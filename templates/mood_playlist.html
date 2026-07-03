@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .playlist-header {
+        background: linear-gradient(135deg, {{ mood.color }}20, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid {{ mood.color }};
+    }
+    
+    .playlist-icon {
+        font-size: 4rem;
+        color: {{ mood.color }};
+    }
+    
+    .song-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border-bottom: 1px solid var(--border-color);
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .song-item:hover {
+        background: var(--bg-card-hover);
+    }
+    
+    .song-number {
+        width: 40px;
+        font-weight: bold;
+        color: {{ mood.color }};
+    }
+    
+    .song-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .song-info {
+        flex: 1;
+    }
+    
+    .song-title {
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+    
+    .song-artist {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+    
+    .play-btn-sm {
+        background: #1db954;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+    }
+    
+    .play-btn-sm:hover {
+        background: white;
+        transform: scale(1.05);
+    }
+    
+    .play-btn-sm i {
+        color: black;
+    }
+    
+    @media (max-width: 768px) {
+        .song-img {
+            width: 40px;
+            height: 40px;
+        }
+        .song-number {
+            width: 30px;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<script>
+var moodSongs = {{ songs_json|safe }};
+
+function playMoodSong(audioUrl, title, artist, coverImg, songId) {
+    if (typeof setPlayerQueue === 'function') {
+        setPlayerQueue(moodSongs, audioUrl);
+    }
+    playSong(audioUrl, title, artist, coverImg, songId, moodSongs);
+}
+
+function playAllMoodSongs() {
+    if (moodSongs.length > 0) {
+        const firstSong = moodSongs[0];
+        playMoodSong(firstSong.audio, firstSong.title, firstSong.artist, firstSong.img, firstSong.id);
+    }
+}
+
+function shuffleMoodSongs() {
+    if (moodSongs.length > 0) {
+        const shuffled = [...moodSongs];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        const firstSong = shuffled[0];
+        playMoodSong(firstSong.audio, firstSong.title, firstSong.artist, firstSong.img, firstSong.id);
+    }
+}
+</script>
+
+<div class="playlist-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center">
+                <div class="playlist-icon">
+                    <i class="bi {{ mood.icon }}"></i>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <h1 class="display-4 fw-bold text-white">{{ mood.name }} Playlist</h1>
+                <p class="text-secondary mb-2">{{ mood.description }}</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <span class="badge bg-dark">{{ songs|length }} songs</span>
+                    <span class="badge bg-dark">Based on mood</span>
+                </div>
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-success rounded-pill px-4" onclick="playAllMoodSongs()">
+                        <i class="bi bi-play-fill me-2"></i>Play All
+                    </button>
+                    <button class="btn btn-outline-secondary rounded-pill px-4" onclick="shuffleMoodSongs()">
+                        <i class="bi bi-shuffle me-2"></i>Shuffle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    {% if songs %}
+        {% for song in songs %}
+        <div class="song-item" onclick="playMoodSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+            <div class="song-number">#{{ forloop.counter }}</div>
+            <img src="{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" class="song-img">
+            <div class="song-info">
+                <div class="song-title">{{ song.title }}</div>
+                <div class="song-artist">{{ song.artist.get_display_name }}</div>
+            </div>
+            <button class="play-btn-sm" onclick="event.stopPropagation(); playMoodSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.get_display_name|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                <i class="bi bi-play-fill"></i>
+            </button>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-emoji-frown display-1 text-secondary"></i>
+            <p class="text-secondary mt-3">No songs in this mood yet. Check back soon!</p>
+            <a href="{% url 'home' %}" class="btn btn-success rounded-pill">Browse Music</a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

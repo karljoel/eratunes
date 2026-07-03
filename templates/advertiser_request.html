@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card bg-dark border-secondary">
+        <div class="card-header bg-dark border-secondary">
+            <h4 class="mb-0 text-white">Advertise on EraTunes</h4>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info bg-dark border-info text-info mb-4">
+                <h6 class="mb-2">Advertising Rates:</h6>
+                <ul class="small mb-0">
+                    <li>Sidebar Ad: <strong>50,000 UGX / month</strong></li>
+                    <li>Top Banner: <strong>100,000 UGX / month</strong></li>
+                    <li>In-Feed Ad: <strong>75,000 UGX / month</strong></li>
+                </ul>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success w-100 mt-3">Submit Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

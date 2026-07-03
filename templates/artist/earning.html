@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-success mb-4"><i class="bi bi-cash-stack me-2"></i>My Earnings</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white p-3">
+                <h6>Available Balance</h6>
+                <h2 class="text-success">UGX {{ wallet_balance|floatformat:0 }}</h2>
+                {% if wallet_balance < min_withdrawal %}
+                <small class="text-warning">Need UGX {{ min_withdrawal }} to withdraw</small>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white p-3">
+                <h6>Total Earned</h6>
+                <h3>UGX {{ total_earned|floatformat:0 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white p-3">
+                <h6>Songs Sold</h6>
+                <h3>{{ total_songs_sold }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="alert alert-info">
+        <strong>💰 Payment Breakdown:</strong> Each download costs UGX 200 → You get UGX {{ artist_share }} (60%)
+    </div>
+    
+    <h4 class="mt-4">Transaction History</h4>
+    <div class="table-responsive">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Song</th>
+                    <th>Buyer</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for earning in earnings %}
+                <tr>
+                    <td>{{ earning.song.title }}</td>
+                    <td>{{ earning.payment.user.username }}</td>
+                    <td>UGX {{ earning.amount|floatformat:0 }}</td>
+                    <td>{{ earning.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        {% if earning.status == 'pending' %}
+                            <span class="badge bg-success">Available</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Withdrawn</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No sales yet</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

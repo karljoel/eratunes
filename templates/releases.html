@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .releases-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    
+    .filter-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #aaa;
+        padding: 8px 20px;
+        border-radius: 30px;
+        transition: 0.2s;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+        background: #1db954;
+        border-color: #1db954;
+        color: black;
+    }
+    
+    .song-card {
+        background: #181818;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    
+    .song-card:hover {
+        background: #282828;
+        transform: translateY(-5px);
+    }
+    
+    .song-card img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+    
+    .song-info {
+        padding: 12px;
+    }
+    
+    .song-title {
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .song-artist {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 8px;
+    }
+    
+    .song-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.7rem;
+        color: #666;
+    }
+    
+    .play-btn {
+        background: #1db954;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .play-btn:hover {
+        background: white;
+        transform: scale(1.05);
+    }
+    
+    .play-btn i {
+        color: black;
+        font-size: 0.8rem;
+    }
+    
+    .radio-btn {
+        background: #ff8c00;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .radio-btn:hover {
+        background: white;
+        transform: scale(1.05);
+    }
+    
+    .radio-btn i {
+        color: black;
+        font-size: 0.7rem;
+    }
+    
+    .badge-new {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #1db954;
+        color: black;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    
+    .badge-trending {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff0000;
+        color: white;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .releases-header h1 {
+            font-size: 1.8rem;
+        }
+        .filter-btn {
+            padding: 6px 15px;
+            font-size: 0.8rem;
+        }
+        .song-title {
+            font-size: 0.8rem;
+        }
+        .song-artist {
+            font-size: 0.7rem;
+        }
+        .play-btn, .radio-btn {
+            width: 28px;
+            height: 28px;
+        }
+        .play-btn i, .radio-btn i {
+            font-size: 0.7rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .song-title {
+            font-size: 0.7rem;
+        }
+        .song-artist {
+            font-size: 0.6rem;
+        }
+        .filter-btn {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+    }
+</style>
+
+<script>
+// Convert songs to JavaScript array
+var releasesSongs = [
+    {% for song in songs %}
+    {
+        id: {{ song.id }},
+        title: "{{ song.title|escapejs }}",
+        artist: "{{ song.artist.username|escapejs }}",
+        img: "{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}",
+        audio: "{{ song.audio_file.url }}"
+    },
+    {% endfor %}
+];
+
+// Function to play song with releases queue
+function playReleaseSong(audioUrl, title, artist, coverImg, songId) {
+    if (typeof setPlayerQueue === 'function') {
+        setPlayerQueue(releasesSongs, audioUrl);
+    }
+    playSong(audioUrl, title, artist, coverImg, songId, releasesSongs);
+}
+
+// Function to play radio
+function playReleaseRadio(songId) {
+    if (typeof startRadio === 'function') {
+        startRadio(songId);
+    }
+}
+</script>
+
+<div class="releases-header">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white">
+                {% if filter == 'new' %}New Releases
+                {% elif filter == 'recent' %}Recent Releases
+                {% elif filter == 'timeless' %}Timeless Hits
+                {% else %}All Releases{% endif %}
+            </h1>
+            <p class="text-secondary">
+                {% if filter == 'new' %}Fresh music from the last 30 days
+                {% elif filter == 'recent' %}Released in the last 31-90 days
+                {% elif filter == 'timeless' %}Classics that never get old
+                {% else %}All music available{% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+        <a href="?filter=new" class="filter-btn {% if filter == 'new' %}active{% endif %}">
+            <i class="bi bi-stars me-1"></i> New Releases
+        </a>
+        <a href="?filter=recent" class="filter-btn {% if filter == 'recent' %}active{% endif %}">
+            <i class="bi bi-clock-history me-1"></i> Recent Releases
+        </a>
+        <a href="?filter=timeless" class="filter-btn {% if filter == 'timeless' %}active{% endif %}">
+            <i class="bi bi-trophy me-1"></i> Timeless Hits
+        </a>
+    </div>
+    
+    <!-- Songs Grid -->
+    <div class="row g-4">
+        {% for song in songs %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="song-card position-relative">
+                <div class="position-relative">
+                    <img src="{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" 
+                         onclick="playReleaseSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                    
+                    {% if filter == 'new' %}
+                    <div class="badge-new">NEW</div>
+                    {% endif %}
+                    {% if song.is_trending %}
+                    <div class="badge-trending">TRENDING</div>
+                    {% endif %}
+                </div>
+                <div class="song-info">
+                    <div class="song-title" onclick="playReleaseSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                        {{ song.title }}
+                    </div>
+                    <div class="song-artist">{{ song.artist.username }}</div>
+                    <div class="song-stats">
+                        <span><i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays</span>
+                        <div class="d-flex gap-2">
+                            <button class="play-btn" onclick="event.stopPropagation(); playReleaseSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                                <i class="bi bi-play-fill"></i>
+                            </button>
+                            <button class="radio-btn" onclick="event.stopPropagation(); playReleaseRadio({{ song.id }})">
+                                <i class="bi bi-broadcast"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-music-note-beamed display-1 text-secondary"></i>
+            <p class="text-secondary mt-3">No songs found in this category.</p>
+            <a href="{% url 'home' %}" class="btn btn-success rounded-pill">Back to Home</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .artists-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .artist-card {
+        background: #181818;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: 0.3s;
+    }
+    
+    .artist-card:hover {
+        background: #282828;
+        transform: translateY(-5px);
+    }
+    
+    .artist-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 3px solid #1db954;
+    }
+    
+    .artist-name {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .artist-stats {
+        font-size: 0.7rem;
+        color: #aaa;
+    }
+    
+    .pro-badge {
+        background: linear-gradient(135deg, #ffd700, #ff8c00);
+        color: black;
+        font-size: 0.7rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-top: 8px;
+        font-weight: bold;
+    }
+    
+    .verified-badge {
+        background: #1da1f2;
+        color: white;
+        font-size: 0.7rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-top: 8px;
+    }
+    
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #aaa;
+        padding: 8px 20px;
+        border-radius: 30px;
+        transition: 0.2s;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+        background: #1db954;
+        border-color: #1db954;
+        color: black;
+    }
+    
+    .pagination {
+        margin-top: 30px;
+    }
+    
+    .page-link {
+        background: #222;
+        border-color: #333;
+        color: white;
+    }
+    
+    .page-link:hover, .page-item.active .page-link {
+        background: #1db954;
+        border-color: #1db954;
+        color: black;
+    }
+    
+    @media (max-width: 768px) {
+        .artist-img {
+            width: 80px;
+            height: 80px;
+        }
+        .artist-name {
+            font-size: 0.85rem;
+        }
+        .filter-btn {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<div class="artists-header">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white">All Artists</h1>
+            <p class="text-secondary">Discover talented artists on EraTunes</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+        <a href="?filter=all" class="filter-btn {% if filter == 'all' %}active{% endif %}">All Artists</a>
+        <a href="?filter=pro" class="filter-btn {% if filter == 'pro' %}active{% endif %}">
+            <i class="bi bi-patch-check-fill me-1"></i> PRO Artists
+        </a>
+        <a href="?filter=verified" class="filter-btn {% if filter == 'verified' %}active{% endif %}">
+            <i class="bi bi-check-circle-fill me-1"></i> Verified
+        </a>
+    </div>
+    
+    <!-- Artists Grid - using proper row and col structure -->
+    <div class="row g-4">
+        {% for artist in artists %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'artist_profile' artist.username %}" class="text-decoration-none">
+                <div class="artist-card">
+                    {% if artist.profile_picture %}
+                        <img src="{{ artist.profile_picture.url }}" class="artist-img">
+                    {% else %}
+                        <div class="artist-img bg-secondary d-flex align-items-center justify-content-center mx-auto">
+                            <i class="bi bi-person-fill" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                   <div class="artist-name">{{ artist.get_display_name }}</div>
+                    <div class="artist-stats">{{ artist.song_count }} songs • {{ artist.total_plays }} plays</div>
+                    {% if artist.is_pro %}
+                        <div class="pro-badge">
+                            <i class="bi bi-patch-check-fill me-1"></i> PRO ARTIST
+                        </div>
+                    {% elif artist.is_verified %}
+                        <div class="verified-badge">
+                            <i class="bi bi-check-circle-fill me-1"></i> VERIFIED
+                        </div>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-people display-1 text-secondary"></i>
+            <p class="text-secondary mt-3">No artists found.</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if artists.has_other_pages %}
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if artists.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ artists.previous_page_number }}{% if filter %}&filter={{ filter }}{% endif %}">«</a>
+                </li>
+                {% endif %}
+                
+                {% for num in artists.paginator.page_range %}
+                    {% if artists.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > artists.number|add:'-3' and num < artists.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if filter %}&filter={{ filter }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if artists.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ artists.next_page_number }}{% if filter %}&filter={{ filter }}{% endif %}">»</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

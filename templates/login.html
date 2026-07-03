@@ -1,0 +1,134 @@
+{% extends 'auth_base.html' %}
+{% block content %}
+
+<style>
+    .login-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .login-header {
+        padding: 30px 30px 20px;
+        text-align: center;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .login-header i {
+        font-size: 3rem;
+        color: #1db954;
+    }
+    .login-header h2 {
+        font-size: 1.8rem;
+        margin-top: 10px;
+        font-weight: bold;
+        color: white;
+    }
+    .login-header p {
+        color: #888;
+    }
+    .login-body {
+        padding: 30px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #ccc;
+        font-weight: 500;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        color: white;
+        font-size: 1rem;
+    }
+    .form-group input:focus {
+        outline: none;
+        border-color: #1db954;
+    }
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: #1db954;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .btn-login:hover {
+        background: #1ed760;
+    }
+    .login-footer {
+        padding: 20px 30px;
+        text-align: center;
+        border-top: 1px solid #1a1a1a;
+        background: #060606;
+    }
+    .login-footer a {
+        color: #1db954;
+        text-decoration: none;
+    }
+    .login-footer a:hover {
+        text-decoration: underline;
+    }
+    .error-message {
+        background: rgba(220, 53, 69, 0.1);
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+</style>
+
+<div class="login-card">
+    <div class="login-header">
+        <i class="bi bi-music-note-beamed"></i>
+        <h2>Welcome Back</h2>
+        <p>Login to your EraTunes account</p>
+    </div>
+    
+    <div class="login-body">
+        {% if form.errors %}
+        <div class="error-message">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Invalid username or password.
+        </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <button type="submit" class="btn-login">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+            </button>
+        </form>
+    </div>
+    
+    <div class="login-footer">
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+        <p class="mb-0">Artist? <a href="{% url 'artist_signup' %}">Register as Artist</a></p>
+    </div>
+</div>
+
+{% endblock %}

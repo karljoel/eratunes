@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .signup-container {
+        max-width: 450px;
+        margin: 50px auto;
+    }
+    .signup-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .signup-header {
+        background: linear-gradient(135deg, #0a0a0a, #030303);
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .signup-body {
+        padding: 30px;
+    }
+    .signup-footer {
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #1a1a1a;
+        background: #0a0a0a;
+    }
+    .form-control:focus {
+        border-color: #00ff00;
+        box-shadow: none;
+    }
+</style>
+
+<div class="container">
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <i class="bi bi-headphones fs-1 text-success"></i>
+                <h2 class="fw-bold mb-0 mt-2">Create Account</h2>
+                <p class="text-secondary mb-0">Join EraTunes and start listening</p>
+            </div>
+            
+            <div class="signup-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-white">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <small class="text-danger">{{ form.username.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-white">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <small class="text-danger">{{ form.email.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-white">Password</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <small class="text-danger">{{ form.password1.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-white">Confirm Password</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <small class="text-danger">{{ form.password2.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 py-2 mt-3">
+                        <i class="bi bi-person-plus me-2"></i>Sign Up
+                    </button>
+                </form>
+            </div>
+            
+            <div class="signup-footer">
+                <p class="mb-0 text-secondary">
+                    Already have an account? 
+                    <a href="{% url 'login' %}" class="text-success text-decoration-none">Login here</a>
+                </p>
+                <p class="mb-0 mt-2 text-secondary">
+                    <i class="bi bi-mic me-1"></i>Want to upload music?
+                    <a href="{% url 'artist_signup' %}" class="text-success text-decoration-none">Register as Artist</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

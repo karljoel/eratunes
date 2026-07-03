@@ -1,0 +1,571 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .song-detail-container {
+        padding: 30px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .song-header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-bottom: 40px;
+        align-items: flex-start;
+    }
+    
+    .song-cover {
+        width: 250px;
+        height: 250px;
+        border-radius: 12px;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .song-info {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .song-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    
+    .song-artist {
+        font-size: 1.2rem;
+        color: #aaa;
+        margin-bottom: 15px;
+    }
+    
+    .song-stats {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .stat-badge {
+        background: #1a1a1a;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: #aaa;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    /* Comments Section */
+    .comments-section {
+        margin-top: 40px;
+        border-top: 1px solid #333;
+        padding-top: 30px;
+    }
+    
+    .comments-section h4 {
+        color: #ffffff;
+    }
+    
+    .comment-card {
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .comment-card.pinned {
+        background: linear-gradient(135deg, #1a2a1a, #0a1a0a);
+        border-left: 3px solid #1db954;
+    }
+    
+    .comment-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .comment-username {
+        color: #1db954;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    
+    .comment-username:hover {
+        text-decoration: underline;
+    }
+    
+    .comment-time {
+        font-size: 0.7rem;
+        color: #aaa;
+    }
+    
+    .comment-text {
+        margin-top: 8px;
+        line-height: 1.5;
+        color: #fff;
+    }
+    
+    .comment-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 15px;
+    }
+    
+    .comment-action-btn {
+        background: none;
+        border: none;
+        color: #aaa;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .comment-action-btn:hover {
+        color: #1db954;
+    }
+    
+    .reply-form {
+        margin-left: 50px;
+        margin-top: 15px;
+        display: none;
+    }
+    
+    .reply-form.show {
+        display: block;
+    }
+    
+    .replies-section {
+        margin-left: 50px;
+        margin-top: 15px;
+    }
+    
+    .reply-card {
+        background: #0d0d0d;
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .pinned-badge {
+        background: #1db954;
+        color: black;
+        font-size: 0.65rem;
+        padding: 2px 8px;
+        border-radius: 20px;
+        margin-left: 10px;
+    }
+    
+    .comment-text {
+        color: var(--text-primary, #ffffff);
+    }
+    
+    [data-theme="light"] .comment-text {
+        color: #1a1a1a !important;
+    }
+    
+    @media (max-width: 768px) {
+        .song-header {
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+        }
+        .song-stats {
+            justify-content: center;
+        }
+        .action-buttons {
+            justify-content: center;
+        }
+        .replies-section {
+            margin-left: 15px;
+        }
+        .reply-form {
+            margin-left: 15px;
+        }
+        .song-title {
+            font-size: 1.5rem;
+        }
+        .song-cover {
+            width: 180px;
+            height: 180px;
+        }
+    }
+    
+    [data-theme="light"] .comment-card {
+        background: #ffffff !important;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    [data-theme="light"] .comment-card .text-white,
+    [data-theme="light"] .comment-card .comment-text {
+        color: #1a1a1a !important;
+    }
+    
+    [data-theme="light"] .comment-card strong {
+        color: #1db954 !important;
+    }
+    
+    [data-theme="light"] .comment-card .text-secondary {
+        color: #6c757d !important;
+    }
+    
+    [data-theme="light"] .comment-card .bg-secondary {
+        background: #e9ecef !important;
+    }
+    
+    [data-theme="light"] .comment-card .bi-person {
+        color: #6c757d !important;
+    }
+    
+    [data-theme="light"] .comment-card button.btn-link {
+        color: #6c757d !important;
+    }
+    
+    [data-theme="light"] .comment-card button.btn-link:hover {
+        color: #1db954 !important;
+    }
+    
+    [data-theme="light"] .comment-card button.text-danger {
+        color: #dc3545 !important;
+    }
+    
+    [data-theme="light"] .comment-card button.text-danger:hover {
+        color: #ff4444 !important;
+    }
+    
+    [data-theme="light"] #comments-list {
+        background: transparent;
+    }
+    
+    [data-theme="light"] .comment-input,
+    [data-theme="light"] #comment-input {
+        background-color: #ffffff !important;
+        border-color: #e0e0e0 !important;
+        color: #1a1a1a !important;
+    }
+    
+    [data-theme="light"] #comment-input::placeholder {
+        color: #adb5bd !important;
+    }
+    
+    .payment-success {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #1db954;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="song-detail-container">
+    <!-- Song Header -->
+    <div class="song-header">
+     {% if song.cover_image %}
+    <img src="{{ song.cover_image.url }}" class="song-cover">
+{% else %}
+    <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover">
+{% endif %}  
+        <div class="song-info">
+            <h1 class="song-title">{{ song.title }}</h1>
+            <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
+            <div class="song-stats">
+                <div class="stat-badge">
+                    <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
+                </div>
+                <div class="stat-badge">
+                    <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
+                </div>
+            </div>
+           <div class="action-buttons">
+    <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()">
+        <i class="bi bi-play-fill me-2"></i>Play Now
+    </button>
+    
+    {% if user.is_authenticated %}
+        <a href="{% url 'download_song' song.id %}" class="btn btn-success rounded-pill px-4">
+            <i class="bi bi-download me-2"></i>Download Now - Free
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-success rounded-pill px-4">
+            <i class="bi bi-download me-2"></i>Login to Download
+        </a>
+    {% endif %}
+    
+    {% if prev_song %}
+    <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
+        <i class="bi bi-chevron-left"></i>
+    </a>
+    {% endif %}
+    {% if next_song %}
+    <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
+        <i class="bi bi-chevron-right"></i>
+    </a>
+    {% endif %}
+</div>
+    
+    {% if prev_song %}
+    <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
+        <i class="bi bi-chevron-left"></i>
+    </a>
+    {% endif %}
+    {% if next_song %}
+    <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
+        <i class="bi bi-chevron-right"></i>
+    </a>
+    {% endif %}
+</div>
+                {% if next_song %}
+                <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+        
+    <!-- Comments Section -->
+    <div class="comments-section">
+        <h4 class="text-white fw-bold mb-3">
+            <i class="bi bi-chat-dots me-2 text-success"></i>Comments 
+            <span id="comment-count" class="text-secondary">0</span>
+        </h4>
+        
+        {% if user.is_authenticated %}
+        <div class="mb-4">
+            <textarea id="comment-input" class="form-control bg-dark text-white border-secondary rounded-3" 
+                      rows="2" placeholder="Share your thoughts about this song... (+5 points)"></textarea>
+            <div class="mt-2 text-end">
+                <button id="submit-comment" class="btn btn-success rounded-pill px-4">
+                    <i class="bi bi-send me-1"></i>Post Comment
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-secondary bg-dark border-secondary text-center">
+            <a href="{% url 'login' %}" class="text-success">Login</a> to join the conversation
+        </div>
+        {% endif %}
+        
+        <div id="comments-list">
+            <div class="text-center py-4 text-secondary">Loading comments...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+const songId = {{ song.id }};
+
+function playSongFromDetail() {
+    // Get song data from the page
+    const songData = {
+        id: {{ song.id }},
+        title: "{{ song.title|escapejs }}",
+        artist: "{{ song.artist.get_display_name|escapejs }}",
+        audio: "{{ song.audio_file.url|escapejs }}",
+        img: "{{ song.get_cover_url|escapejs }}"
+    };
+    
+    // Check if global playSong function exists (from base.html player)
+    if (typeof window.playSong === 'function') {
+        window.playSong(songData.audio, songData.title, songData.artist, songData.img, songData.id);
+        showToast("Now playing: " + songData.title);
+    } else {
+        console.log("Player not loaded yet");
+        showToast("Player loading... try again in a moment");
+    }
+}
+
+function loadComments() {
+    fetch(`/comments/${songId}/`)
+        .then(response => response.json())
+        .then(data => {
+            displayComments(data.comments);
+        })
+        .catch(error => {
+            console.error("Error loading comments:", error);
+            document.getElementById('comments-list').innerHTML = '<div class="text-center py-4 text-danger">Failed to load comments.</div>';
+        });
+}
+
+function displayComments(comments) {
+    const container = document.getElementById('comments-list');
+    const countSpan = document.getElementById('comment-count');
+    
+    if (!comments || comments.length === 0) {
+        container.innerHTML = '<div class="text-center py-4 text-secondary">No comments yet. Be the first to comment!</div>';
+        countSpan.innerText = '0';
+        return;
+    }
+    
+    countSpan.innerText = comments.length;
+    let html = '';
+    for (let i = 0; i < comments.length; i++) {
+        const comment = comments[i];
+        html += `
+            <div class="comment-card">
+                <div class="d-flex gap-3">
+                    <div>
+                        <div style="width: 40px; height: 40px; background: #2a2a2a; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-person text-white"></i>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div>
+                            <strong class="text-success">${escapeHtml(comment.user)}</strong>
+                            <span class="text-secondary ms-2" style="font-size: 0.7rem;">${comment.created_at}</span>
+                        </div>
+                        <div class="mt-1 text-white">${escapeHtml(comment.text)}</div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-link text-secondary" onclick="likeComment(${comment.id})">
+                                <i class="bi bi-heart"></i> ${comment.likes}
+                            </button>
+                            ${comment.user === '{{ user.username }}' ? 
+                                `<button class="btn btn-sm btn-link text-danger" onclick="deleteComment(${comment.id})">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>` : ''
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
+
+function submitComment() {
+    const textarea = document.getElementById('comment-input');
+    const text = textarea.value.trim();
+    
+    if (!text) {
+        alert('Please enter a comment');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('text', text);
+    
+    fetch(`/comment/add/${songId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            textarea.value = '';
+            loadComments();
+            showToast('Comment posted! +5 points');
+        } else {
+            alert(data.message || 'Failed to post comment');
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert('Error posting comment');
+    });
+}
+
+function likeComment(commentId) {
+    fetch(`/comment/like/${commentId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(() => loadComments())
+    .catch(error => console.error("Error:", error));
+}
+
+function deleteComment(commentId) {
+    if (!confirm('Delete this comment?')) return;
+    
+    fetch(`/comment/delete/${commentId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(() => loadComments())
+    .catch(error => console.error("Error:", error));
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message) {
+    let toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadComments();
+    
+    const submitBtn = document.getElementById('submit-comment');
+    if (submitBtn) {
+        submitBtn.removeEventListener('click', submitComment);
+        submitBtn.addEventListener('click', submitComment);
+    }
+    
+    // Check for payment success message
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('payment') === 'success') {
+        showToast('✅ Payment successful! You can now download this song.');
+    }
+});
+
+// Make sure the buy button form submits normally
+document.getElementById('buyForm')?.addEventListener('submit', function(e) {
+    console.log("Buy form submitted");
+});
+</script>
+{% endblock %}

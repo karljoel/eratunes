@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .feed-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .feed-stats {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    
+    .feed-stat {
+        background: var(--bg-card);
+        border-radius: 10px;
+        padding: 10px 20px;
+        text-align: center;
+    }
+</style>
+
+<div class="feed-header">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-white">
+            <i class="bi bi-rss-fill me-2 text-success"></i>Your Feed
+        </h1>
+        <p class="text-secondary">New music from artists you follow</p>
+        <div class="feed-stats">
+            <div class="feed-stat">
+                <div class="fw-bold text-success">{{ total_following }}</div>
+                <small class="text-secondary">Following</small>
+            </div>
+            <div class="feed-stat">
+                <div class="fw-bold text-success">{{ feed_songs.paginator.count }}</div>
+                <small class="text-secondary">New Songs</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    {% if feed_songs %}
+    <div class="row g-4">
+        {% for song in feed_songs %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="song-card" onclick="playSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.get_display_name|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }}, pageSongs)">
+                <img src="{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" 
+                     style="width: 100%; aspect-ratio: 1/1; object-fit: cover;">
+                <div class="p-2">
+                    <h6 class="text-white text-truncate">{{ song.title }}</h6>
+                    <small class="text-secondary">{{ song.artist.get_display_name }}</small>
+                    <div class="mt-2">
+                        <small class="text-success">{{ song.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if feed_songs.has_other_pages %}
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if feed_songs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ feed_songs.previous_page_number }}">«</a>
+                </li>
+                {% endif %}
+                
+                {% for num in feed_songs.paginator.page_range %}
+                    {% if feed_songs.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > feed_songs.number|add:'-3' and num < feed_songs.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if feed_songs.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ feed_songs.next_page_number }}">»</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-rss display-1 text-secondary"></i>
+        <p class="text-secondary mt-3">Follow artists to see their new music here!</p>
+        <a href="{% url 'all_artists' %}" class="btn btn-success rounded-pill">Discover Artists</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+var pageSongs = [
+    {% for song in feed_songs %}
+    {
+        id: {{ song.id }},
+        title: "{{ song.title|escapejs }}",
+        artist: "{{ song.artist.get_display_name|escapejs }}",
+        img: "{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}",
+        audio: "{{ song.audio_file.url }}"
+    },
+    {% endfor %}
+];
+</script>
+
+{% endblock %}

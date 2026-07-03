@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .stats-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .big-stat {
+        text-align: center;
+    }
+    
+    .big-stat-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #1db954;
+    }
+    
+    .stats-card {
+        background: var(--bg-card);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .stats-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+    }
+    
+    .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+    }
+    
+    .rank-item:hover {
+        background: var(--bg-card-hover);
+    }
+    
+    .rank-number {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #1db954;
+        width: 40px;
+    }
+    
+    .rank-img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .rank-info {
+        flex: 1;
+    }
+    
+    .rank-title {
+        font-weight: bold;
+    }
+    
+    .rank-count {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+    
+    .streak-card {
+        text-align: center;
+        padding: 30px;
+    }
+    
+    .streak-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #ff8c00;
+    }
+    
+    @media (max-width: 768px) {
+        .big-stat-number {
+            font-size: 2rem;
+        }
+        .rank-img {
+            width: 35px;
+            height: 35px;
+        }
+    }
+</style>
+
+<div class="stats-header">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-white">
+            <i class="bi bi-graph-up me-2 text-success"></i>Your Listening Stats
+        </h1>
+        <p class="text-secondary">Your music journey at a glance</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Big Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="stats-card big-stat">
+                <div class="big-stat-number">{{ total_plays }}</div>
+                <div class="text-secondary">Total Plays</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card big-stat">
+                <div class="big-stat-number">{{ unique_songs }}</div>
+                <div class="text-secondary">Unique Songs</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card big-stat">
+                <div class="big-stat-number">{{ unique_artists }}</div>
+                <div class="text-secondary">Artists</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stats-card big-stat">
+                <div class="big-stat-number">{{ week_plays }}</div>
+                <div class="text-secondary">This Week</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Listening Streak -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="stats-card streak-card">
+                <i class="bi bi-fire fs-1 text-warning"></i>
+                <div class="streak-number">{{ current_streak }}</div>
+                <div class="text-secondary">Current Listening Streak (days)</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stats-card streak-card">
+                <i class="bi bi-trophy fs-1 text-warning"></i>
+                <div class="streak-number">{{ longest_streak }}</div>
+                <div class="text-secondary">Longest Streak</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Most Played Songs -->
+        <div class="col-md-6">
+            <div class="stats-card">
+                <h3><i class="bi bi-music-note-beamed me-2 text-success"></i>Most Played Songs</h3>
+                {% for song in most_played_songs %}
+                <div class="rank-item" onclick="playSong('{{ song.song__audio_file.url|default:"" }}', '{{ song.song__title|escapejs }}', '{{ song.song__artist__username|escapejs }}', '{% if song.song__cover_image %}{{ song.song__cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.song__id }})">
+                    <div class="rank-number">#{{ forloop.counter }}</div>
+                    <div class="rank-info">
+                        <div class="rank-title">{{ song.song__title }}</div>
+                        <div class="rank-count">{{ song.play_count }} plays</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3 text-secondary">No data yet</div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Most Played Artists -->
+        <div class="col-md-6">
+            <div class="stats-card">
+                <h3><i class="bi bi-people me-2 text-success"></i>Most Played Artists</h3>
+                {% for artist in most_played_artists %}
+                <div class="rank-item" onclick="window.location.href='/artist/{{ artist.song__artist__username }}/'">
+                    <div class="rank-number">#{{ forloop.counter }}</div>
+                    <div class="rank-info">
+                        <div class="rank-title">{{ artist.song__artist__username }}</div>
+                        <div class="rank-count">{{ artist.play_count }} plays</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3 text-secondary">No data yet</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Listening Habits -->
+    <div class="row g-4 mt-2">
+        <div class="col-md-6">
+            <div class="stats-card">
+                <h3><i class="bi bi-clock me-2 text-success"></i>Peak Listening Hours</h3>
+                {% for hour in hour_stats %}
+                <div class="rank-item">
+                    <div class="rank-number">#{{ forloop.counter }}</div>
+                    <div class="rank-info">
+                        <div class="rank-title">
+                            {% if hour.hour == '00' %}12:00 AM - 1:00 AM
+                            {% elif hour.hour == '01' %}1:00 AM - 2:00 AM
+                            {% elif hour.hour == '02' %}2:00 AM - 3:00 AM
+                            {% elif hour.hour == '03' %}3:00 AM - 4:00 AM
+                            {% elif hour.hour == '04' %}4:00 AM - 5:00 AM
+                            {% elif hour.hour == '05' %}5:00 AM - 6:00 AM
+                            {% elif hour.hour == '06' %}6:00 AM - 7:00 AM
+                            {% elif hour.hour == '07' %}7:00 AM - 8:00 AM
+                            {% elif hour.hour == '08' %}8:00 AM - 9:00 AM
+                            {% elif hour.hour == '09' %}9:00 AM - 10:00 AM
+                            {% elif hour.hour == '10' %}10:00 AM - 11:00 AM
+                            {% elif hour.hour == '11' %}11:00 AM - 12:00 PM
+                            {% elif hour.hour == '12' %}12:00 PM - 1:00 PM
+                            {% elif hour.hour == '13' %}1:00 PM - 2:00 PM
+                            {% elif hour.hour == '14' %}2:00 PM - 3:00 PM
+                            {% elif hour.hour == '15' %}3:00 PM - 4:00 PM
+                            {% elif hour.hour == '16' %}4:00 PM - 5:00 PM
+                            {% elif hour.hour == '17' %}5:00 PM - 6:00 PM
+                            {% elif hour.hour == '18' %}6:00 PM - 7:00 PM
+                            {% elif hour.hour == '19' %}7:00 PM - 8:00 PM
+                            {% elif hour.hour == '20' %}8:00 PM - 9:00 PM
+                            {% elif hour.hour == '21' %}9:00 PM - 10:00 PM
+                            {% elif hour.hour == '22' %}10:00 PM - 11:00 PM
+                            {% elif hour.hour == '23' %}11:00 PM - 12:00 AM
+                            {% endif %}
+                        </div>
+                        <div class="rank-count">{{ hour.count }} plays</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3 text-secondary">No data yet</div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="stats-card">
+                <h3><i class="bi bi-calendar-week me-2 text-success"></i>Favorite Listening Days</h3>
+                {% for day in day_stats %}
+                <div class="rank-item">
+                    <div class="rank-number">#{{ forloop.counter }}</div>
+                    <div class="rank-info">
+                        <div class="rank-title">
+                            {% if day.weekday == 1 %}Sunday
+                            {% elif day.weekday == 2 %}Monday
+                            {% elif day.weekday == 3 %}Tuesday
+                            {% elif day.weekday == 4 %}Wednesday
+                            {% elif day.weekday == 5 %}Thursday
+                            {% elif day.weekday == 6 %}Friday
+                            {% elif day.weekday == 7 %}Saturday
+                            {% endif %}
+                        </div>
+                        <div class="rank-count">{{ day.count }} plays</div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3 text-secondary">No data yet</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

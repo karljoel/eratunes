@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #0a2a1a, #030303);
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 30px;
+    }
+    .hero-section h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #fff, #1db954);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .suggestion-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 12px;
+        padding: 15px;
+        transition: all 0.2s;
+        cursor: pointer;
+        height: 100%;
+    }
+    .suggestion-card:hover {
+        transform: translateY(-5px);
+        border-color: #1db954;
+        background: #121212;
+    }
+    .suggestion-img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+    .trending-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff4444;
+        color: white;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    .category-chip {
+        background: #1a1a1a;
+        border: 1px solid #2a2a2a;
+        padding: 6px 15px;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #ccc;
+    }
+    .category-chip:hover, .category-chip.active {
+        background: #1db954;
+        border-color: #1db954;
+        color: white;
+    }
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        border-left: 3px solid #1db954;
+        padding-left: 12px;
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <div class="hero-section text-center">
+        <h1>Discover Your Next Vibe</h1>
+        <p class="text-secondary mt-2">Explore trending tracks, new releases, and personalized recommendations</p>
+        <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+            <span class="category-chip" onclick="filterByMood('chill')">😌 Chill</span>
+            <span class="category-chip" onclick="filterByMood('energy')">⚡ Energy</span>
+            <span class="category-chip" onclick="filterByMood('party')">🎉 Party</span>
+            <span class="category-chip" onclick="filterByMood('focus')">📚 Focus</span>
+            <span class="category-chip" onclick="filterByMood('sad')">😢 Sad</span>
+        </div>
+    </div>
+
+    <!-- For You Section (Personalized Suggestions) -->
+    {% if recommended_songs %}
+    <div class="mt-5">
+        <h3 class="section-title text-white">
+            <i class="bi bi-stars me-2 text-success"></i>Recommended For You
+        </h3>
+        <div class="row g-4">
+            {% for song in recommended_songs %}
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="suggestion-card" onclick="openPlayer('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.cover_image.url }}', '{{ song.audio_file.url }}', '{{ song.audio_file.url }}', '[]', {{ song.id }})">
+                    <div class="position-relative">
+                        <img src="{{ song.cover_image.url }}" class="suggestion-img">
+                        {% if song.is_trending %}
+                        <div class="trending-badge">TRENDING</div>
+                        {% endif %}
+                    </div>
+                    <h6 class="text-white text-truncate mb-0">{{ song.title }}</h6>
+                    <small class="text-secondary">{{ song.artist.username }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Trending Now -->
+    {% if trending_songs %}
+    <div class="mt-5">
+        <h3 class="section-title text-white">
+            <i class="bi bi-fire me-2 text-danger"></i>Trending Now
+        </h3>
+        <div class="row g-4">
+            {% for song in trending_songs %}
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="suggestion-card" onclick="openPlayer('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.cover_image.url }}', '{{ song.audio_file.url }}', '{{ song.audio_file.url }}', '[]', {{ song.id }})">
+                    <div class="position-relative">
+                        <img src="{{ song.cover_image.url }}" class="suggestion-img">
+                        <div class="trending-badge">🔥 {{ song.play_count }} plays</div>
+                    </div>
+                    <h6 class="text-white text-truncate mb-0">{{ song.title }}</h6>
+                    <small class="text-secondary">{{ song.artist.username }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- New Releases -->
+    <div class="mt-5">
+        <h3 class="section-title text-white">
+            <i class="bi bi-music-note-beamed me-2 text-info"></i>New Releases
+        </h3>
+        <div class="row g-4">
+            {% for song in page_obj %}
+            <div class="col-6 col-md-3 col-lg-2">
+                <div class="suggestion-card" onclick="openPlayer('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.cover_image.url }}', '{{ song.audio_file.url }}', '{{ song.audio_file.url }}', '[]', {{ song.id }})">
+                    <img src="{{ song.cover_image.url }}" class="suggestion-img">
+                    <h6 class="text-white text-truncate mb-0">{{ song.title }}</h6>
+                    <small class="text-secondary">{{ song.artist.username }}</small>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-music-note fs-1 text-secondary"></i>
+                <p class="text-secondary mt-2">No songs found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link bg-dark text-white border-secondary" href="?page={{ page_obj.previous_page_number }}">«</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link {% if page_obj.number == num %}bg-success border-success{% else %}bg-dark text-white border-secondary{% endif %}" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link bg-dark text-white border-secondary" href="?page={{ page_obj.next_page_number }}">»</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function filterByMood(mood) {
+        let genreFilter = '';
+        switch(mood) {
+            case 'chill':
+                genreFilter = 'R&B,Jazz,Reggae,Acoustic';
+                break;
+            case 'energy':
+                genreFilter = 'Rock,Hip Hop,Electronic';
+                break;
+            case 'party':
+                genreFilter = 'Afrobeat,Dancehall,Pop,Amapiano';
+                break;
+            case 'focus':
+                genreFilter = 'Classical,Ambient,Lofi';
+                break;
+            case 'sad':
+                genreFilter = 'Blues,Soul,Ballad';
+                break;
+        }
+        if (genreFilter) {
+            window.location.href = `/?category=${genreFilter.split(',')[0]}`;
+        }
+    }
+</script>
+
+{% endblock %}

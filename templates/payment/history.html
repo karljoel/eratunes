@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="text-white mb-4"><i class="bi bi-cart-check me-2 text-success"></i>My Purchase History</h2>
+    
+    {% if purchases %}
+    <div class="table-responsive">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Song</th>
+                    <th>Artist</th>
+                    <th>Price</th>
+                    <th>Purchased On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in purchases %}
+                <tr>
+                    <td>{{ purchase.song.title }}</td>
+                    <td>{{ purchase.song.artist.username }}</td>
+                    <td>UGX 200</td>
+                    <td>{{ purchase.purchased_at|date:"M d, Y" }}</td>
+                    <td>
+                        {% if purchase.has_downloaded %}
+                            <span class="badge bg-danger">Downloaded (Used)</span>
+                        {% else %}
+                            <span class="badge bg-success">Available ({{ purchase.downloads_remaining }} download left)</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x fs-1 text-secondary"></i>
+        <p class="text-secondary mt-2">You haven't purchased any songs yet.</p>
+        <a href="{% url 'home' %}" class="btn btn-success mt-3">Browse Songs</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

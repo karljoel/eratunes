@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card bg-dark text-white border-secondary shadow-lg p-4 mb-4">
+                <h2 class="fw-bold text-success mb-4 text-center">Artist Login</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ login_form.as_p }}
+                    </div>
+                    <button type="submit" name="login" class="btn btn-success w-100 rounded-pill">Enter Studio</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-1 d-none d-md-flex align-items-center justify-content-center">
+            <div style="width: 1px; height: 80%; background: #333;"></div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card bg-dark text-white border-secondary shadow-lg p-4">
+                <h2 class="fw-bold text-primary mb-4 text-center">New Artist?</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3 small-form">
+                        {{ signup_form.as_p }}
+                    </div>
+                    <button type="submit" name="signup" class="btn btn-outline-primary w-100 rounded-pill">Join the Era</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Makes the Django labels and inputs look clean */
+    p label { display: block; font-size: 0.8rem; color: #aaa; margin-top: 10px; }
+    p input { 
+        width: 100%; 
+        background: #111; 
+        border: 1px solid #444; 
+        color: white; 
+        padding: 8px; 
+        border-radius: 5px; 
+    }
+</style>
+{% endblock %}

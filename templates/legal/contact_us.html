@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .contact-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .contact-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .contact-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .contact-header p {
+        color: var(--text-secondary);
+    }
+    
+    .contact-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+        margin-bottom: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        background: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #1db954;
+    }
+    
+    textarea.form-control {
+        resize: vertical;
+    }
+    
+    .btn-submit {
+        background: #1db954;
+        color: black;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    
+    .btn-submit:hover {
+        background: white;
+        transform: scale(1.02);
+    }
+    
+    .contact-info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .info-item {
+        flex: 1;
+        text-align: center;
+        padding: 20px;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .info-item i {
+        font-size: 2rem;
+        color: #1db954;
+        margin-bottom: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-header h1 {
+            font-size: 1.8rem;
+        }
+        .contact-card {
+            padding: 20px;
+        }
+        .contact-info {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="contact-container">
+    <div class="contact-header">
+        <h1 class="text-white">Contact Us</h1>
+        <p>We'd love to hear from you!</p>
+    </div>
+    
+    <div class="contact-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <select id="subject" name="subject" class="form-control" required>
+                    <option value="">Select a subject...</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Artist Support">Artist Support</option>
+                    <option value="Technical Issue">Technical Issue</option>
+                    <option value="Partnership">Partnership Opportunity</option>
+                    <option value="Report a Problem">Report a Problem</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-send me-2"></i>Send Message
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="contact-info">
+        <div class="info-item">
+            <i class="bi bi-envelope-fill"></i>
+            <h5>Email</h5>
+            <p>eratune.com@gmail.com</p>
+            <small>Respond within 24 hours</small>
+        </div>
+        <div class="info-item">
+            <i class="bi bi-whatsapp"></i>
+            <h5>WhatsApp</h5>
+            <p>+256 786 341 491</p>
+            <small>Available 9AM - 6PM</small>
+        </div>
+        <div class="info-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <h5>Location</h5>
+            <p>Kampala, Uganda</p>
+            <small>East Africa</small>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

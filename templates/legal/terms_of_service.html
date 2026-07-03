@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .legal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .legal-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .legal-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .legal-content {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .legal-content h2 {
+        font-size: 1.5rem;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        color: #1db954;
+    }
+    
+    .legal-content h3 {
+        font-size: 1.2rem;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .legal-content p {
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    
+    .legal-content ul {
+        margin-bottom: 15px;
+        padding-left: 25px;
+    }
+    
+    .legal-content li {
+        margin-bottom: 8px;
+    }
+    
+    @media (max-width: 768px) {
+        .legal-content {
+            padding: 20px;
+        }
+        .legal-header h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<div class="legal-container">
+    <div class="legal-header">
+        <h1 class="text-white">Terms of Service</h1>
+        <p>Last updated: May 27, 2026</p>
+    </div>
+    
+    <div class="legal-content">
+        <p>Welcome to EraTunez! By accessing or using our music streaming platform, you agree to be bound by these Terms of Service.</p>
+        
+        <h2>1. Acceptance of Terms</h2>
+        <p>By creating an account or using EraTunez, you acknowledge that you have read, understood, and agree to these Terms. If you do not agree, please do not use our service.</p>
+        
+        <h2>2. Account Registration</h2>
+        <h3>Eligibility</h3>
+        <p>You must be at least 13 years old to create an account. Artists must provide accurate information about themselves.</p>
+        
+        <h3>Account Security</h3>
+        <p>You are responsible for maintaining the security of your account. Notify us immediately of any unauthorized access.</p>
+        
+        <h2>3. User Conduct</h2>
+        <p>You agree not to:</p>
+        <ul>
+            <li>Upload copyrighted material you don't own or have permission to use</li>
+            <li>Harass, abuse, or harm other users</li>
+            <li>Use the platform for illegal activities</li>
+            <li>Attempt to bypass our security measures</li>
+            <li>Scrape or copy content without permission</li>
+            <li>Create multiple accounts for abusive purposes</li>
+        </ul>
+        
+        <h2>4. Content Ownership</h2>
+        <h3>Your Content</h3>
+        <p>You retain ownership of any music, images, or other content you upload. By uploading, you grant EraTunez a license to host, stream, and promote your content on our platform.</p>
+        
+        <h3>EraTunez Content</h3>
+        <p>All platform content, including logos, designs, and code, is owned by EraTunez and protected by copyright laws.</p>
+        
+        <h2>5. Artist Monetization</h2>
+        <h3>PRO Artist Program</h3>
+        <p>Artists can upgrade to PRO status by paying a subscription fee. PRO artists receive:</p>
+        <ul>
+            <li>Verified badge and priority placement</li>
+            <li>Merchandise shop access</li>
+            <li>Featured artist section visibility</li>
+            <li>Higher earning potential</li>
+        </ul>
+        
+        <h3>Payments and Payouts</h3>
+        <p>Artists earn from song downloads, fan tips, and merchandise sales. Payouts are processed anytime after reaching a minimum threshold of UGX 10,000.</p>
+        
+        <h2>6. Subscription and Payments</h2>
+        <p>PRO artist subscriptions are billed monthly or annually. Fees are non-refundable except as required by law. We reserve the right to change pricing with 30 days notice.</p>
+        
+        <h2>7. Termination</h2>
+        <p>We may terminate or suspend your account for violating these Terms. You may delete your account at any time. Upon termination, your content may be removed from the platform.</p>
+        
+        <h2>8. Disclaimer of Warranties</h2>
+        <p>EraTunez is provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free service.</p>
+        
+        <h2>9. Limitation of Liability</h2>
+        <p>To the maximum extent permitted by law, EraTunez shall not be liable for any indirect, incidental, or consequential damages arising from your use of the platform.</p>
+        
+        <h2>10. Governing Law</h2>
+        <p>These Terms shall be governed by the laws of Uganda. Any disputes shall be resolved in courts located in Kampala, Uganda.</p>
+        
+        <h2>11. Changes to Terms</h2>
+        <p>We may modify these Terms at any time. Continued use of EraTunez after changes constitutes acceptance of the new Terms.</p>
+        
+        <h2>12. Contact Information</h2>
+        <p>For questions about these Terms, please contact:</p>
+        <ul>
+            <li>Email: eratunez.com@gmail.com</li>
+            <li>WhatsApp: +256 786 341 491</li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

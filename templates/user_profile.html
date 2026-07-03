@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* Profile Page Styles */
+    .profile-wrapper {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .profile-card {
+        background: #0a0a0a;
+        border-radius: 24px;
+        border: 1px solid #1f1f1f;
+        overflow: hidden;
+    }
+    
+    /* Header Section */
+    .profile-header {
+        text-align: center;
+        padding: 40px 30px 30px;
+        background: linear-gradient(135deg, #0f0f0f, #050505);
+        border-bottom: 1px solid #1f1f1f;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #1db954;
+        margin-bottom: 16px;
+    }
+    
+    .profile-avatar-placeholder {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1db954, #0d5c2a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+    }
+    
+    .profile-avatar-placeholder i {
+        font-size: 4rem;
+        color: white;
+    }
+    
+    .profile-name {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 4px;
+    }
+    
+    .profile-username {
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+    
+    .pro-badge {
+        display: inline-block;
+        background: #f39c12;
+        color: #000;
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+    
+    /* Tabs */
+    .profile-tabs {
+        display: flex;
+        border-bottom: 1px solid #1f1f1f;
+        background: #0d0d0d;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 16px;
+        color: #888;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .tab-btn:hover {
+        color: #1db954;
+        background: #121212;
+    }
+    
+    .tab-btn.active {
+        color: #1db954;
+        border-bottom: 2px solid #1db954;
+    }
+    
+    /* Form Sections */
+    .profile-section {
+        padding: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 24px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #ccc;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px 16px;
+        background: #141414;
+        border: 1px solid #2a2a2a;
+        border-radius: 12px;
+        color: white;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #1db954;
+        background: #1a1a1a;
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #555;
+    }
+    
+    /* File Input Styling */
+    .file-input-wrapper input[type="file"] {
+        padding: 10px;
+        background: #141414;
+        cursor: pointer;
+    }
+    
+    .file-input-wrapper input[type="file"]::file-selector-button {
+        background: #1db954;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        color: black;
+        font-weight: bold;
+        margin-right: 12px;
+        cursor: pointer;
+    }
+    
+    .current-file {
+        font-size: 0.7rem;
+        color: #666;
+        margin-top: 6px;
+    }
+    
+    /* Ad Info Box */
+    .ad-info {
+        background: #0f1a12;
+        border: 1px solid #1db954;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 28px;
+    }
+    
+    .ad-info h4 {
+        color: #1db954;
+        margin-bottom: 12px;
+        font-size: 1rem;
+    }
+    
+    .ad-info ul {
+        padding-left: 20px;
+        margin: 0;
+    }
+    
+    .ad-info li {
+        color: #aaa;
+        margin-bottom: 6px;
+        font-size: 0.85rem;
+    }
+    
+    .ad-info li strong {
+        color: #1db954;
+    }
+    
+    /* Submit Button */
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: #1db954;
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 8px;
+    }
+    
+    .btn-submit:hover {
+        background: #1ed760;
+        transform: scale(1.02);
+    }
+    
+    /* Alert Messages */
+    .alert-message {
+        background: #1a2a1a;
+        border: 1px solid #1db954;
+        color: #1db954;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+    }
+    
+    /* Helper Text */
+    .helper-text {
+        font-size: 0.7rem;
+        color: #555;
+        margin-top: 4px;
+    }
+</style>
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+        
+        <!-- Profile Header -->
+        <div class="profile-header">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" class="profile-avatar">
+            {% else %}
+                <div class="profile-avatar-placeholder">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            {% endif %}
+            <div class="profile-name">{{ user.get_display_name }}</div>
+            <div class="profile-username">@{{ user.username }}</div>
+            {% if user.is_pro %}
+                <div class="pro-badge"><i class="bi bi-patch-check-fill me-1"></i>PRO ARTIST</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+    <label for="display_name" class="form-label">Display Name / Stage Name</label>
+    <input type="text" name="display_name" id="display_name" class="form-control bg-dark text-white border-secondary" 
+           value="{{ user.display_name|default:'' }}" placeholder="Your stage name (spaces allowed)">
+    <small class="text-secondary">This name will appear publicly on your profile</small>
+</div>
+        <!-- Tabs -->
+        <div class="profile-tabs">
+            <button class="tab-btn active" onclick="switchTab('edit')">✏️ Edit Profile</button>
+            <button class="tab-btn" onclick="switchTab('advertise')">📢 Advertise</button>
+        </div>
+        
+        <!-- Edit Profile Tab -->
+        <div id="edit-tab" class="profile-section">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-message">
+                        <i class="bi bi-check-circle-fill me-2"></i>{{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="{{ form.display_name.id_for_label }}" class="form-label">{{ form.display_name.label }}</label>
+        {{ form.display_name }}
+        <small class="text-secondary">{{ form.display_name.help_text }}</small>
+        {% if form.display_name.errors %}
+            <div class="text-danger small">{{ form.display_name.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.bio.id_for_label }}" class="form-label">{{ form.bio.label }}</label>
+        {{ form.bio }}
+        <small class="text-secondary">{{ form.bio.help_text }}</small>
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.location.id_for_label }}" class="form-label">{{ form.location.label }}</label>
+        {{ form.location }}
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.website.id_for_label }}" class="form-label">{{ form.website.label }}</label>
+        {{ form.website }}
+        <small class="text-secondary">{{ form.website.help_text }}</small>
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">{{ form.profile_picture.label }}</label>
+        {{ form.profile_picture }}
+        <small class="text-secondary">{{ form.profile_picture.help_text }}</small>
+        {% if user.profile_picture %}
+            <div class="mt-2">
+                <img src="{{ user.profile_picture.url }}" width="60" height="60" class="rounded-circle">
+                <small class="text-secondary ms-2">Current picture</small>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        <label for="{{ form.whatsapp_number.id_for_label }}" class="form-label">{{ form.whatsapp_number.label }}</label>
+        {{ form.whatsapp_number }}
+        <small class="text-secondary">{{ form.whatsapp_number.help_text }}</small>
+    </div>
+    
+    <button type="submit" class="btn btn-success rounded-pill px-4">
+        <i class="bi bi-save me-2"></i>Save Changes
+    </button>
+</form>
+           
+                
+              
+        <!-- Advertise Tab -->
+        <div id="advertise-tab" class="profile-section" style="display: none;">
+            <div class="ad-info">
+                <h4><i class="bi bi-megaphone-fill me-2"></i>Advertise on EraTunes</h4>
+                <ul>
+                    <li>📱 <strong>Sidebar Ad</strong> — 50,000 UGX / month</li>
+                    <li>🎯 <strong>Top Banner</strong> — 100,000 UGX / month</li>
+                    <li>📄 <strong>In-Feed Ad</strong> — 75,000 UGX / month</li>
+                </ul>
+            </div>
+            
+            <form method="post" action="{% url 'advertiser_request' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>Business / Company Name</label>
+                    <input type="text" name="advertiser_business_name" placeholder="Your business name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Message / Requirements</label>
+                    <textarea name="advertiser_message" rows="4" placeholder="Tell us about your advertising needs..."></textarea>
+                </div>
+                
+                <input type="hidden" name="wants_to_advertise" value="True">
+                
+                <button type="submit" class="btn-submit">📩 Submit Request</button>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        const editTab = document.getElementById('edit-tab');
+        const advertiseTab = document.getElementById('advertise-tab');
+        const buttons = document.querySelectorAll('.tab-btn');
+        
+        if (tab === 'edit') {
+            editTab.style.display = 'block';
+            advertiseTab.style.display = 'none';
+            buttons[0].classList.add('active');
+            buttons[1].classList.remove('active');
+        } else {
+            editTab.style.display = 'none';
+            advertiseTab.style.display = 'block';
+            buttons[0].classList.remove('active');
+            buttons[1].classList.add('active');
+        }
+    }
+</script>
+
+{% endblock %}

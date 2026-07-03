@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .charts-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #f39c12;
+    }
+    
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #aaa;
+        padding: 8px 20px;
+        border-radius: 30px;
+        transition: 0.2s;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+        background: #f39c12;
+        border-color: #f39c12;
+        color: black;
+    }
+    
+    .chart-card {
+        background: #181818;
+        border-radius: 12px;
+        padding: 20px;
+        transition: 0.3s;
+    }
+    
+    .chart-card:hover {
+        background: #282828;
+        transform: translateY(-5px);
+    }
+    
+    .rank-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #f39c12;
+        width: 60px;
+        text-align: center;
+    }
+    
+    .chart-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .chart-info {
+        flex: 1;
+        margin-left: 15px;
+    }
+    
+    .chart-title {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+    
+    .chart-artist {
+        font-size: 0.8rem;
+        color: #aaa;
+    }
+    
+    .chart-stats {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .play-count {
+        font-size: 0.8rem;
+        color: #f39c12;
+    }
+    
+    .trending-up {
+        color: #4CAF50;
+        font-size: 0.8rem;
+    }
+    
+    .genre-bar {
+        height: 8px;
+        border-radius: 4px;
+        margin-top: 8px;
+    }
+    
+    .genre-stat {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .artist-rank {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-bottom: 1px solid #222;
+        transition: 0.2s;
+    }
+    
+    .artist-rank:hover {
+        background: #1a1a1a;
+        transform: translateX(5px);
+    }
+    
+    .artist-avatar-small {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    @media (max-width: 768px) {
+        .rank-number {
+            font-size: 1.2rem;
+            width: 40px;
+        }
+        .chart-img {
+            width: 45px;
+            height: 45px;
+        }
+        .chart-title {
+            font-size: 0.8rem;
+        }
+        .filter-btn {
+            padding: 5px 12px;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<div class="charts-header">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white">
+                <i class="bi bi-graph-up me-2" style="color: #f39c12;"></i>Music Charts
+            </h1>
+            <p class="text-secondary">Discover the hottest tracks and trending artists</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Chart Type Tabs -->
+    <div class="filter-buttons">
+        <a href="?type=songs{% if period %}&period={{ period }}{% endif %}{% if selected_genre != 'all' %}&genre={{ selected_genre }}{% endif %}" 
+           class="filter-btn {% if chart_type == 'songs' %}active{% endif %}">
+            <i class="bi bi-music-note me-1"></i> Top Songs
+        </a>
+        <a href="?type=artists{% if period %}&period={{ period }}{% endif %}" 
+           class="filter-btn {% if chart_type == 'artists' %}active{% endif %}">
+            <i class="bi bi-people me-1"></i> Top Artists
+        </a>
+        <a href="?type=genres{% if period %}&period={{ period }}{% endif %}" 
+           class="filter-btn {% if chart_type == 'genres' %}active{% endif %}">
+            <i class="bi bi-pie-chart me-1"></i> Genre Popularity
+        </a>
+    </div>
+    
+    <!-- Period Filter (for songs and artists) -->
+    {% if chart_type != 'genres' %}
+    <div class="filter-buttons">
+        <a href="?type={{ chart_type }}&period=week{% if selected_genre != 'all' %}&genre={{ selected_genre }}{% endif %}" 
+           class="filter-btn {% if period == 'week' %}active{% endif %}">
+            <i class="bi bi-calendar-week me-1"></i> This Week
+        </a>
+        <a href="?type={{ chart_type }}&period=month{% if selected_genre != 'all' %}&genre={{ selected_genre }}{% endif %}" 
+           class="filter-btn {% if period == 'month' %}active{% endif %}">
+            <i class="bi bi-calendar-month me-1"></i> This Month
+        </a>
+        <a href="?type={{ chart_type }}&period=year{% if selected_genre != 'all' %}&genre={{ selected_genre }}{% endif %}" 
+           class="filter-btn {% if period == 'year' %}active{% endif %}">
+            <i class="bi bi-calendar-year me-1"></i> This Year
+        </a>
+    </div>
+    {% endif %}
+    
+    <!-- Genre Filter (for songs only) -->
+    {% if chart_type == 'songs' %}
+    <div class="filter-buttons">
+        <a href="?type=songs&period={{ period }}&genre=all" class="filter-btn {% if selected_genre == 'all' %}active{% endif %}">All Genres</a>
+        {% for genre_code, genre_name in genres|slice:":8" %}
+        <a href="?type=songs&period={{ period }}&genre={{ genre_code }}" 
+           class="filter-btn {% if selected_genre == genre_code %}active{% endif %}">
+            {{ genre_name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Charts Content -->
+    {% if chart_type == 'songs' %}
+    <div class="chart-card">
+        <h3 class="text-white mb-4">
+            <i class="bi bi-trophy-fill me-2" style="color: #f39c12;"></i>
+            Top 50 Songs
+            {% if selected_genre != 'all' %}
+            - {{ selected_genre }}
+            {% endif %}
+        </h3>
+        <div>
+            {% for song in songs %}
+            <div class="artist-rank" onclick="playSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.get_display_name|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }}, pageSongs)">
+                <div class="rank-number">#{{ forloop.counter }}</div>
+                <img src="{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" class="chart-img">
+                <div class="chart-info">
+                    <div class="chart-title">{{ song.title }}</div>
+                    <div class="chart-artist">{{ song.artist.get_display_name }}</div>
+                </div>
+                <div class="chart-stats">
+                    <div class="play-count">
+                        <i class="bi bi-earbuds me-1"></i> {{ song.period_plays|default:0 }} plays
+                    </div>
+                    <button class="btn btn-sm btn-outline-success rounded-circle" 
+                            onclick="event.stopPropagation(); playSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.get_display_name|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }}, pageSongs)">
+                        <i class="bi bi-play-fill"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <i class="bi bi-music-note display-1 text-secondary"></i>
+                <p class="text-secondary mt-3">No songs found</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% elif chart_type == 'artists' %}
+    <div class="chart-card">
+        <h3 class="text-white mb-4">
+            <i class="bi bi-trophy-fill me-2" style="color: #f39c12;"></i>
+            Top 50 Artists
+        </h3>
+        <div>
+            {% for artist in artists %}
+            <a href="{% url 'artist_profile' artist.username %}" class="text-decoration-none">
+                <div class="artist-rank">
+                    <div class="rank-number">#{{ forloop.counter }}</div>
+                    {% if artist.profile_picture %}
+                        <img src="{{ artist.profile_picture.url }}" class="artist-avatar-small">
+                    {% else %}
+                        <div class="artist-avatar-small bg-secondary d-flex align-items-center justify-content-center">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                    {% endif %}
+                    <div class="chart-info">
+                        <div class="chart-title">{{ artist.username }}</div>
+                        <div class="chart-artist">{{ artist.song_count }} songs</div>
+                    </div>
+                    <div class="chart-stats">
+                        <div class="play-count">
+                            <i class="bi bi-earbuds me-1"></i> {{ artist.period_plays|default:0 }} plays
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="text-center py-5">
+                <i class="bi bi-people display-1 text-secondary"></i>
+                <p class="text-secondary mt-3">No artists found</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% elif chart_type == 'genres' %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="chart-card">
+                <h3 class="text-white mb-4">
+                    <i class="bi bi-pie-chart-fill me-2" style="color: #f39c12;"></i>
+                    Genre Popularity
+                </h3>
+                {% for genre in genres %}
+                <div>
+                    <div class="genre-stat">
+                        <div>
+                            <span class="text-white fw-bold">{{ genre.name }}</span>
+                            <small class="text-secondary ms-2">{{ genre.song_count }} songs</small>
+                        </div>
+                        <div class="play-count">{{ genre.play_count }} plays</div>
+                    </div>
+                    <div class="genre-bar" style="width: 100%; background: #333;">
+                        <div class="genre-bar-fill" style="width: {% widthratio genre.play_count genres.0.play_count 100 %}%; height: 8px; background: {{ genre.color }}; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Make pageSongs available for chart clicks
+var pageSongs = {{ page_songs_json|safe }};
+</script>
+
+{% endblock %}

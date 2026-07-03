@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .signup-container {
+        max-width: 450px;
+        margin: 50px auto;
+    }
+    .signup-card {
+        background: #0a0a0a;
+        border: 1px solid #1a1a1a;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .signup-header {
+        background: linear-gradient(135deg, #0a0a0a, #030303);
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    .signup-body {
+        padding: 30px;
+    }
+    .signup-footer {
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #1a1a1a;
+    }
+</style>
+
+<div class="container">
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <i class="bi bi-mic fs-1 text-warning"></i>
+                <h2 class="fw-bold mb-0 mt-2">Artist Registration</h2>
+                <p class="text-secondary mb-0">Upload music, sell merch, grow your fanbase</p>
+            </div>
+            
+            <div class="signup-body">
+                <form method="post">
+                    {% csrf_token %}
+                 
+                     <!-- ========== ADD THIS ERROR DISPLAY SECTION ========== -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Please correct the following errors:</strong>
+        <ul>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <li><strong>{{ field }}:</strong> {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <!-- ========== ADD NON-FIELD ERRORS ========== -->
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- rest of your form fields -->
+    <div class="mb-3">
+        <label for="display_name" class="form-label">Stage Name (Optional)</label>
+        {{ form.display_name }}
+    </div>
+                    <div class="mb-3">
+    <label for="display_name" class="form-label">Stage Name (Optional)</label>
+    {{ form.display_name }}
+    <small class="text-secondary">{{ form.display_name.help_text }}</small>
+</div>
+
+<div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    {{ form.username }}
+    <small class="text-secondary">{{ form.username.help_text }}</small>
+</div>
+
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    {{ form.email }}
+</div>
+
+<div class="mb-3">
+    <label for="whatsapp_number" class="form-label">WhatsApp Number</label>
+    {{ form.whatsapp_number }}
+</div>
+<!-- Add this inside your form, after whatsapp_number field -->
+
+<div class="mb-3">
+    <label class="form-label"><i class="bi bi-geo-alt me-1"></i> Your Country <span class="text-danger">*</span></label>
+    {{ form.country }}
+    <small class="text-secondary">Select your country. Songs will appear in your country's page.</small>
+</div>
+
+<div class="mb-3">
+    <label class="form-label"><i class="bi bi-building me-1"></i> City/Town (Optional)</label>
+    {{ form.city }}
+    <small class="text-secondary">e.g., Kampala, Nairobi, Dar es Salaam</small>
+</div>
+<div class="mb-3">
+    <label for="password1" class="form-label">Password</label>
+    {{ form.password1 }}
+</div>
+
+<div class="mb-3">
+    <label for="password2" class="form-label">Confirm Password</label>
+    {{ form.password2 }}
+</div>
+                    
+                    <button type="submit" class="btn btn-warning w-100 py-2 mt-3">
+                        <i class="bi bi-mic me-2"></i>Register as Artist
+                    </button>
+                </form>
+            </div>
+            
+            <div class="signup-footer">
+                <p class="mb-0 text-secondary">
+                    Already have an artist account? 
+                    <a href="{% url 'login' %}" class="text-warning text-decoration-none">Login here</a>
+                </p>
+                <p class="mb-0 mt-2 text-secondary">
+                    <i class="bi bi-headphones me-1"></i>Listener?
+                    <a href="{% url 'signup' %}" class="text-success text-decoration-none">Sign up as Regular User</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

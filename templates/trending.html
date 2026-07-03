@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .trending-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #ff0000;
+    }
+    
+    .trending-badge-large {
+        display: inline-block;
+        background: linear-gradient(135deg, #ff0000, #cc0000);
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    
+    .song-card {
+        background: #181818;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: 0.3s;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .song-card:hover {
+        background: #282828;
+        transform: translateY(-5px);
+    }
+    
+    .song-card img {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+    
+    .song-info {
+        padding: 12px;
+    }
+    
+    .song-title {
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .song-artist {
+        font-size: 0.75rem;
+        color: #aaa;
+        margin-bottom: 8px;
+    }
+    
+    .song-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.7rem;
+        color: #666;
+    }
+    
+    .trending-number {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        background: #ff0000;
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        z-index: 10;
+    }
+    
+    .play-btn {
+        background: #1db954;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .play-btn:hover {
+        background: white;
+        transform: scale(1.05);
+    }
+    
+    .play-btn i {
+        color: black;
+        font-size: 0.8rem;
+    }
+    
+    .radio-btn {
+        background: #ff8c00;
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .radio-btn:hover {
+        background: white;
+        transform: scale(1.05);
+    }
+    
+    .radio-btn i {
+        color: black;
+        font-size: 0.7rem;
+    }
+    
+    .trending-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #ff0000;
+        color: white;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .trending-header h1 {
+            font-size: 1.8rem;
+        }
+        .song-title {
+            font-size: 0.8rem;
+        }
+        .song-artist {
+            font-size: 0.7rem;
+        }
+        .trending-number {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+        }
+        .play-btn, .radio-btn {
+            width: 28px;
+            height: 28px;
+        }
+        .play-btn i, .radio-btn i {
+            font-size: 0.7rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .song-title {
+            font-size: 0.7rem;
+        }
+        .song-artist {
+            font-size: 0.6rem;
+        }
+        .trending-number {
+            width: 24px;
+            height: 24px;
+            font-size: 0.7rem;
+            top: -8px;
+            left: -8px;
+        }
+    }
+</style>
+
+<script>
+// Convert trending songs to JavaScript array
+var trendingSongs = [
+    {% for song in trending_songs %}
+    {
+        id: {{ song.id }},
+        title: "{{ song.title|escapejs }}",
+        artist: "{{ song.artist.username|escapejs }}",
+        img: "{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}",
+        audio: "{{ song.audio_file.url }}"
+    },
+    {% endfor %}
+];
+
+// Function to play song with trending queue
+function playTrendingSong(audioUrl, title, artist, coverImg, songId) {
+    if (typeof setPlayerQueue === 'function') {
+        setPlayerQueue(trendingSongs, audioUrl);
+    }
+    playSong(audioUrl, title, artist, coverImg, songId, trendingSongs);
+}
+
+// Function to play radio
+function playTrendingRadio(songId) {
+    if (typeof startRadio === 'function') {
+        startRadio(songId);
+    }
+}
+</script>
+
+<div class="trending-header">
+    <div class="container">
+        <div class="text-center">
+            <div class="trending-badge-large">
+                <i class="bi bi-fire me-1"></i> HOT RIGHT NOW
+            </div>
+            <h1 class="display-4 fw-bold text-white">Trending Now</h1>
+            <p class="text-secondary">The most popular songs on EraTunes right now</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold text-white">Top Trending Tracks</h3>
+        <p class="text-secondary mb-0">{{ trending_songs|length }} songs</p>
+    </div>
+    
+    <div class="row g-4">
+        {% for song in trending_songs %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="song-card position-relative">
+                <div class="trending-number">#{{ forloop.counter }}</div>
+                <div class="position-relative">
+                    <img src="{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" 
+                         onclick="playTrendingSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                    <div class="trending-badge">TRENDING</div>
+                </div>
+                <div class="song-info">
+                    <div class="song-title" onclick="playTrendingSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                        {{ song.title }}
+                    </div>
+                    <div class="song-artist">{{ song.artist.username }}</div>
+                    <div class="song-stats">
+                        <span><i class="bi bi-fire text-danger me-1"></i> {{ song.play_count }} plays</span>
+                        <div class="d-flex gap-2">
+                            <button class="play-btn" onclick="event.stopPropagation(); playTrendingSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                                <i class="bi bi-play-fill"></i>
+                            </button>
+                            <button class="radio-btn" onclick="event.stopPropagation(); playTrendingRadio({{ song.id }})">
+                                <i class="bi bi-broadcast"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-fire display-1 text-secondary"></i>
+            <p class="text-secondary mt-3">No trending songs at the moment.</p>
+            <a href="{% url 'home' %}" class="btn btn-success rounded-pill">Back to Home</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

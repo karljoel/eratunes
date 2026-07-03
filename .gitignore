@@ -1,0 +1,8 @@
+media/ 
+*.mp4 
+*.mp3 
+*.wav 
+*.sqlite3 
+__pycache__/ 
+*.pyc 
+staticfiles/ 

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2 class="fw-bold text-white mb-4">Advertise on EraTunes</h2>
+    
+    <div class="card bg-dark border-secondary">
+        <div class="card-body">
+            <h5 class="text-white">Advertising Rates</h5>
+            <ul class="text-secondary mb-4">
+                <li>Sidebar Ad: 50,000 UGX / month</li>
+                <li>Top Banner: 100,000 UGX / month</li>
+                <li>Between Songs: 75,000 UGX / month</li>
+                <li>Event Promotion: 30,000 UGX / 2 weeks</li>
+            </ul>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label text-white">Company/Business Name</label>
+                    <input type="text" name="advertiser_name" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Contact (WhatsApp/Phone)</label>
+                    <input type="text" name="advertiser_contact" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Email</label>
+                    <input type="email" name="advertiser_email" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Ad Title</label>
+                    <input type="text" name="title" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Ad Type</label>
+                    <select name="ad_type" class="form-select bg-dark text-white border-secondary" required>
+                        <option value="sponsor">Sidebar Ad - 50,000 UGX/month</option>
+                        <option value="banner">Top Banner - 100,000 UGX/month</option>
+                        <option value="infeed">Between Songs - 75,000 UGX/month</option>
+                        <option value="event">Event Promotion - 30,000 UGX/2 weeks</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Website/Link URL</label>
+                    <input type="url" name="link_url" class="form-control bg-dark text-white border-secondary" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Ad Image</label>
+                    <input type="file" name="image" class="form-control bg-dark text-white border-secondary" accept="image/*" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Payment Reference (after payment)</label>
+                    <input type="text" name="payment_reference" class="form-control bg-dark text-white border-secondary" placeholder="Mobile Money transaction ID">
+                </div>
+                <button type="submit" class="btn btn-success w-100">Submit Ad Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

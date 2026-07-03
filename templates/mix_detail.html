@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .mix-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .mix-song-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border-bottom: 1px solid var(--border-color);
+        transition: 0.2s;
+        cursor: pointer;
+    }
+    
+    .mix-song-item:hover {
+        background: var(--bg-card-hover);
+    }
+    
+    .mix-song-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .mix-song-reason {
+        font-size: 0.7rem;
+        color: #1db954;
+    }
+</style>
+
+<script>
+var mixSongs = [
+    {% for item in mix_songs %}
+    {
+        id: {{ item.song.id }},
+        title: "{{ item.song.title|escapejs }}",
+        artist: "{{ item.song.artist.username|escapejs }}",
+        img: "{% if item.song.cover_image %}{{ item.song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}",
+        audio: "{{ item.song.audio_file.url }}"
+    },
+    {% endfor %}
+];
+
+function playMixSong(audioUrl, title, artist, coverImg, songId) {
+    setPlayerQueue(mixSongs, audioUrl);
+    playSong(audioUrl, title, artist, coverImg, songId, mixSongs);
+}
+</script>
+
+<div class="mix-header">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-white">{{ mix.name }}</h1>
+        <p class="text-secondary">{{ mix.mix_songs.count }} songs • Updated {{ mix.created_at|date:"F j, Y" }}</p>
+        <button class="btn btn-success rounded-pill" onclick="playMixSong(mixSongs[0]?.audio, mixSongs[0]?.title, mixSongs[0]?.artist, mixSongs[0]?.img, mixSongs[0]?.id)">
+            <i class="bi bi-play-fill me-2"></i>Play All
+        </button>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+            {% for item in mix_songs %}
+            <div class="mix-song-item" onclick="playMixSong('{{ item.song.audio_file.url }}', '{{ item.song.title|escapejs }}', '{{ item.song.artist.username|escapejs }}', '{% if item.song.cover_image %}{{ item.song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ item.song.id }})">
+                <div class="rank-number">#{{ forloop.counter }}</div>
+                <img src="{% if item.song.cover_image %}{{ item.song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}" class="mix-song-img">
+                <div class="flex-grow-1">
+                    <div class="fw-bold">{{ item.song.title }}</div>
+                    <div class="text-secondary small">{{ item.song.artist.username }}</div>
+                    <div class="mix-song-reason"><i class="bi bi-info-circle me-1"></i>{{ item.reason }}</div>
+                </div>
+                <button class="play-btn" onclick="event.stopPropagation(); playMixSong('{{ item.song.audio_file.url }}', '{{ item.song.title|escapejs }}', '{{ item.song.artist.username|escapejs }}', '{% if item.song.cover_image %}{{ item.song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ item.song.id }})">
+                    <i class="bi bi-play-fill"></i>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

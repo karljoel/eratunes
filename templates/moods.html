@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .moods-header {
+        background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #1db954;
+    }
+    
+    .mood-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 25px 15px;
+        text-align: center;
+        transition: 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        border: 1px solid var(--border-color);
+    }
+    
+    .mood-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .mood-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
+    
+    .mood-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    
+    .mood-count {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+    
+    .mood-description {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 8px;
+    }
+    
+    @media (max-width: 768px) {
+        .mood-icon {
+            font-size: 2rem;
+        }
+        .mood-name {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="moods-header">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold text-white">
+            <i class="bi bi-emoji-smile me-2 text-success"></i>Mood-Based Playlists
+        </h1>
+        <p class="text-secondary">Music for every feeling and moment</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row g-4">
+        {% for mood in moods %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'mood_playlist' mood.slug %}" class="mood-card">
+                <div class="mood-icon" style="color: {{ mood.color }};">
+                    <i class="bi {{ mood.icon }}"></i>
+                </div>
+                <div class="mood-name text-white">{{ mood.name }}</div>
+                <div class="mood-count">{{ mood.songs.count }} songs</div>
+                <div class="mood-description">{{ mood.description|truncatechars:50 }}</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

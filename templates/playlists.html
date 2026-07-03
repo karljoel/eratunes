@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .playlist-card {
+        background: #121212;
+        border-radius: 12px;
+        transition: 0.2s;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .playlist-card:hover {
+        transform: translateY(-5px);
+        background: #1a1a1a;
+    }
+    .playlist-cover {
+        width: 100%;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+    }
+    .playlist-cover-placeholder {
+        width: 100%;
+        aspect-ratio: 1/1;
+        background: linear-gradient(135deg, #1db954, #0d5c2a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .playlist-cover-placeholder i {
+        font-size: 3rem;
+        color: white;
+    }
+    .delete-playlist {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.7);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: 0.2s;
+        z-index: 10;
+    }
+    .playlist-card:hover .delete-playlist {
+        opacity: 1;
+    }
+    .delete-playlist:hover {
+        background: #dc3545;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .playlist-card h6 {
+            font-size: 0.8rem;
+        }
+        .playlist-card p {
+            font-size: 0.7rem;
+        }
+        .delete-playlist {
+            width: 25px;
+            height: 25px;
+        }
+        .delete-playlist i {
+            font-size: 0.7rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .col-6 {
+            padding: 0 8px;
+        }
+        .container {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .btn-success {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+    }
+    
+    /* Play all button */
+    .play-all-btn {
+        background: #1db954;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: black;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+    .play-all-btn:hover {
+        background: white;
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mb-4">
+        <h1 class="fw-bold text-white mb-0">My Playlists</h1>
+        <a href="{% url 'create_playlist' %}" class="btn btn-success rounded-pill px-4">
+            <i class="bi bi-plus-circle me-2"></i>New Playlist
+        </a>
+    </div>
+    
+    {% if playlists %}
+    <div class="row g-3 g-md-4">
+        {% for playlist in playlists %}
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="playlist-card position-relative">
+                <a href="{% url 'view_playlist' playlist.id %}" class="text-decoration-none">
+                    {% if playlist.cover_image %}
+                        <img src="{{ playlist.cover_image.url }}" class="playlist-cover">
+                    {% else %}
+                        <div class="playlist-cover-placeholder">
+                            <i class="bi bi-music-note-list"></i>
+                        </div>
+                    {% endif %}
+                    <div class="p-2 p-md-3">
+                        <h6 class="text-white fw-bold mb-1 text-truncate">{{ playlist.name }}</h6>
+                        <p class="text-secondary small mb-0">{{ playlist.songs.count }} songs</p>
+                    </div>
+                </a>
+                <a href="{% url 'delete_playlist' playlist.id %}" class="delete-playlist" 
+                   onclick="return confirm('Delete {{ playlist.name|escapejs }} playlist?')">
+                    <i class="bi bi-trash text-white small"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-music-note-list fs-1 text-secondary"></i>
+        <p class="text-secondary mt-3">You don't have any playlists yet.</p>
+        <a href="{% url 'create_playlist' %}" class="btn btn-success rounded-pill">Create Your First Playlist</a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

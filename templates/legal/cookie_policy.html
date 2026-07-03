@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .legal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    
+    .legal-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .legal-header h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .legal-content {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .legal-content h2 {
+        font-size: 1.5rem;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        color: #1db954;
+    }
+    
+    .legal-content p {
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    
+    .cookie-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    .cookie-table th, .cookie-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .cookie-table th {
+        background: var(--bg-secondary);
+        font-weight: bold;
+    }
+    
+    .cookie-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .btn-accept {
+        background: #1db954;
+        color: black;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+    
+    .btn-reject {
+        background: transparent;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 10px 25px;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+        .legal-header h1 {
+            font-size: 1.8rem;
+        }
+        .legal-content {
+            padding: 20px;
+        }
+        .cookie-table {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<div class="legal-container">
+    <div class="legal-header">
+        <h1 class="text-white">Cookie Policy</h1>
+        <p>Last updated: May 27, 2026</p>
+    </div>
+    
+    <div class="legal-content">
+        <p>This Cookie Policy explains how EraTunez uses cookies and similar technologies to recognize you when you visit our platform. It explains what these technologies are and why we use them, as well as your rights to control our use of them.</p>
+        
+        <h2>What Are Cookies?</h2>
+        <p>Cookies are small data files that are placed on your computer or mobile device when you visit a website. Cookies are widely used by website owners to make their websites work more efficiently, as well as to provide reporting information.</p>
+        
+        <h2>Why Do We Use Cookies?</h2>
+        <p>We use cookies for several reasons:</p>
+        <ul>
+            <li><strong>Essential Cookies:</strong> Required for the platform to function properly (login, player, queue)</li>
+            <li><strong>Preference Cookies:</strong> Remember your settings like dark/light mode</li>
+            <li><strong>Analytics Cookies:</strong> Help us understand how users interact with EraTunez</li>
+            <li><strong>Personalization Cookies:</strong> Enable personalized recommendations and listening history</li>
+        </ul>
+        
+        <h2>Types of Cookies We Use</h2>
+        <table class="cookie-table">
+            <thead>
+                <tr>
+                    <th>Cookie Name</th>
+                    <th>Purpose</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>sessionid</td>
+                    <td>Maintains your login session</td>
+                    <td>Session</td>
+                </tr>
+                <tr>
+                    <td>csrftoken</td>
+                    <td>Protects against cross-site request forgery</td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>eratunez_theme</td>
+                    <td>Remembers your dark/light mode preference</td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>eratunez_player_state</td>
+                    <td>Saves your current song and queue position</td>
+                    <td>1 year</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>Third-Party Cookies</h2>
+        <p>We may also use cookies from third-party services:</p>
+        <ul>
+            <li><strong>YouTube:</strong> For embedded music videos</li>
+            <li><strong>Bootstrap CDN:</strong> For platform styling</li>
+            <li><strong>Font Awesome:</strong> For icons</li>
+        </ul>
+        
+        <h2>Your Cookie Choices</h2>
+        <p>You can control cookies through your browser settings. Most browsers allow you to:</p>
+        <ul>
+            <li>See what cookies are stored</li>
+            <li>Delete all cookies</li>
+            <li>Block cookies from specific sites</li>
+            <li>Block all cookies</li>
+        </ul>
+        <p>However, disabling essential cookies may affect platform functionality, such as staying logged in or saving your player preferences.</p>
+        
+        <div class="cookie-buttons">
+            <button class="btn-accept" onclick="acceptCookies()">Accept All Cookies</button>
+            <button class="btn-reject" onclick="rejectCookies()">Reject Non-Essential</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function acceptCookies() {
+    localStorage.setItem('cookie_consent', 'accepted');
+    alert('Thank you! You have accepted all cookies.');
+}
+
+function rejectCookies() {
+    localStorage.setItem('cookie_consent', 'rejected');
+    alert('Non-essential cookies have been disabled. Essential cookies will still function.');
+}
+</script>
+
+{% endblock %}

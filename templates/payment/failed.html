@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container text-center mt-5 pt-5">
+    <div class="card bg-dark border-danger mx-auto" style="max-width: 500px;">
+        <div class="card-body p-5">
+            <i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>
+            <h2 class="text-danger mt-3">Payment Failed</h2>
+            <p class="text-white mt-2">There was an issue processing your payment.</p>
+            <p class="text-secondary">Please try again or contact support.</p>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary mt-3">Go Home</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
