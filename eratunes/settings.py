@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',  # For S3 storage
     'music',
 ]
 
@@ -119,3 +120,29 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # ========== SECURITY ==========
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+# ========== BACKBLAZE B2 STORAGE ==========
+# Your Backblaze Credentials
+AWS_ACCESS_KEY_ID = '00506f34a75eeb10000000001'
+AWS_SECRET_ACCESS_KEY = 'K005fLTFFWB6sa9XulhuCv8uAiDuH58'
+AWS_STORAGE_BUCKET_NAME = 'EraTunezstore'
+AWS_S3_ENDPOINT_URL = 'https://s3.us-east-005.backblazeb2.com'
+AWS_S3_REGION_NAME = 'us-east-005'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+# Storage Configuration
+STORAGES = {
+    'default': {
+        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
+# Media URL (where files will be served from)
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.backblazeb2.com/'
+MEDIA_ROOT = ''
