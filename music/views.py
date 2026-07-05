@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models import Q, Sum, Count
 from django.core.paginator import Paginator
 from django.utils import timezone
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 import json
