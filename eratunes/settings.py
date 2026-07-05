@@ -109,6 +109,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ========== AUTH ==========
+ADMIN_SITE_HEADER = "EraTunez Admin"
 AUTH_USER_MODEL = 'music.CustomUser'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
