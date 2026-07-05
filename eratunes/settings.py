@@ -114,7 +114,7 @@ AUTH_USER_MODEL = 'music.CustomUser'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
+# ADMIN_SITE_HEADER = "EraTunez Admin"
 # ========== EMAIL ==========
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
