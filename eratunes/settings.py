@@ -4,7 +4,7 @@ Django settings for eratunes project.
 
 import os
 from pathlib import Path
-import dj_database_url # type: ignore
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',  # For S3 storage
+    'storages',  # For S3/Backblaze storage
     'music',
 ]
 
@@ -99,29 +99,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ========== STATIC & MEDIA FILES ==========
+# ========== STATIC FILES ==========
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-# ========== AUTH ==========
-ADMIN_SITE_HEADER = "EraTunez Admin"
-AUTH_USER_MODEL = 'music.CustomUser'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-# ADMIN_SITE_HEADER = "EraTunez Admin"
-# ========== EMAIL ==========
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# ========== SECURITY ==========
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-# ========== BACKBLAZE B2 STORAGE ==========
+# ========== BACKBLAZE B2 STORAGE (MEDIA FILES) ==========
 AWS_ACCESS_KEY_ID = '00506f34a75eeb10000000001'
 AWS_SECRET_ACCESS_KEY = 'K005fLTFFWB6sa9XulhuCv8uAiDuH58'
 AWS_STORAGE_BUCKET_NAME = 'EraTunezstore'
@@ -129,8 +113,33 @@ AWS_S3_ENDPOINT_URL = 'https://s3.us-east-005.backblazeb2.com'
 AWS_S3_REGION_NAME = 'us-east-005'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_ADDRESSING_STYLE = 'path'
-AWS_DEFAULT_ACL = None  # ← CHANGE THIS from 'public-read' to None
+AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.backblazeb2.com/'
+MEDIA_ROOT = ''
+
+# ========== AUTH ==========
+AUTH_USER_MODEL = 'music.CustomUser'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# ========== EMAIL ==========
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# ========== SECURITY ==========
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
