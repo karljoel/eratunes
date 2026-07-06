@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',  # For S3/Backblaze storage
+    'storages',
     'music',
 ]
 
@@ -105,15 +105,14 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ========== BACKBLAZE B2 STORAGE (MEDIA FILES) ==========
-AWS_ACCESS_KEY_ID = '00506f34a75eeb10000000001'
-AWS_SECRET_ACCESS_KEY = 'K005fLTFFWB6sa9XulhuCv8uAiDuH58'
-AWS_STORAGE_BUCKET_NAME = 'EraTunezstore'
-AWS_S3_ENDPOINT_URL = 'https://s3.us-east-005.backblazeb2.com'
-AWS_S3_REGION_NAME = 'us-east-005'
+# ========== CLOUDFLARE R2 STORAGE ==========
+AWS_ACCESS_KEY_ID = 'c59513eb356ccbb7e17d1d9ba93882655'
+AWS_SECRET_ACCESS_KEY = '820ff134bc368c78319e1168b020de73c0d8e84b1a2bee9744e205896fc5c38a'
+AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
+AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
+AWS_S3_REGION_NAME = 'auto'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_ADDRESSING_STYLE = 'path'
-AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -128,18 +127,4 @@ STORAGES = {
     },
 }
 
-MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.backblazeb2.com/'
-MEDIA_ROOT = ''
-
-# ========== AUTH ==========
-AUTH_USER_MODEL = 'music.CustomUser'
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-# ========== EMAIL ==========
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# ========== SECURITY ==========
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.r2.cloudflarestorage.com/'
