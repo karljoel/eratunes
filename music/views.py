@@ -69,13 +69,11 @@ def home(request):
     
     songs = Song.objects.filter(is_approved=True)
     all_artists = CustomUser.objects.filter(is_artist=True).order_by('-is_pro', '-is_verified')
-    shop_items = Product.objects.filter(artist__is_pro=True).select_related('artist').order_by('artist__username')
-    
+    shop_items = Product.objects.filter().select_related('artist').order_by('artist__username')
     pro_artists = CustomUser.objects.filter(
-        is_artist=True, 
-        is_pro=True,
-        is_verified=True
-    ).order_by('-points')[:10]
+    is_artist=True,
+    is_verified=True
+).order_by('-points')[:10]
 
     featured_mixes = DJMix.objects.filter(is_featured=True)[:6]
     recent_mixes = DJMix.objects.all().order_by('-release_date')[:6]
