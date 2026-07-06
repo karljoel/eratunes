@@ -106,7 +106,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ========== CLOUDFLARE R2 STORAGE ==========
-AWS_ACCESS_KEY_ID = 'c59513eb356ccbb7e17d1d9ba93882655'
+AWS_ACCESS_KEY_ID = 'c59513eb356cbb7e17d1d9ba93882655'
 AWS_SECRET_ACCESS_KEY = '820ff134bc368c78319e1168b020de73c0d8e84b1a2bee9744e205896fc5c38a'
 AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
 AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
