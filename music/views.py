@@ -55,6 +55,12 @@ def track_download(request, song_id):
 # ============================================================
 
 def home(request):
+     # Debug: Check what user is
+    print(f"User: {request.user}")
+    print(f"Is authenticated: {request.user.is_authenticated}")
+    print(f"User type: {type(request.user)}")
+    
+    # ... rest of your code
     # pro_artists = CustomUser.objects.filter(
 #     is_artist=True,
 #     is_verified=True
