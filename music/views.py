@@ -55,6 +55,10 @@ def track_download(request, song_id):
 # ============================================================
 
 def home(request):
+    # pro_artists = CustomUser.objects.filter(
+#     is_artist=True,
+#     is_verified=True
+# ).order_by('-points')[:10]
     query = request.GET.get('q')
     category = request.GET.get('category')
     page_number = request.GET.get('page', 1)
