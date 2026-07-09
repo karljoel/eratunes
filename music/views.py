@@ -1599,33 +1599,37 @@ def generate_weekly_mix(user):
 
 
 def get_or_create_mixes(request):
+    # If user is not logged in, return nothing
     if not request.user.is_authenticated:
         return None, None
+    
+    # Get the actual user object
+    current_user = request.user
     
     today = timezone.now().date()
     today_start = timezone.make_aware(datetime.combine(today, datetime.min.time()))
     
     daily_mix = UserMix.objects.filter(
-        user=request.user,
+        user=current_user,  # ← Use current_user instead of request.user
         mix_type='daily',
         created_at__date=today
     ).first()
     
     if not daily_mix:
         daily_mix = UserMix.objects.create(
-            user=request.user,
+            user=current_user,  # ← Use current_user here too
             mix_type='daily',
             name=f"Daily Mix • {today.strftime('%b %d')}",
             expires_at=today_start + timedelta(days=1)
         )
         
-        songs = generate_daily_mix(request.user)
+        songs = generate_daily_mix(current_user)  # ← Pass current_user
         for i, song in enumerate(songs):
             MixSong.objects.create(
                 mix=daily_mix,
                 song=song,
                 order=i,
-                reason=get_mix_reason(song, request.user)
+                reason=get_mix_reason(song, current_user)  # ← Pass current_user
             )
     
     days_since_monday = today.weekday()
@@ -1633,26 +1637,26 @@ def get_or_create_mixes(request):
     monday_start = timezone.make_aware(datetime.combine(monday_date, datetime.min.time()))
     
     weekly_mix = UserMix.objects.filter(
-        user=request.user,
+        user=current_user,  # ← Use current_user
         mix_type='weekly',
         created_at__date__gte=monday_date
     ).first()
     
     if not weekly_mix:
         weekly_mix = UserMix.objects.create(
-            user=request.user,
+            user=current_user,  # ← Use current_user
             mix_type='weekly',
             name=f"Weekly Mix • Week of {monday_date.strftime('%b %d')}",
             expires_at=monday_start + timedelta(days=7)
         )
         
-        songs = generate_weekly_mix(request.user)
+        songs = generate_weekly_mix(current_user)  # ← Pass current_user
         for i, song in enumerate(songs):
             MixSong.objects.create(
                 mix=weekly_mix,
                 song=song,
                 order=i,
-                reason=get_mix_reason(song, request.user)
+                reason=get_mix_reason(song, current_user)  # ← Pass current_user
             )
     
     return daily_mix, weekly_mix
