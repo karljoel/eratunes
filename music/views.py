@@ -102,8 +102,9 @@ def home(request):
         recent_plays = RecentlyPlayed.objects.filter(user=request.user)[:5]
         recent_songs = [play.song for play in recent_plays]
     
-    daily_mix, weekly_mix = get_or_create_mixes(request)
-    
+    # daily_mix, weekly_mix = get_or_create_mixes(request)
+    daily_mix = None
+    weekly_mix = None
     daily_mix_songs = []
     weekly_mix_songs = []
     
@@ -211,10 +212,6 @@ def home(request):
         'recent_mixes': recent_mixes,
         'featured_podcasts': featured_podcasts,
         'recent_podcasts': recent_podcasts,
-        'daily_mix': daily_mix,
-        'weekly_mix': weekly_mix,
-        'daily_mix_songs': daily_mix_songs,
-        'weekly_mix_songs': weekly_mix_songs,
         'moods': moods,
     }
     
@@ -1605,6 +1602,7 @@ def generate_weekly_mix(user):
 
 
 def get_or_create_mixes(request):
+    
     # If user is not logged in, return nothing
     if not request.user.is_authenticated:
         return None, None
