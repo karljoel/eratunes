@@ -127,4 +127,5 @@ STORAGES = {
     },
 }
 
-MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.r2.cloudflarestorage.com/'
+# ========== MEDIA URL ==========
+MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
