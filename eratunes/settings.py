@@ -127,5 +127,5 @@ STORAGES = {
     },
 }
 
-# ========== MEDIA URL ==========
+# In your settings.py
 MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
