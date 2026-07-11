@@ -8,6 +8,7 @@ from .models import CustomUser, Song, Comment, Product, Playlist, PlaylistSong, 
 admin.site.register(Product)
 
 # ==================== CUSTOM USER ADMIN ====================
+@admin.register(CustomUser)  # <--- Use the proper decorator here
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Artist & Fan Info', {
@@ -21,11 +22,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 'email', 'points', 'is_artist', 'is_pro', 'is_verified', 'is_staff']
     list_editable = ['points', 'is_verified', 'is_pro']
 
-# Unregister default User if exists, then register CustomUser
-if admin.site.is_registered(CustomUser):
-    admin.site.unregister(CustomUser)
-admin.site.register(CustomUser, CustomUserAdmin)
-
+# DELETE the old unregister/register block that was down here!
 # ==================== SONG ADMIN ====================
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):

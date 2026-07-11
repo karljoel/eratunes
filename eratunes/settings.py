@@ -142,3 +142,5 @@ STORAGES = {
 
 # In your settings.py
 MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
+# Tell Django to use your custom user model globally
+AUTH_USER_MODEL = 'music.CustomUser'
