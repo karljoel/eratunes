@@ -99,8 +99,8 @@ def home(request):
     
     recent_songs = []
     if request.user.is_authenticated:
-        recent_plays = RecentlyPlayed.objects.filter(user=request.user)[:5]
-        recent_songs = [play.song for play in recent_plays]
+     recent_plays = RecentlyPlayed.objects.filter(user=request.user).select_related('song')[:5]
+    recent_songs = [play.song for play in recent_plays]
     
     # daily_mix, weekly_mix = get_or_create_mixes(request)
     daily_mix = None
@@ -279,7 +279,7 @@ def radio_view(request, song_id):
         is_approved=True
     ).exclude(id=song_id).filter(
         Q(genre=seed_song.genre) |
-        Q(artist=seed_song.artist) |
+       Q(artist__username=seed_song.artist.username) |
         Q(is_trending=True)
     ).distinct().order_by('-play_count')[:50]
     
@@ -688,9 +688,8 @@ def upload_song(request):
 
 def artist_profile(request, username):
     artist = get_object_or_404(CustomUser, username=username, is_artist=True)
-    songs = Song.objects.filter(artist=artist, is_approved=True).order_by('-created_at')
-    merch = Product.objects.filter(artist=artist)
-    
+    songs = Song.objects.filter(artist__username=artist.username, is_approved=True).order_by('-created_at')
+    merch = Product.objects.filter(artist__username=artist.username)
     total_plays = songs.aggregate(total=Sum('play_count'))['total'] or 0
     
     context = {
@@ -1174,7 +1173,7 @@ def charts_page(request):
             ).count()
             if period_plays > 0:
                 artist.period_plays = period_plays
-                artist.song_count = Song.objects.filter(artist=artist, is_approved=True).count()
+                artist.song_count = Song.objects.filter(artist__username=artist.username, is_approved=True).count()
                 artists_with_plays.append(artist)
         
         artists_with_plays.sort(key=lambda x: x.period_plays, reverse=True)
@@ -1474,33 +1473,39 @@ def track_completion(request, song_id):
 def all_artists(request):
     filter_type = request.GET.get('filter', 'all')
     page_number = request.GET.get('page', 1)
-    
+
     if filter_type == 'pro':
         artists_list = list(CustomUser.objects.filter(
-            is_artist=True, 
+            is_artist=True,
             is_pro=True
         ).order_by('-points'))
     elif filter_type == 'verified':
         artists_list = list(CustomUser.objects.filter(
-            is_artist=True, 
+            is_artist=True,
             is_verified=True
         ).order_by('-points'))
     else:
         artists_list = list(CustomUser.objects.filter(
             is_artist=True
         ).order_by('-is_pro', '-is_verified', '-points'))
-    
+
     for artist in artists_list:
         artist.song_count = Song.objects.filter(
-        artist__username=artist.username, is_approved=True
-    ).count()
-    total_plays = Song.objects.filter(
-        artist__username=artist.username, is_approved=True
-    ).aggregate(total=Sum('play_count'))['total']
-    artist.total_plays = total_plays if total_plays else 0
+            artist__username=artist.username, is_approved=True
+        ).count()
+        total_plays = Song.objects.filter(
+            artist__username=artist.username, is_approved=True
+        ).aggregate(total=Sum('play_count'))['total']
+        artist.total_plays = total_plays if total_plays else 0
+
     paginator = Paginator(artists_list, 20)
     artists = paginator.get_page(page_number)
-    
+
+    context = {
+        'artists': artists,
+        'filter': filter_type,
+    }
+    return render(request, 'all_artists.html', context)
     context = {
         'artists': artists,
         'filter': filter_type,
@@ -1895,7 +1900,7 @@ def search_suggestions(request):
     )[:5]
     
     for artist in artists:
-        song_count = Song.objects.filter(artist=artist, is_approved=True).count()
+        song_count = Song.objects.filter(artist__username=artist.username, is_approved=True).count()
         results.append({
             'title': artist.username,
             'subtitle': f"Artist • {song_count} songs • {artist.followers.count()} followers",

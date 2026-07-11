@@ -4,7 +4,20 @@ Django settings for eratunes project.
 
 import os
 from pathlib import Path
-import dj_database_url
+try:
+    import dj_database_url  # type: ignore[import]
+except Exception:
+    # Provide a minimal fallback if dj_database_url is not installed.
+    class _Fallback:
+        @staticmethod
+        def config(default=None, conn_max_age=0):
+            # Return a simple sqlite config when the package is unavailable.
+            return {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': str(Path(default.split('sqlite:///')[-1])) if default else str(BASE_DIR / 'db.sqlite3'),
+            }
+
+    dj_database_url = _Fallback()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
