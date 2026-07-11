@@ -102,17 +102,20 @@ def home(request):
      recent_plays = RecentlyPlayed.objects.filter(user=request.user).select_related('song')[:5]
     recent_songs = [play.song for play in recent_plays]
     
-    # daily_mix, weekly_mix = get_or_create_mixes(request)
     daily_mix = None
     weekly_mix = None
     daily_mix_songs = []
     weekly_mix_songs = []
     
-    if daily_mix:
-        daily_mix_songs = daily_mix.mix_songs.select_related('song', 'song__artist').all()[:10]
-    if weekly_mix:
-        weekly_mix_songs = weekly_mix.mix_songs.select_related('song', 'song__artist').all()[:10]
-    
+    if request.user.is_authenticated:
+        try:
+            daily_mix, weekly_mix = get_or_create_mixes(request)
+            if daily_mix:
+                daily_mix_songs = daily_mix.mix_songs.select_related('song', 'song__artist').all()[:10]
+            if weekly_mix:
+                weekly_mix_songs = weekly_mix.mix_songs.select_related('song', 'song__artist').all()[:10]
+        except Exception as e:
+            print(f"Mix error: {e}")
     public_playlists = Playlist.objects.filter(is_public=True).order_by('-play_count')[:6]
     
     today = timezone.now().date()
@@ -213,6 +216,10 @@ def home(request):
         'featured_podcasts': featured_podcasts,
         'recent_podcasts': recent_podcasts,
         'moods': moods,
+        'daily_mix': daily_mix,        # ← ADD THIS
+        'weekly_mix': weekly_mix,      # ← ADD THIS
+        'daily_mix_songs': daily_mix_songs,
+        'weekly_mix_songs': weekly_mix_songs,
     }
     
     return render(request, 'index.html', context)
@@ -1510,7 +1517,6 @@ def all_artists(request):
         'artists': artists,
         'filter': filter_type,
     }
-    return render(request, 'all_artists.html', context)
 
 # ============================================================
 # DAILY/WEEKLY MIXES
