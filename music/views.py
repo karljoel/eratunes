@@ -995,7 +995,7 @@ def get_ai_recommendations(request):
         else:
             recommendations = get_recommendations_for_user(request)
             
-            if not recommendations or recommendations.count() == 0:
+            if recommendations is None or not recommendations.exists():
                 recommendations = Song.objects.filter(is_approved=True).order_by('-play_count')[:20]
         
         recommendations_data = []
@@ -1470,28 +1470,33 @@ def track_completion(request, song_id):
 # ALL ARTISTS
 # ============================================================
 
+# THE FIX - add list() to force evaluation:
 def all_artists(request):
     filter_type = request.GET.get('filter', 'all')
     page_number = request.GET.get('page', 1)
     
     if filter_type == 'pro':
-        artists_list = CustomUser.objects.filter(
+        artists_list = list(CustomUser.objects.filter(
             is_artist=True, 
             is_pro=True
-        ).order_by('-points')
+        ).order_by('-points'))
     elif filter_type == 'verified':
-        artists_list = CustomUser.objects.filter(
+        artists_list = list(CustomUser.objects.filter(
             is_artist=True, 
             is_verified=True
-        ).order_by('-points')
+        ).order_by('-points'))
     else:
-        artists_list = CustomUser.objects.filter(
+        artists_list = list(CustomUser.objects.filter(
             is_artist=True
-        ).order_by('-is_pro', '-is_verified', '-points')
+        ).order_by('-is_pro', '-is_verified', '-points'))
     
     for artist in artists_list:
-        artist.song_count = Song.objects.filter(artist=artist, is_approved=True).count()
-        total_plays = Song.objects.filter(artist=artist, is_approved=True).aggregate(total=Sum('play_count'))['total']
+        artist.song_count = Song.objects.filter(
+            artist=artist, is_approved=True
+        ).count()
+        total_plays = Song.objects.filter(
+            artist=artist, is_approved=True
+        ).aggregate(total=Sum('play_count'))['total']
         artist.total_plays = total_plays if total_plays else 0
     
     paginator = Paginator(artists_list, 20)
@@ -1502,7 +1507,6 @@ def all_artists(request):
         'filter': filter_type,
     }
     return render(request, 'all_artists.html', context)
-
 
 # ============================================================
 # DAILY/WEEKLY MIXES
@@ -1827,7 +1831,7 @@ def browse(request):
     
     recommended_songs = []
     if request.user.is_authenticated:
-        recent_plays = RecentlyPlayed.objects.filter(user=request_user).select_related('song')[:5]
+        recent_plays = RecentlyPlayed.objects.filter(user=request.user).select_related('song')[:5]
         if recent_plays:
             genres = [play.song.genre for play in recent_plays if play.song.genre]
             if genres:
