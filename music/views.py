@@ -1492,13 +1492,12 @@ def all_artists(request):
     
     for artist in artists_list:
         artist.song_count = Song.objects.filter(
-            artist=artist, is_approved=True
-        ).count()
-        total_plays = Song.objects.filter(
-            artist=artist, is_approved=True
-        ).aggregate(total=Sum('play_count'))['total']
-        artist.total_plays = total_plays if total_plays else 0
-    
+        artist__username=artist.username, is_approved=True
+    ).count()
+    total_plays = Song.objects.filter(
+        artist__username=artist.username, is_approved=True
+    ).aggregate(total=Sum('play_count'))['total']
+    artist.total_plays = total_plays if total_plays else 0
     paginator = Paginator(artists_list, 20)
     artists = paginator.get_page(page_number)
     
