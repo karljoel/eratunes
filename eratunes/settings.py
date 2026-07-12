@@ -123,13 +123,16 @@ AWS_ACCESS_KEY_ID = 'c59513eb356cbb7e17d1d9ba93882655'
 AWS_SECRET_ACCESS_KEY = '820ff134bc368c78319e1168b020de73c0d8e84b1a2bee9744e205896fc5c38a'
 AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
 AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
-AWS_S3_REGION_NAME = 'weur'  # ← Fixed region
+AWS_S3_REGION_NAME = 'weur'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_DEFAULT_ACL = 'public-read'
+AWS_DEFAULT_ACL = None  # Crucial for R2 functionality
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+
+# Forces Django-storages to route asset URLs using your public link instead of AWS fallbacks
+AWS_S3_CUSTOM_DOMAIN = 'pub-bee61826af38438db4045c84ae0bc301.r2.dev'
 
 STORAGES = {
     'default': {
@@ -140,7 +143,7 @@ STORAGES = {
     },
 }
 
-# In your settings.py
 MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
+
 # Tell Django to use your custom user model globally
 AUTH_USER_MODEL = 'music.CustomUser'
