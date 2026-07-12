@@ -99,9 +99,10 @@ def home(request):
     
     recent_songs = []
     if request.user.is_authenticated:
-     recent_plays = RecentlyPlayed.objects.filter(user=request.user).select_related('song')[:5]
-    recent_songs = [play.song for play in recent_plays]
-    
+        recent_plays = RecentlyPlayed.objects.filter(
+            user=request.user
+        ).select_related('song')[:5]
+        recent_songs = [play.song for play in recent_plays]
     daily_mix = None
     weekly_mix = None
     daily_mix_songs = []

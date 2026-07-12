@@ -348,6 +348,17 @@ document.addEventListener('DOMContentLoaded', function() {
     loadRecommendations();
 });
 
+// Safety wrapper - waits for player to load
+function safePlaySong(audio, title, artist, img, id, queue) {
+    if (typeof playSong === 'function') {
+        playSong(audio, title, artist, img, id, queue);
+    } else {
+        setTimeout(function() {
+            safePlaySong(audio, title, artist, img, id, queue);
+        }, 200);
+    }
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
