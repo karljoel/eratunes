@@ -125,10 +125,13 @@ AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
 AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
 AWS_S3_REGION_NAME = 'weur'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_DEFAULT_ACL = None  # Crucial for R2 functionality
+AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
+
+# Update this block here:
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
+    'ContentDisposition': 'attachment',  # <-- Forces browsers to download instantly instead of playing
 }
 
 # Forces Django-storages to route asset URLs using your public link instead of AWS fallbacks

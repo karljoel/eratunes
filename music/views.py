@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import FileResponse, Http404, JsonResponse
+from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.db import models
 from django.db.models import Q, Sum, Count
 from django.core.paginator import Paginator
@@ -34,11 +36,29 @@ from .forms import (
 
 @login_required
 def download_song(request, song_id):
-    """Free download for logged-in users"""
+    """Free download for logged-in users - streamed as a forced attachment"""
     song = get_object_or_404(Song, id=song_id)
+    
+    # 1. Track the download count
     song.download_count += 1
     song.save()
-    return redirect(song.audio_file.url)
+    
+    # 2. Stream the file from Cloudflare R2 through Django to force an instant attachment download
+    r = requests.get(song.audio_file.url, stream=True) # type: ignore
+    
+    response = StreamingHttpResponse(
+        r.iter_content(chunk_size=8192),
+        content_type=r.headers.get('content-type', 'audio/mpeg')
+    )
+    
+    # Clean the title for the file name (removing quotes or odd characters)
+    clean_title = song.title.replace('"', '').replace("'", "")
+    
+    # This header is the secret sauce that forces an instant device save-dialog
+    response['Content-Disposition'] = f'attachment; filename="{clean_title}.mp3"'
+    response['Content-Length'] = r.headers.get('content-length')
+    
+    return response
 
 
 @login_required

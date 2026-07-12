@@ -301,13 +301,17 @@
                     <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
                 </div>
             </div>
-           <div class="action-buttons">
+    <div class="action-buttons">
     <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()">
         <i class="bi bi-play-fill me-2"></i>Play Now
     </button>
     
     {% if user.is_authenticated %}
-        <a href="{% url 'download_song' song.id %}" class="btn btn-success rounded-pill px-4">
+        <!-- Points straight to R2 with download attribute, and passes song ID for stats tracking -->
+        <a href="{{ song.audio_file.url }}" 
+           download="{{ song.title }}.mp3" 
+           data-song-id="{{ song.id }}"
+           class="btn btn-success rounded-pill px-4 download-trigger">
             <i class="bi bi-download me-2"></i>Download Now - Free
         </a>
     {% else %}
@@ -326,8 +330,7 @@
         <i class="bi bi-chevron-right"></i>
     </a>
     {% endif %}
-</div>
-    
+</div>       
     {% if prev_song %}
     <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
         <i class="bi bi-chevron-left"></i>
@@ -566,6 +569,35 @@ document.addEventListener('DOMContentLoaded', function() {
 // Make sure the buy button form submits normally
 document.getElementById('buyForm')?.addEventListener('submit', function(e) {
     console.log("Buy form submitted");
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const downloadBtn = document.querySelector('.download-trigger');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            const songId = this.getAttribute('data-song-id');
+            
+            // Fire background tracking request to your stats view
+            fetch(`/music/track-download/${songId}/`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Instantly updates the download stat count UI badge on the page
+                    const statBadge = document.querySelector('.bi-download').parentElement;
+                    if (statBadge) {
+                        statBadge.innerHTML = `<i class="bi bi-download me-1"></i> ${data.downloads} downloads`;
+                    }
+                }
+            })
+            .catch(err => console.log('Tracking error:', err));
+        });
+    }
 });
 </script>
 {% endblock %}
