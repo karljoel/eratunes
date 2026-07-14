@@ -2,11 +2,13 @@ from xml.etree.ElementTree import Comment
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 
 # Custom username validator that allows spaces
 class UsernameWithSpacesValidator(UnicodeUsernameValidator):
@@ -112,6 +114,9 @@ class CustomUser(AbstractUser):
         """Return display name or username"""
         return self.display_name if self.display_name else self.username
     
+    def get_absolute_url(self):
+        return reverse('artist_detail', args=[str(self.id)])
+    
     def __str__(self):
         return self.username
     
@@ -209,6 +214,8 @@ class Song(models.Model):
             return None
         
         return f"https://www.youtube.com/embed/{video_id}?autoplay=0&enablejsapi=1"
+    def get_absolute_url(self):
+        return reverse('song_detail', args=[str(self.id)])
     
     class Meta:
         ordering = ['-created_at']

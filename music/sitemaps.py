@@ -1,4 +1,5 @@
 from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 from .models import Song, CustomUser
 
 class SongSitemap(Sitemap):
@@ -11,6 +12,9 @@ class SongSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.created_at
 
+    def location(self, obj):
+        return reverse('song_detail', args=[str(obj.id)])
+
 
 class ArtistSitemap(Sitemap):
     changefreq = "monthly"
@@ -21,3 +25,6 @@ class ArtistSitemap(Sitemap):
 
     def lastmod(self, obj):
         return obj.last_active
+
+    def location(self, obj):
+        return reverse('artist_profile', args=[str(obj.username)])
