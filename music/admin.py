@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils import timezone
 from datetime import timedelta
 from .models import CustomUser, Song, Comment, Product, Playlist, PlaylistSong, Ad, DJMix, Podcast, ProRequest, Mood, SongMood
-
+from .models import BlogPost
 # ==================== PRODUCT ADMIN ====================
 admin.site.register(Product)
 
@@ -218,3 +218,9 @@ class ProRequestAdmin(admin.ModelAdmin):
         count = queryset.update(status='rejected')
         self.message_user(request, f"❌ {count} PRO request(s) rejected.")
     reject_requests.short_description = "Reject selected PRO requests"
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'created_at', 'published']
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'content']    
