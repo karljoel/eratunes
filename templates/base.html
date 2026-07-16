@@ -462,12 +462,14 @@
             width: 80px;
             height: 3px;
             -webkit-appearance: none;
+            appearance: none;
             background: #333;
             border-radius: 2px;
         }
         
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
+            appearance: none;
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -674,30 +676,31 @@
                 flex: 1;
             }
         }
+        
         /* Fix dropdown click issues */
-.dropdown {
-    position: relative;
-    z-index: 1060;
-}
+        .dropdown {
+            position: relative;
+            z-index: 1060;
+        }
 
-.navbar {
-    z-index: 1050;
-}
+        .navbar {
+            z-index: 1050;
+        }
 
-.dropdown-menu {
-    z-index: 1070;
-}
+        .dropdown-menu {
+            z-index: 1070;
+        }
 
-.dropdown-toggle::after {
-    display: inline-block;
-    margin-left: 0.255em;
-    vertical-align: 0.255em;
-    content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
-}
+        .dropdown-toggle::after {
+            display: inline-block;
+            margin-left: 0.255em;
+            vertical-align: 0.255em;
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
         
         /* Light mode general text fixes */
         [data-theme="light"] .text-white {
@@ -753,45 +756,134 @@
             background-color: #198754 !important;
             color: white !important;
         }
+
+        /* ========== FIX: SONG TEXT COLORS IN LIGHT MODE ========== */
+        .song-title,
+        .song-artist-name,
+        .artist-name,
+        .card-title,
+        .shop-item-name,
+        .queue-item-title {
+            color: var(--text-primary);
+        }
+
+        .song-artist,
+        .shop-item-artist,
+        .queue-item-artist,
+        .text-muted {
+            color: var(--text-secondary);
+        }
+
+        /* ========== FIX: FEATURED ARTISTS MOBILE ========== */
+        .artist-name {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+            font-size: 0.7rem;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 576px) {
+            .artist-name {
+                white-space: normal;
+                word-break: break-word;
+                font-size: 0.6rem;
+                max-width: 70px;
+                line-height: 1.2;
+            }
+            
+            .artist-card {
+                min-width: 80px !important;
+                max-width: 90px;
+            }
+            
+            .artist-img {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .text-center[style*="min-width: 100px"] {
+                min-width: 80px !important;
+            }
+        }
+
+        /* ========== FIX: SONG CARDS MOBILE ========== */
+        .song-card {
+            background: var(--bg-card);
+            transition: 0.3s;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .song-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 576px) {
+            .song-card {
+                padding: 8px !important;
+            }
+            
+            .song-card .song-title {
+                font-size: 0.7rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            
+            .song-card .song-artist-name {
+                font-size: 0.6rem !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
         /* Social Media Links */
-.social-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 35px;
-    height: 35px;
-    background: var(--bg-card);
-    border-radius: 50%;
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background: var(--bg-card);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
 
-.social-link:hover {
-    transform: translateY(-3px);
-    background: #1db954;
-    color: white;
-}
+        .social-link:hover {
+            transform: translateY(-3px);
+            background: #1db954;
+            color: white;
+        }
 
-[data-theme="light"] .social-link {
-    background: #f0f0f0;
-    color: #1a1a1a;
-}
+        [data-theme="light"] .social-link {
+            background: #f0f0f0;
+            color: #1a1a1a;
+        }
 
-[data-theme="light"] .social-link:hover {
-    background: #1db954;
-    color: white;
-}
+        [data-theme="light"] .social-link:hover {
+            background: #1db954;
+            color: white;
+        }
 
-/* Social links responsive */
-@media (max-width: 768px) {
-    .social-link {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-    }
-}
+        /* Social links responsive */
+        @media (max-width: 768px) {
+            .social-link {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
