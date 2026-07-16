@@ -1499,44 +1499,32 @@ function playerToggleLike() {
     }
 }
 
-// ========== UPDATED: FREE DOWNLOAD FUNCTION ==========
+// ========== UPDATED: FREE DOWNLOAD FUNCTION (NO LOGIN REQUIRED) ==========
 function playerDownloadCurrent() {
-    if (!playerCurrentSong || !playerCurrentSong.id) {
+    if (!playerCurrentSong || !playerCurrentSong.audio) {
         showToast("No song selected");
         return;
     }
     
-    // Check if user is logged in
+    // Track download for stats (if user is logged in, track it; if not, skip)
     {% if user.is_authenticated %}
-        // Direct download - FREE!
-        if (playerCurrentSong.audio) {
-            // Track download for stats
-            fetch(`/track-download/${playerCurrentSong.id}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json'
-                }
-            }).catch(err => console.log('Download tracking error:', err));
-            
-            // Download the song
-            const link = document.createElement('a');
-            link.href = playerCurrentSong.audio;
-            link.download = '';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Downloading...");
-        } else {
-            showToast("No audio file available");
-        }
-    {% else %}
-        // User not logged in - redirect to login
-        showToast("Login to download songs");
-        setTimeout(() => {
-            window.location.href = "/login/";
-        }, 1500);
+        fetch(`/track-download/${playerCurrentSong.id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        }).catch(err => console.log('Download tracking error:', err));
     {% endif %}
+    
+    // Direct download - FREE for everyone!
+    const link = document.createElement('a');
+    link.href = playerCurrentSong.audio;
+    link.download = '';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`⬇️ Downloading "${playerCurrentSong.title}"...`);
 }
 
 function playerToggleQueue() {
@@ -1866,6 +1854,17 @@ function loadLyrics() {
             console.error('Error loading lyrics:', err);
             document.getElementById('lyrics-content').innerHTML = '<div class="text-center py-4 text-secondary">Failed to load lyrics</div>';
         });
+}
+// ========== INSTANT DOWNLOAD ==========
+function downloadSongInstant(audioUrl, songTitle) {
+    showToast(`⬇️ Downloading "${songTitle}"...`);
+    const link = document.createElement('a');
+    link.href = audioUrl;
+    link.download = '';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 function displayPlainLyrics(lyrics) {

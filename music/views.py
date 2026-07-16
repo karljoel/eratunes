@@ -35,15 +35,12 @@ from .forms import (
 # FREE DOWNLOAD VIEWS
 # ============================================================
 
-@login_required
+# 🔥 REMOVE @login_required
 def download_song(request, song_id):
-    """Free download for logged-in users - streamed as a forced attachment"""
     song = get_object_or_404(Song, id=song_id)
-    
-    # 1. Track the download count
     song.download_count += 1
     song.save()
-    
+    return redirect(song.audio_file.url)
     # 2. Stream the file from Cloudflare R2 through Django to force an instant attachment download
     r = requests.get(song.audio_file.url, stream=True) # type: ignore
     

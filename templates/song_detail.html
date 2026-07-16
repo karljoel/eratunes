@@ -290,35 +290,40 @@
 {% else %}
     <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover">
 {% endif %}  
-        <div class="song-info">
-            <h1 class="song-title">{{ song.title }}</h1>
-            <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
-            <div class="song-stats">
-                <div class="stat-badge">
-                    <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
-                </div>
-                <div class="stat-badge">
-                    <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
-                </div>
-            </div>
+       <div class="song-info">
+    <h1 class="song-title">{{ song.title }}</h1>
+    <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
+    <div class="song-stats">
+        <div class="stat-badge">
+            <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
+        </div>
+        <div class="stat-badge">
+            <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
+        </div>
+    </div>
     <div class="action-buttons">
-    <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()">
-        <i class="bi bi-play-fill me-2"></i>Play Now
-    </button>
-    
-    {% if user.is_authenticated %}
-        <!-- Points straight to R2 with download attribute, and passes song ID for stats tracking -->
-        <a href="{{ song.audio_file.url }}" 
-           download="{{ song.title }}.mp3" 
-           data-song-id="{{ song.id }}"
-           class="btn btn-success rounded-pill px-4 download-trigger">
+        <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()">
+            <i class="bi bi-play-fill me-2"></i>Play Now
+        </button>
+
+        <!-- 🔥 UPDATED: Download button - FREE for everyone, no login needed -->
+        <button class="btn btn-success rounded-pill px-4" 
+                onclick="downloadSongInstant('{{ song.audio_file.url }}', '{{ song.title|escapejs }}')">
             <i class="bi bi-download me-2"></i>Download Now - Free
+        </button>
+
+        {% if prev_song %}
+        <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
+            <i class="bi bi-chevron-left"></i>
         </a>
-    {% else %}
-        <a href="{% url 'login' %}" class="btn btn-success rounded-pill px-4">
-            <i class="bi bi-download me-2"></i>Login to Download
+        {% endif %}
+        {% if next_song %}
+        <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
+            <i class="bi bi-chevron-right"></i>
         </a>
-    {% endif %}
+        {% endif %}
+    </div>
+</div>
     
     {% if prev_song %}
     <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
