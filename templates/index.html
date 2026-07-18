@@ -673,6 +673,12 @@ function getCookie(name) {
                             title="Download">
                         <i class="bi bi-download"></i>
                     </button>
+                    <!-- Share button -->
+<button class="btn btn-sm btn-outline-info rounded-circle action-btn" 
+        onclick="openShareModal('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.id }}')" 
+        title="Share">
+    <i class="bi bi-share-fill"></i>
+</button>
                 </div>
             </div>
         </div>
@@ -707,6 +713,12 @@ function getCookie(name) {
                             title="Download">
                         <i class="bi bi-download"></i>
                     </button>
+                    <!-- Share button -->
+<button class="btn btn-sm btn-outline-info rounded-circle action-btn" 
+        onclick="openShareModal('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.id }}')" 
+        title="Share">
+    <i class="bi bi-share-fill"></i>
+</button>
                 </div>
             </div>
         </div>
@@ -777,6 +789,12 @@ function getCookie(name) {
                             title="View Comments">
                         <i class="bi bi-chat"></i>
                     </button>
+                    <!-- Share button -->
+<button class="btn btn-sm btn-outline-info rounded-circle action-btn" 
+        onclick="openShareModal('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.id }}')" 
+        title="Share">
+    <i class="bi bi-share-fill"></i>
+</button>
                 </div>
             </div>
         </div>
