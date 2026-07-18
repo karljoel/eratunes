@@ -2245,8 +2245,11 @@ function fetchSearchSuggestions(query) {
             suggestionsLoading.style.display = 'none';
             suggestionsList.innerHTML = `<div class="p-3 text-center text-danger">Search failed</div>`;
         });
+    }
 // ========== SHARE FUNCTION ==========
 function openShareModal(songTitle, artistName, songId) {
+    alert("Share button clicked for song: " + songTitle + " by " + artistName);
+    showToast('Opening share options...');
     const url = `https://www.eratunez.com/song/${songId}/`;
     const text = `🎵 Check out "${songTitle}" by ${artistName} on EraTunez! 🎶\n\nDownload and stream East African music for free at:`;
     const shareUrl = url;
