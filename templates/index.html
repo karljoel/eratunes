@@ -789,15 +789,48 @@ function getCookie(name) {
                             title="View Comments">
                         <i class="bi bi-chat"></i>
                     </button>
+                    
                     <!-- Share button -->
-<button class="btn btn-sm btn-outline-info rounded-circle action-btn" 
-        onclick="openShareModal('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.id }}')" 
-        title="Share">
-    <i class="bi bi-share-fill"></i>
-</button>
+                    <button class="btn btn-sm btn-outline-info rounded-circle action-btn" 
+                            onclick="openShareModal('{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{{ song.id }}')" 
+                            title="Share">
+                        <i class="bi bi-share-fill"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- ========== ADSTERRA AD - AFTER EVERY 6TH SONG ========== -->
+        {% if forloop.counter|divisibleby:6 and not forloop.last %}
+        <div class="col-12 my-3">
+            <div class="bg-dark border border-secondary rounded-3 p-3 text-center">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <small class="text-secondary">📢 Sponsored</small>
+                    <span class="badge bg-secondary">Ad</span>
+                </div>
+                <a href="https://www.effectivecpmnetwork.com/nfysj4vb?key=05ec0b67f62d69e64b712eaf96f4fa86" 
+                   target="_blank" 
+                   rel="noopener nofollow" 
+                   class="text-decoration-none d-block"
+                   onclick="showToast('⬆️ Opening sponsor...')">
+                    <div class="bg-success bg-opacity-10 rounded-2 p-3 hover-effect">
+                        <i class="bi bi-megaphone-fill text-success me-2" style="font-size: 1.5rem;"></i>
+                        <span class="text-white fw-bold">🎵 Discover More East African Music</span>
+                        <p class="text-secondary small mb-0 mt-1">Support EraTunez by clicking</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-music-note fs-1 text-secondary"></i>
+            <p class="text-secondary mt-2">No tracks found here yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
         <!-- Playlist Modal -->
         <div class="modal fade" id="playlistModal{{ song.id }}" tabindex="-1">
