@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- *** Dynamic SEO for this Blog Post *** -->
+{% block title %}{{ post.title }} - Uganda Music News | EraTunez Blog{% endblock title %}
+
+{% block extra_head %}
+<!-- Lock in keywords like "Kalifah Aganaga Nassanga story" naturally in the description -->
+<meta name="description" content="{{ post.summary|default:post.content|truncatewords:25|striptags }}">
+<meta name="keywords" content="{{ post.title|lower }}, Uganda music news, EraTunez blog, Afrobeat, East African music culture">
+
+<!-- WhatsApp/Social Share Previews -->
+<meta property="og:title" content="{{ post.title }} | EraTunez">
+<meta property="og:description" content="{{ post.summary|default:post.content|truncatewords:20|striptags }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% if post.image %}
+<meta property="og:image" content="{{ post.image.url }}">
+{% else %}
+<!-- Fallback image if the post doesn't have one -->
+<meta property="og:image" content="{% static 'images/default-blog-og.jpg' %}">
+{% endif %}
+{% endblock extra_head %}
+
+<!-- *** Style specifically for Blog Content *** -->
+{% block content %}
+<style>
+    /* Professional Blog Readability on EraTunez Dark Theme */
+    .blog-detail-wrapper {
+        padding: 40px 15px;
+        background-color: var(--bg-primary); /* Uses your theme variables! */
+        color: var(--text-primary);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .blog-header {
+        margin-bottom: 30px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 20px;
+    }
+    
+    .blog-title {
+        font-family: 'Montserrat', sans-serif; /* Matching your logo font */
+        font-weight: 800;
+        font-size: 2.8rem;
+        line-height: 1.1;
+        margin-bottom: 15px;
+    }
+    
+    .blog-meta {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .blog-category-badge {
+        background-color: #138639; /* Your green */
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+    }
+
+    .blog-main-image {
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        margin-bottom: 30px;
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    /* Crucial formatting for user-generated content */
+    .blog-content {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.15rem;
+        line-height: 1.8;
+        color: #e0e0e0; /* Slightly off-white for readability */
+    }
+    
+    /* Light Mode Adjustments */
+    [data-theme="light"] .blog-content {
+        color: #1a1a1a !important;
+    }
+    
+    .blog-content p {
+        margin-bottom: 25px;
+    }
+    
+    .blog-content h2, .blog-content h3 {
+        color: var(--text-primary);
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 15px;
+    }
+    
+    .blog-content blockquote {
+        border-left: 5px solid #138639;
+        padding-left: 20px;
+        font-style: italic;
+        color: var(--text-secondary);
+        margin: 30px 0;
+    }
+
+    .blog-back-btn {
+        margin-top: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .blog-title {
+            font-size: 2rem;
+        }
+        .blog-content {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<div class="blog-detail-wrapper">
+    <article>
+        
+        <!-- Header Section -->
+        <header class="blog-header">
+            {% if post.category %}
+            <span class="blog-category-badge">{{ post.category.name }}</span>
+            {% else %}
+            <span class="blog-category-badge">EraTunez Insights</span>
+            {% endif %}
+            
+            <h1 class="blog-title">{{ post.title }}</h1>
+            
+            <div class="blog-meta">
+                <span class="blog-date"><i class="bi bi-calendar3"></i> Published {{ post.published_at|date:"F d, Y" }}</span>
+                {% if post.author %}
+                <span class="blog-author"><i class="bi bi-person-circle"></i> By {{ post.author.get_full_name|default:post.author.username }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Main Featured Image (from Cloudflare R2 presumably) -->
+        {% if post.image %}
+            <img src="{{ post.image.url }}" class="blog-main-image img-fluid" alt="{{ post.title }} - EraTunez Image">
+        {% endif %}
+
+        <!-- Main Blog Body -->
+        <div class="blog-content">
+            {{ post.content|safe|linebreaks }}
+        </div>
+        
+    </article>
+
+    <!-- Navigation Back -->
+    <a href="/blog/" class="btn btn-outline-success blog-back-btn">
+        <i class="bi bi-arrow-left"></i> Back to All Uganda Music News
+    </a>
+</div>
+{% endblock content %}
