@@ -1,4 +1,31 @@
 {% extends 'base.html' %}
+{% block title %}Download {{ song.title }} by {{ song.artist.get_display_name }} (MP3 Free Download) | Eratunez{% endblock title %}
+
+<!-- 2. Dynamic WhatsApp / Facebook Link Previews -->
+{% block extra_head %}
+    <!-- Targeted Meta Description specific to this track -->
+    <meta name="description" content="Get the latest track: Stream and download '{{ song.title }}' by {{ song.artist.get_display_name }} for free on Eratunez. Enjoy high-quality MP3 downloads of new Ugandan music.">
+    
+    <!-- Track-Specific Keywords -->
+    <meta name="keywords" content="{{ song.title }}, {{ song.artist.get_display_name }}, download mp3, free download, new ugandan music, East African new songs">
+
+    <!-- Open Graph (OG) tags: Essential for WhatsApp share previews -->
+    <meta property="og:title" content="'{{ song.title }}' by {{ song.artist.get_display_name }} - Free Download on Eratunez" />
+    <meta property="og:description" content="Listen to and download '{{ song.title }}' now. Check out the latest Uganda and East African music on Eratunez." />
+    <meta property="og:type" content="music.song" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    
+    <!-- Dynamic Cover Art from R2 -->
+    {% if song.cover_image %}
+    <meta property="og:image" content="{{ song.cover_image.url }}" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="600" />
+    <meta property="og:image:type" content="image/jpeg" />
+    {% endif %}
+{% endblock extra_head %}
+
+<!-- *** END DYNAMIC SEO & SOCIAL SHARE BLOCK *** -->
+
 {% block content %}
 
 <style>

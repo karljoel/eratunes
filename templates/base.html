@@ -3,13 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>EraTunez | Music of the Era</title>
     
+    <!-- *** START OPTIMIZED SEO & META BLOCK *** -->
+    
+    <!-- 1. The Dynamic Title Block -->
+    <!-- Default title optimized for Kampala/EA search volume -->
+    <title>{% block title %}Eratunez | Free Music Downloads, New Ugandan Music, and East African Hits{% endblock title %}</title>
+
+    <!-- 2. Global Search Engine Meta Description -->
+    <!-- Lock in high-value phrases naturally -->
+    <meta name="description" content="Discover, stream, and download new Ugandan music and East African new songs from emerging artists for free. Eratunez is your home for unmatched music hits.">
+
+    <!-- 3. General Site-wide Keywords -->
+    <!-- The magic words Google will index -->
+    <meta name="keywords" content="new ugandan music, East African new songs, free music download, download mp3 songs, latest hits, download songs free, local artist music, Afrobeat downloads, Uganda music site, Eratunez music, Kampala music downloads">
+
+    <!-- 4. Favicon (Branding for browser tabs) -->
+    <!-- Assuming you have a favicon.ico in your static/images/ folder -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+    <!-- *** END OPTIMIZED SEO & META BLOCK *** -->
+
+    <!-- Keep your existing functional CSS links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    {% block extra_head %}{% endblock extra_head %}
+    <!-- Your existing internal styles continue here... -->
     <style>
+    /* Your CSS here */
         /* ========== THEME VARIABLES ========== */
         :root {
             --bg-primary: #030303;
