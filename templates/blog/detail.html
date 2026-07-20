@@ -156,7 +156,7 @@
         </div>
         
     </article>
-    <!-- *** START ERA-TUNEZ SHARE BLOCK *** -->
+    <!-- *** START COMPREHENSIVE ERA-TUNEZ SHARE BLOCK (Facebook, X, WhatsApp) *** -->
     <style>
         .era-share-section {
             margin-top: 60px;
@@ -170,14 +170,14 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: 700;
         }
 
         .era-share-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -185,27 +185,40 @@
         .era-share-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             text-decoration: none;
             transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+            font-size: 1.4rem;
         }
 
         .era-share-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
             color: white !important;
         }
 
-        /* WhatsApp: The priority for EA audience */
+        /* WhatsApp */
         .btn-whatsapp {
             background-color: #25D366;
             color: #fff !important;
+        }
+        
+        /* Facebook */
+        .btn-facebook {
+            background-color: #1877F2;
+            color: #fff !important;
+        }
+
+        /* X (Twitter) */
+        .btn-x {
+            background-color: #000000;
+            color: #fff !important;
+            border: 1px solid #333;
         }
         
         /* General Link Copy button */
@@ -213,6 +226,7 @@
             background-color: var(--bg-card);
             color: var(--text-primary) !important;
             border: 1px solid var(--border-color);
+            font-size: 1.2rem;
         }
         
         .btn-link-copy:hover {
@@ -222,32 +236,48 @@
     </style>
 
     <div class="era-share-section">
-        <div class="era-share-title">Spread the Word</div>
+        <div class="era-share-title">Share Uganda Music Insights</div>
         <div class="era-share-buttons">
             
-            <!-- WhatsApp Share Button -->
-            <!-- Builds dynamic link: api.whatsapp.com/send?text=[title] [url] -->
+            <!-- WhatsApp Share -->
             <a href="https://api.whatsapp.com/send?text={{ post.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}" 
                class="era-share-btn btn-whatsapp" 
                target="_blank" 
                rel="noopener noreferrer"
                title="Share this story on WhatsApp">
-                <i class="bi bi-whatsapp" style="font-size: 1.3rem;"></i>
-                Share on WhatsApp
+                <i class="bi bi-whatsapp"></i>
+            </a>
+
+            <!-- Facebook Share (fb.com/sharer/sharer.php?u=[url]) -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" 
+               class="era-share-btn btn-facebook" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               title="Share this story on Facebook">
+                <i class="bi bi-facebook"></i>
+            </a>
+
+            <!-- X (Twitter) Share (twitter.com/intent/tweet?text=[text]&url=[url]&via=EraTunez) -->
+            <!-- Add "&via=EraTunez" if you want to mention your handle -->
+            <a href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri|urlencode }}&via=EraTunez" 
+               class="era-share-btn btn-x" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               title="Post this story on X (Twitter)">
+                <i class="fa-brands fa-x-twitter"></i> <!-- Note: Using FontAwesome for X -->
             </a>
 
             <!-- Copy Link Button (Uses JS below) -->
             <button class="era-share-btn btn-link-copy" 
                     id="copyLinkBtn"
                     title="Copy this post's link">
-                <i class="bi bi-link-45deg" style="font-size: 1.3rem;"></i>
-                Copy Link
+                <i class="bi bi-link-45deg"></i>
             </button>
             
         </div>
     </div>
     
-    <!-- Simple JavaScript for the Copy Link Button -->
+    <!-- JavaScript for the Copy Link Button -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const copyBtn = document.getElementById('copyLinkBtn');
@@ -256,25 +286,24 @@
             copyBtn.addEventListener('click', function() {
                 // Copy the URL to clipboard
                 navigator.clipboard.writeText(postUrl).then(function() {
-                    // Provide visual feedback (change text and icon temporarily)
+                    // Visual feedback
                     const originalHTML = copyBtn.innerHTML;
-                    copyBtn.innerHTML = '<i class="bi bi-check-circle-fill text-success"></i> Copied!';
+                    copyBtn.innerHTML = '<i class="bi bi-check-circle-fill text-success" style="font-size: 1.1rem;"></i>';
                     copyBtn.classList.add('border-success');
                     
-                    // Reset back to original state after 2.5 seconds
+                    // Reset back
                     setTimeout(function() {
                         copyBtn.innerHTML = originalHTML;
                         copyBtn.classList.remove('border-success');
                     }, 2500);
                 }).catch(function(err) {
-                    // Standard fallback for older browsers
-                    alert('Could not copy link. Manually copy the URL from your browser address bar.');
+                    alert('Could not copy link. Manually copy the URL from your address bar.');
                     console.error('Copy failed:', err);
                 });
             });
         });
     </script>
-    <!-- *** END ERA-TUNEZ SHARE BLOCK *** -->
+    <!-- *** END COMPREHENSIVE ERA-TUNEZ SHARE BLOCK *** -->
 
     <!-- Navigation Back -->
     <a href="/blog/" class="btn btn-outline-success blog-back-btn">
