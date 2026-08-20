@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import CustomUser, Song, Comment, Product, Playlist, PlaylistSong, Ad, DJMix, Podcast, ProRequest, Mood, SongMood
 from .models import BlogPost
+from .models import LiveStream
 # ==================== PRODUCT ADMIN ====================
 admin.site.register(Product)
 
@@ -224,3 +225,9 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'created_at', 'published']
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title', 'content']    
+    from .models import LiveStream
+
+@admin.register(LiveStream)
+class LiveStreamAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_live', 'updated_at')
+    list_editable = ('is_live',)
