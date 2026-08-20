@@ -625,7 +625,7 @@ def batch_upload(request):
                     tmp_file.flush()
                     
                     try:
-                        from mutagen.mp3 import MP3
+                        from mutagen.mp3 import MP3 # type: ignore
                         audio_mp3 = MP3(tmp_file.name)
                         duration = int(audio_mp3.info.length)
                     except:
