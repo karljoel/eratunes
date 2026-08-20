@@ -977,8 +977,8 @@ class BlogPost(models.Model):
         from django.urls import reverse
         return reverse('blog_detail', args=[self.slug])  
 
-    class LiveStream(models.Model):
-     title = models.CharField(max_length=200, default="EraTunez Live DJ Mix")
+class LiveStream(models.Model):
+    title = models.CharField(max_length=200, default="EraTunez Live DJ Mix")
     embed_url = models.URLField(
         help_text="Paste your Facebook Live or YouTube embed link here"
     )
@@ -986,11 +986,10 @@ class BlogPost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        # Ensures only one stream is marked as LIVE at a time
         if self.is_live:
             LiveStream.objects.filter(is_live=True).exclude(pk=self.pk).update(is_live=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
         status = "LIVE" if self.is_live else "OFFLINE"
-        return f"{self.title} [{status}]"     
+        return f"{self.title} [{status}]"    
