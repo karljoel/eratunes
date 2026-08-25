@@ -4,7 +4,7 @@ Django settings for eratunes project.
 
 import os
 from pathlib import Path
-import dj_database_url
+import db_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
