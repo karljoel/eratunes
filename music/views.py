@@ -225,9 +225,7 @@ def home(request):
     page_obj = paginator.get_page(page_number)
     
     moods = Mood.objects.filter(is_active=True).prefetch_related('songs')
-    live_streams = LiveStream.objects.filter(is_live=True)
     context = {
-        'live_streams': live_streams,
         'page_obj': page_obj,
         'songs': page_obj,
         'new_releases': new_releases,
