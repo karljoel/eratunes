@@ -1,8 +1,8 @@
-echo "Django==6.0.3" > requirements.txt
-echo "asgiref==3.11.1" >> requirements.txt
-echo "whitenoise==6.12.0" >> requirements.txt
-echo "django-storages==1.14.6" >> requirements.txt
-echo "pillow==12.1.1" >> requirements.txt
-echo "sqlparse==0.5.5" >> requirements.txt
-echo "tzdata==2025.3" >> requirements.txt
-echo "gunicorn==26.0.0" >> requirements.txt
+Django==6.0.3
+asgiref==3.11.1
+whitenoise==6.12.0
+django-storages==1.14.6
+pillow==12.1.1
+sqlparse==0.5.5
+tzdata==2025.3
+gunicorn==26.0.0
