@@ -4,20 +4,7 @@ Django settings for eratunes project.
 
 import os
 from pathlib import Path
-try:
-    import dj_database_url  # type: ignore[import]
-except Exception:
-    # Provide a minimal fallback if dj_database_url is not installed.
-    class _Fallback:
-        @staticmethod
-        def config(default=None, conn_max_age=0):
-            # Return a simple sqlite config when the package is unavailable.
-            return {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': str(Path(default.split('sqlite:///')[-1])) if default else str(BASE_DIR / 'db.sqlite3'),
-            }
-
-    dj_database_url = _Fallback()
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -59,14 +46,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'eratunes.urls'
@@ -92,12 +78,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eratunes.wsgi.application'
 
-# ========== DATABASE ==========
+# ========== DATABASE - FORCE POSTGRESQL ==========
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'eratunes',
+        'USER': 'eratunesuser',
+        'PASSWORD': '2VgUMGNYbw7KNNUMe1gJt1jqF77xw3D0a',
+        'HOST': 'dpg-d972qesvikkc73dh411g-a',
+        'PORT': '5432',
+    }
 }
 
 # Password validation
@@ -129,14 +119,10 @@ AWS_S3_REGION_NAME = 'weur'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
-
-# Update this block here:
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
-    'ContentDisposition': 'attachment',  # <-- Forces browsers to download instantly instead of playing
+    'ContentDisposition': 'attachment',
 }
-
-# Forces Django-storages to route asset URLs using your public link instead of AWS fallbacks
 AWS_S3_CUSTOM_DOMAIN = 'pub-bee61826af38438db4045c84ae0bc301.r2.dev'
 
 STORAGES = {
@@ -150,5 +136,10 @@ STORAGES = {
 
 MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
 
-# Tell Django to use your custom user model globally
+# ========== CUSTOM USER MODEL ==========
 AUTH_USER_MODEL = 'music.CustomUser'
+
+# ========== LOGIN URLs ==========
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
