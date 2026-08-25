@@ -78,13 +78,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eratunes.wsgi.application'
 
-# ========== DATABASE - FORCE POSTGRESQL ==========
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'eratunes',
         'USER': 'eratunesuser',
-        'PASSWORD': '2VgUMGNYbw7KNNUMe1gJt1jqF77xw3D0a',
+        'PASSWORD': '2VgxUMGNYbw7KMNUMelgJtljqF77xw3D',  # ✅ UPDATED
         'HOST': 'dpg-d972qesvikkc73dh411g-a',
         'PORT': '5432',
     }
