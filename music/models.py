@@ -18,7 +18,10 @@ class UsernameWithSpacesValidator(UnicodeUsernameValidator):
 # ============================================================
 # CUSTOM USER MODEL
 # ============================================================
-
+# class BlogPost(models.Model):
+#     title = models.CharField(max_length=200)
+#     slug = models.SlugField(unique=True, max_length=200)
+#     ...
 # East African Countries
 COUNTRY_CHOICES = [
     ('uganda', '🇺🇬 Uganda'),
@@ -954,28 +957,5 @@ def update_wallet_on_earning(sender, instance, created, **kwargs):
         wallet, _ = Wallet.objects.get_or_create(user=instance.artist)
         wallet.add_earnings(instance.amount)
         
-class BlogPost(models.Model):
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, max_length=200)
-    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
-    content = models.TextField()
-    excerpt = models.TextField(max_length=300, blank=True, help_text="Short summary for the blog listing")
-    cover_image = models.ImageField(upload_to='blog/', blank=True, null=True)
-    tags = models.CharField(max_length=200, blank=True, help_text="Comma separated: ugandan-music, afrobeats, etc")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    published = models.BooleanField(default=False)
-    published_at = models.DateTimeField(null=True, blank=True)
-    
-    class Meta:
-        ordering = ['-created_at']
-    
-    def __str__(self):
-        return self.title
-    
-    def get_absolute_url(self):
-        from django.urls import reverse
-        return reverse('blog_detail', args=[self.slug])  
-
 
    
