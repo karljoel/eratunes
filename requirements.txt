@@ -6,3 +6,4 @@ pillow==12.1.1
 sqlparse==0.5.5
 tzdata==2025.3
 gunicorn==26.0.0
+dj-database-url==2.3.0
