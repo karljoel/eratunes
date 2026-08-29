@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils import timezone
 from datetime import timedelta
 from .models import CustomUser, Song, Comment, Product, Playlist, PlaylistSong, Ad, DJMix, Podcast, ProRequest, Mood, SongMood
-from .models import BlogPost
+from .models import BlogPost 
 # ==================== PRODUCT ADMIN ====================
 admin.site.register(Product)
 
@@ -191,7 +191,6 @@ class ProRequestAdmin(admin.ModelAdmin):
             if pro_request.status == 'pending':
                 artist = pro_request.artist
                 
-                # Update artist
                 artist.is_pro = True
                 artist.is_verified = True
                 
@@ -201,9 +200,8 @@ class ProRequestAdmin(admin.ModelAdmin):
                     artist.pro_expiry = timezone.now() + timedelta(days=365)
                 
                 artist.subscription_plan = pro_request.plan
-                artist.save()  # This saves all fields
+                artist.save()
                 
-                # Update request
                 pro_request.status = 'approved'
                 pro_request.processed_date = timezone.now()
                 pro_request.save()
@@ -219,11 +217,11 @@ class ProRequestAdmin(admin.ModelAdmin):
         self.message_user(request, f"❌ {count} PRO request(s) rejected.")
     reject_requests.short_description = "Reject selected PRO requests"
 
-    @admin.register(BlogPost)
-    class BlogPostAdmin(admin.ModelAdmin):
-        list_display = ['title', 'author', 'published', 'published_at']
-        prepopulated_fields = {'slug': ('title',)}
-        search_fields = ['title', 'content']
-        list_filter = ['published', 'created_at']
 
-
+# ==================== BLOG POST ADMIN ====================
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'published', 'published_at']
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'content']
+    list_filter = ['published', 'created_at']
