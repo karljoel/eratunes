@@ -15,13 +15,7 @@ class UsernameWithSpacesValidator(UnicodeUsernameValidator):
     regex = r'^[\w.@+\-\s]+$'
     message = 'Enter a valid username. This value may contain letters, numbers, spaces, and @/./+/-/_ characters.'
 
-# ============================================================
-# CUSTOM USER MODEL
-# ============================================================
-# class BlogPost(models.Model):
-#     title = models.CharField(max_length=200)
-#     slug = models.SlugField(unique=True, max_length=200)
-#     ...
+
 # East African Countries
 COUNTRY_CHOICES = [
     ('uganda', '🇺🇬 Uganda'),
@@ -956,6 +950,47 @@ def update_wallet_on_earning(sender, instance, created, **kwargs):
     if created and instance.status == 'pending':
         wallet, _ = Wallet.objects.get_or_create(user=instance.artist)
         wallet.add_earnings(instance.amount)
-        
 
-   
+  # ============================================================
+# BLOG POST MODEL
+# ============================================================
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=200)
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    content = models.TextField()
+    excerpt = models.TextField(max_length=300, blank=True)
+    cover_image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    tags = models.CharField(max_length=200, blank=True, help_text="Comma separated: ugandan-music, afrobeats, etc")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-published_at']
+    
+    def __str__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('blog_detail', args=[self.slug])
+
+
+# ============================================================
+# SIGNALS (Auto-create wallet for new users)
+# ============================================================
+@receiver(post_save, sender=CustomUser)
+def create_user_wallet(sender, instance, created, **kwargs):
+    """Automatically create a wallet for every new user"""
+    if created:
+        Wallet.objects.get_or_create(user=instance)
+
+
+@receiver(post_save, sender=Earning)
+def update_wallet_on_earning(sender, instance, created, **kwargs):
+    """Update wallet balance when earnings are added"""
+    if created and instance.status == 'pending':
+        wallet, _ = Wallet.objects.get_or_create(user=instance.artist)
+        wallet.add_earnings(instance.amount)    
