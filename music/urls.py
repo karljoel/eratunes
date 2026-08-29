@@ -100,6 +100,8 @@ urlpatterns = [
     path('about-us/', views.about_us, name='about_us'),
     path('contact-us/', views.contact_us, name='contact_us'),
     path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
+    path('blog/', views.blog_list, name='blog_list'),
+    path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),
    
 ]
 

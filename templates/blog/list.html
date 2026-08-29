@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-white mb-4">EraTunez Blog</h1>
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark text-white h-100">
+                {% if post.cover_image %}
+                <img src="{{ post.cover_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text text-secondary">{{ post.excerpt|truncatechars:120 }}</p>
+                    <a href="{% url 'blog_detail' post.slug %}" class="btn btn-sm btn-success">Read More</a>
+                </div>
+                <div class="card-footer bg-transparent border-secondary">
+                    <small class="text-secondary">{{ post.published_at|date:"M d, Y" }}</small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-secondary py-5">No blog posts yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
