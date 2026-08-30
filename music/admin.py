@@ -24,6 +24,13 @@ class CustomUserAdmin(UserAdmin):
     list_editable = ['points', 'is_verified', 'is_pro']
 
 
+# ==================== SONG MOOD INLINE ====================
+class SongMoodInline(admin.TabularInline):
+    model = SongMood
+    extra = 1
+    autocomplete_fields = ['mood']
+
+
 # ==================== SONG ADMIN ====================
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
@@ -33,17 +40,15 @@ class SongAdmin(admin.ModelAdmin):
     list_editable = ('region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
     actions = ['approve_boost']
     
+    # ✅ ADD INLINES FOR MOODS
+    inlines = [SongMoodInline]
+    
     fieldsets = (
         ('Basic Information', {
             'fields': ('title', 'artist', 'genre', 'region', 'release_date')
         }),
         ('Media', {
             'fields': ('audio_file', 'cover_image')
-        }),
-        ('Moods', {
-            'fields': ('moods',),
-            'description': 'Select moods that describe this song',
-            'classes': ('wide',)
         }),
         ('Lyrics', {
             'fields': ('lyrics', 'has_lyrics', 'lyrics_views'),
