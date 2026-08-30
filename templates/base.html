@@ -6,34 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- *** START OPTIMIZED SEO & META BLOCK *** -->
-     <!-- 🆕 KADAM VERIFICATION META TAG -->
     <meta name="kadam-verification" content="kadamf8969fdfff0e5b4a958d313fd99df6e6" />
-    <!-- 1. The Dynamic Title Block -->
-    <!-- Default title optimized for Kampala/EA search volume -->
     <title>{% block title %}Eratunez | Free Music Downloads, New Ugandan Music, and East African Hits{% endblock title %}</title>
-
-    <!-- 2. Global Search Engine Meta Description -->
-    <!-- Lock in high-value phrases naturally -->
     <meta name="description" content="Discover, stream, and download new Ugandan music and East African new songs from emerging artists for free. Eratunez is your home for unmatched music hits.">
-
-    <!-- 3. General Site-wide Keywords -->
-    <!-- The magic words Google will index -->
     <meta name="keywords" content="new ugandan music, East African new songs, free music download, download mp3 songs, latest hits, download songs free, local artist music, Afrobeat downloads, Uganda music site, Eratunez music, Kampala music downloads">
-
-    <!-- 4. Favicon (Branding for browser tabs) -->
-    <!-- Assuming you have a favicon.ico in your static/images/ folder -->
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
     <!-- *** END OPTIMIZED SEO & META BLOCK *** -->
 
-    <!-- Keep your existing functional CSS links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% block extra_head %}{% endblock extra_head %}
-    <!-- Your existing internal styles continue here... -->
+    
     <style>
-    /* Your CSS here */
         /* ========== THEME VARIABLES ========== */
         :root {
             --bg-primary: #030303;
@@ -218,7 +203,6 @@
             }
         }
         
-        /* Right Sidebar */
         .right-sidebar {
             width: 220px;
             flex-shrink: 0;
@@ -294,7 +278,6 @@
             color: #6c757d !important;
         }
         
-        /* Footer */
         .footer {
             background: var(--bg-secondary);
             margin-top: 50px;
@@ -327,7 +310,6 @@
             color: #6c757d !important;
         }
         
-        /* Bottom Player */
         .bottom-player {
             position: fixed;
             bottom: 0;
@@ -596,14 +578,8 @@
         }
         
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
         }
         
         .lyrics-container {
@@ -701,7 +677,6 @@
             }
         }
         
-        /* Fix dropdown click issues */
         .dropdown {
             position: relative;
             z-index: 1060;
@@ -726,7 +701,6 @@
             border-left: 0.3em solid transparent;
         }
         
-        /* Light mode general text fixes */
         [data-theme="light"] .text-white {
             color: #1a1a1a !important;
         }
@@ -781,7 +755,6 @@
             color: white !important;
         }
 
-        /* ========== FIX: SONG TEXT COLORS IN LIGHT MODE ========== */
         .song-title,
         .song-artist-name,
         .artist-name,
@@ -798,7 +771,6 @@
             color: var(--text-secondary);
         }
 
-        /* ========== FIX: FEATURED ARTISTS MOBILE ========== */
         .artist-name {
             display: block;
             white-space: nowrap;
@@ -833,7 +805,6 @@
             }
         }
 
-        /* ========== FIX: SONG CARDS MOBILE ========== */
         .song-card {
             background: var(--bg-card);
             transition: 0.3s;
@@ -869,7 +840,6 @@
             }
         }
 
-        /* Social Media Links */
         .social-link {
             display: inline-flex;
             align-items: center;
@@ -900,7 +870,6 @@
             color: white;
         }
 
-        /* Social links responsive */
         @media (max-width: 768px) {
             .social-link {
                 width: 30px;
@@ -908,158 +877,157 @@
                 font-size: 0.9rem;
             }
         }
+
         [data-theme="light"] .text-white {
-    color: #1a1a1a !important;
-}
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] h6.text-white,
-[data-theme="light"] p.text-white,
-[data-theme="light"] span.text-white,
-[data-theme="light"] div.text-white {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] h6.text-white,
+        [data-theme="light"] p.text-white,
+        [data-theme="light"] span.text-white,
+        [data-theme="light"] div.text-white {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .card {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .card {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .song-card h6,
-[data-theme="light"] .song-card p {
-    color: #1a1a1a !important;
-}
-/* ========== MASTER LIGHT MODE FIX ========== */
-[data-theme="light"] .text-white {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .song-card h6,
+        [data-theme="light"] .song-card p {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4,
-[data-theme="light"] h5,
-[data-theme="light"] h6 {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .text-white {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] p {
-    color: #333333 !important;
-}
+        [data-theme="light"] h1,
+        [data-theme="light"] h2,
+        [data-theme="light"] h3,
+        [data-theme="light"] h4,
+        [data-theme="light"] h5,
+        [data-theme="light"] h6 {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .card {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
-}
+        [data-theme="light"] p {
+            color: #333333 !important;
+        }
 
-[data-theme="light"] .song-card {
-    background-color: #f8f9fa !important;
-}
+        [data-theme="light"] .card {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+            border-color: #dee2e6 !important;
+        }
 
-[data-theme="light"] .song-card:hover {
-    background-color: #e9ecef !important;
-}
+        [data-theme="light"] .song-card {
+            background-color: #f8f9fa !important;
+        }
 
-[data-theme="light"] .song-card h6,
-[data-theme="light"] .song-card p,
-[data-theme="light"] .song-card span {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .song-card:hover {
+            background-color: #e9ecef !important;
+        }
 
-[data-theme="light"] .card h6,
-[data-theme="light"] .card h5,
-[data-theme="light"] .card h4,
-[data-theme="light"] .card p,
-[data-theme="light"] .card span:not(.badge) {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .song-card h6,
+        [data-theme="light"] .song-card p,
+        [data-theme="light"] .song-card span {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .table {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .card h6,
+        [data-theme="light"] .card h5,
+        [data-theme="light"] .card h4,
+        [data-theme="light"] .card p,
+        [data-theme="light"] .card span:not(.badge) {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .table td,
-[data-theme="light"] .table th {
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
-}
+        [data-theme="light"] .table {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .list-group-item {
-    background-color: #ffffff !important;
-    color: #1a1a1a !important;
-    border-color: #dee2e6 !important;
-}
+        [data-theme="light"] .table td,
+        [data-theme="light"] .table th {
+            color: #1a1a1a !important;
+            border-color: #dee2e6 !important;
+        }
 
-[data-theme="light"] .fw-bold {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .list-group-item {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+            border-color: #dee2e6 !important;
+        }
 
-[data-theme="light"] small {
-    color: #666666 !important;
-}
+        [data-theme="light"] .fw-bold {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .text-secondary {
-    color: #6c757d !important;
-}
+        [data-theme="light"] small {
+            color: #666666 !important;
+        }
 
-[data-theme="light"] .text-success {
-    color: #198754 !important;
-}
+        [data-theme="light"] .text-secondary {
+            color: #6c757d !important;
+        }
 
-[data-theme="light"] .text-danger {
-    color: #dc3545 !important;
-}
+        [data-theme="light"] .text-success {
+            color: #198754 !important;
+        }
 
-[data-theme="light"] .text-warning {
-    color: #ffc107 !important;
-}
+        [data-theme="light"] .text-danger {
+            color: #dc3545 !important;
+        }
 
-[data-theme="light"] .text-info {
-    color: #0dcaf0 !important;
-}
+        [data-theme="light"] .text-warning {
+            color: #ffc107 !important;
+        }
 
-[data-theme="light"] .bg-dark {
-    background-color: #f8f9fa !important;
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .text-info {
+            color: #0dcaf0 !important;
+        }
 
-[data-theme="light"] .border-secondary {
-    border-color: #dee2e6 !important;
-}
+        [data-theme="light"] .bg-dark {
+            background-color: #f8f9fa !important;
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .queue-item-title,
-[data-theme="light"] .queue-item-artist {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .border-secondary {
+            border-color: #dee2e6 !important;
+        }
 
-[data-theme="light"] .section-header h4,
-[data-theme="light"] .section-header h2 {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .queue-item-title,
+        [data-theme="light"] .queue-item-artist {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .recent-song-card .song-title {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .section-header h4,
+        [data-theme="light"] .section-header h2 {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .chart-title,
-[data-theme="light"] .chart-artist {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .recent-song-card .song-title {
+            color: #1a1a1a !important;
+        }
 
-[data-theme="light"] .stat-value,
-[data-theme="light"] .stat-label {
-    color: #1a1a1a !important;
-}
+        [data-theme="light"] .chart-title,
+        [data-theme="light"] .chart-artist {
+            color: #1a1a1a !important;
+        }
 
-/* Fix any inline style="color: white" */
-[data-theme="light"] [style*="color: white"],
-[data-theme="light"] [style*="color:#fff"],
-[data-theme="light"] [style*="color: #fff"],
-[data-theme="light"] [style*="color:#ffffff"],
-[data-theme="light"] [style*="color: #ffffff"] {
-    color: #1a1a1a !important;
-}
-/* ========== END MASTER LIGHT MODE FIX ========== */
+        [data-theme="light"] .stat-value,
+        [data-theme="light"] .stat-label {
+            color: #1a1a1a !important;
+        }
+
+        [data-theme="light"] [style*="color: white"],
+        [data-theme="light"] [style*="color:#fff"],
+        [data-theme="light"] [style*="color: #fff"],
+        [data-theme="light"] [style*="color:#ffffff"],
+        [data-theme="light"] [style*="color: #ffffff"] {
+            color: #1a1a1a !important;
+        }
     </style>
 </head>
 
@@ -1067,37 +1035,35 @@
 
 <nav class="navbar navbar-dark bg-black border-bottom border-secondary sticky-top py-2">
     <div class="container-fluid px-3 d-flex align-items-center justify-content-between">
-        <a class="navbar-brand artistic-logo" href="{% url 'home' %}">EraTunez</a>
-        <a class="nav-link text-white" href="{% url 'charts' %}">
+        <a class="navbar-brand artistic-logo" href="{% url 'home' %}" aria-label="EraTunez Home">EraTunez</a>
+        <a class="nav-link text-white" href="{% url 'charts' %}" aria-label="Music Charts">
             <i class="bi bi-graph-up me-1"></i> <span class="link-text">Music Charts</span>
         </a>
-        <a class="nav-link text-white" href="{% url 'listening_history' %}">
+        <a class="nav-link text-white" href="{% url 'listening_history' %}" aria-label="Listening History">
             <i class="bi bi-clock-history me-1"></i> <span class="link-text">Listening History</span>
         </a>
-        <a class="nav-link text-white" href="{% url 'listening_stats' %}">
+        <a class="nav-link text-white" href="{% url 'listening_stats' %}" aria-label="Listening Stats">
             <i class="bi bi-bar-chart-steps me-1"></i> <span class="link-text">Listening Stats</span>
         </a>
-        <a class="nav-link text-white" href="{% url 'following_feed' %}">
+        <a class="nav-link text-white" href="{% url 'following_feed' %}" aria-label="Following Feed">
             <i class="bi bi-rss-fill me-1"></i> Feed
         </a>
-        <a class="nav-link text-white" href="{% url 'moods' %}">
+        <a class="nav-link text-white" href="{% url 'moods' %}" aria-label="Moods">
             <i class="bi bi-emoji-smile me-1"></i> Moods
-        <a class="nav-link text-white" href="{% url 'blog_list' %}">
-    <i class="bi bi-newspaper me-1"></i> Blog
-</a>    
-           
-</a>
         </a>
-        <form class="d-flex flex-grow-1 mx-2 mx-md-4 position-relative" style="max-width: 600px;" action="{% url 'home' %}" method="GET" id="search-form">
+        <a class="nav-link text-white" href="{% url 'blog_list' %}" aria-label="Blog">
+            <i class="bi bi-newspaper me-1"></i> Blog
+        </a>
+        <form class="d-flex flex-grow-1 mx-2 mx-md-4 position-relative" style="max-width: 600px;" action="{% url 'home' %}" method="GET" id="search-form" role="search">
             <div class="input-group">
                 <input class="form-control bg-dark border-secondary text-white rounded-start-pill px-3 shadow-none" 
                        type="search" 
                        name="q" 
                        id="search-input"
                        placeholder="Search songs, artists, genres..." 
-                       aria-label="Search"
+                       aria-label="Search songs, artists, genres"
                        autocomplete="off">
-                <button class="btn btn-success rounded-end-pill" type="submit" id="search-button">
+                <button class="btn btn-success rounded-end-pill" type="submit" id="search-button" aria-label="Submit search">
                     <i class="bi bi-search"></i>
                 </button>
             </div>
@@ -1112,46 +1078,40 @@
                 <div id="suggestions-list"></div>
             </div>
         </form>
-      
-                </div>
-            </a>
-        </div>
-    </div>
-</div>
 
         <div class="d-flex align-items-center">
-            <button id="themeToggle" class="btn btn-link" style="border: none; background: transparent; color: var(--text-primary);">
+            <button id="themeToggle" class="btn btn-link" style="border: none; background: transparent; color: var(--text-primary);" aria-label="Toggle dark/light mode">
                 <i id="themeIcon" class="bi bi-moon-fill fs-4"></i>
             </button>
             
             {% if user.is_authenticated %}
                 <div class="dropdown me-2">
-                    <button class="btn btn-link text-white text-decoration-none dropdown-toggle p-0" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-link text-white text-decoration-none dropdown-toggle p-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
                         {% if user.profile_picture %}
-                            <img src="{{ user.profile_picture.url }}" width="32" height="32" class="rounded-circle" style="object-fit: cover; border: 2px solid #1db954;">
+                            <img src="{{ user.profile_picture.url }}" width="32" height="32" class="rounded-circle" style="object-fit: cover; border: 2px solid #1db954;" alt="Profile picture of {{ user.username }}">
                         {% else %}
                             <i class="bi bi-person-circle fs-4 text-white"></i>
                         {% endif %}
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{% url 'user_profile' %}" aria-label="My Profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
                         {% if user.is_artist %}
-                        <li><a class="dropdown-item" href="{% url 'artist_dashboard' %}"><i class="bi bi-mic me-2"></i>Artist Studio</a></li>
+                        <li><a class="dropdown-item" href="{% url 'artist_dashboard' %}" aria-label="Artist Studio"><i class="bi bi-mic me-2"></i>Artist Studio</a></li>
                         {% endif %}
-                        <li><a class="dropdown-item" href="{% url 'my_playlists' %}"><i class="bi bi-music-note-list me-2"></i>My Playlists</a></li>
-                        <li><a class="dropdown-item" href="{% url 'listening_history' %}"><i class="bi bi-clock-history me-2"></i>Listening History</a></li>
-                        <li><a class="dropdown-item" href="{% url 'listening_stats' %}"><i class="bi bi-graph-up me-2"></i>Listening Stats</a></li>
+                        <li><a class="dropdown-item" href="{% url 'my_playlists' %}" aria-label="My Playlists"><i class="bi bi-music-note-list me-2"></i>My Playlists</a></li>
+                        <li><a class="dropdown-item" href="{% url 'listening_history' %}" aria-label="Listening History"><i class="bi bi-clock-history me-2"></i>Listening History</a></li>
+                        <li><a class="dropdown-item" href="{% url 'listening_stats' %}" aria-label="Listening Stats"><i class="bi bi-graph-up me-2"></i>Listening Stats</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <form action="{% url 'logout' %}" method="post" class="m-0">
                                 {% csrf_token %}
-                                <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                                <button type="submit" class="dropdown-item text-danger" aria-label="Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
                             </form>
                         </li>
                     </ul>   
                 </div>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">Login</a>
+                <a href="{% url 'login' %}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" aria-label="Login">Login</a>
             {% endif %}
         </div>
     </div>
@@ -1164,18 +1124,18 @@
         <div class="carousel-inner">
             {% for ad in banner_ads %}
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <a href="{% url 'track_ad_click' ad.id %}" target="_blank">
-                    <img src="{{ ad.image.url }}" class="d-block w-100" style="max-height: 100px; object-fit: cover;">
+                <a href="{% url 'track_ad_click' ad.id %}" target="_blank" aria-label="{{ ad.title }}">
+                    <img src="{{ ad.image.url }}" class="d-block w-100" style="max-height: 100px; object-fit: cover;" alt="{{ ad.title }}">
                 </a>
             </div>
             {% endfor %}
         </div>
         {% if banner_ads|length > 1 %}
-        <button class="carousel-control-prev" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="prev" aria-label="Previous ad">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#topBannerCarousel" data-bs-slide="next" aria-label="Next ad">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
@@ -1187,13 +1147,13 @@
 <!-- Content container -->
 <div class="{% if hide_sidebar %}full-width-content{% else %}app-wrapper{% endif %}">
     {% if not hide_sidebar %}
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Sidebar">
         <div class="sidebar-title"><i class="bi bi-shop me-1"></i> MARKETPLACE</div>
         
         {% for item in shop_items %}
         <div class="shop-item">
             <div class="d-flex align-items-center gap-2">
-                <img src="{{ item.image.url }}" class="shop-item-img">
+                <img src="{{ item.image.url }}" class="shop-item-img" alt="{{ item.name }}">
                 <div class="flex-grow-1 overflow-hidden">
                     <div class="shop-item-name">{{ item.name }}</div>
                     <div class="shop-item-price">UGX {{ item.price }}</div>
@@ -1201,7 +1161,7 @@
                 </div>
             </div>
             <a href="https://wa.me/{{ item.artist.whatsapp_number }}?text=Hi%20{{ item.artist.username }},%20I'm%20buying%20the%20{{ item.name|urlencode }}%20merch%20from%20EraTunez" 
-               target="_blank" class="btn btn-success btn-sm buy-btn-sm w-100">
+               target="_blank" class="btn btn-success btn-sm buy-btn-sm w-100" aria-label="Buy {{ item.name }} on WhatsApp">
                <i class="bi bi-whatsapp me-1"></i> BUY
             </a>
         </div>
@@ -1216,9 +1176,9 @@
         <div class="mt-4 pt-3 border-top border-secondary">
             <div class="sidebar-title"><i class="bi bi-megaphone me-1"></i> SPONSORED</div>
             {% for ad in sponsor_ads %}
-            <a href="{% url 'track_ad_click' ad.id %}" target="_blank" class="text-decoration-none">
+            <a href="{% url 'track_ad_click' ad.id %}" target="_blank" class="text-decoration-none" aria-label="{{ ad.title }}">
                 <div class="shop-item mb-2">
-                    <img src="{{ ad.image.url }}" class="w-100 rounded" style="height: auto; margin-bottom: 8px;">
+                    <img src="{{ ad.image.url }}" class="w-100 rounded" style="height: auto; margin-bottom: 8px;" alt="{{ ad.title }}">
                     <div class="shop-item-name text-center">{{ ad.title }}</div>
                 </div>
             </a>
@@ -1233,28 +1193,28 @@
     </main>
     
     {% if not hide_sidebar %}
-    <aside class="right-sidebar">
+    <aside class="right-sidebar" aria-label="East Africa Regions">
         <div class="right-sidebar-title">
             <i class="bi bi-geo-alt me-1"></i> EAST AFRICA
         </div>
         
         <div class="region-section">
-            <a href="{% url 'region_page' 'uganda' %}" class="country-item">
+            <a href="{% url 'region_page' 'uganda' %}" class="country-item" aria-label="Uganda music">
                 <span class="country-flag">🇺🇬</span> Uganda
             </a>
-            <a href="{% url 'region_page' 'kenya' %}" class="country-item">
+            <a href="{% url 'region_page' 'kenya' %}" class="country-item" aria-label="Kenya music">
                 <span class="country-flag">🇰🇪</span> Kenya
             </a>
-            <a href="{% url 'region_page' 'tanzania' %}" class="country-item">
+            <a href="{% url 'region_page' 'tanzania' %}" class="country-item" aria-label="Tanzania music">
                 <span class="country-flag">🇹🇿</span> Tanzania
             </a>
-            <a href="{% url 'region_page' 'rwanda' %}" class="country-item">
+            <a href="{% url 'region_page' 'rwanda' %}" class="country-item" aria-label="Rwanda music">
                 <span class="country-flag">🇷🇼</span> Rwanda
             </a>
-            <a href="{% url 'region_page' 'burundi' %}" class="country-item">
+            <a href="{% url 'region_page' 'burundi' %}" class="country-item" aria-label="Burundi music">
                 <span class="country-flag">🇧🇮</span> Burundi
             </a>
-            <a href="{% url 'region_page' 'south-sudan' %}" class="country-item">
+            <a href="{% url 'region_page' 'south-sudan' %}" class="country-item" aria-label="South Sudan music">
                 <span class="country-flag">🇸🇸</span> South Sudan
             </a>
         </div>
@@ -1269,10 +1229,10 @@
 </div>
 
 <!-- Queue Panel -->
-<div id="queue-panel" class="queue-panel">
+<div id="queue-panel" class="queue-panel" role="dialog" aria-label="Queue panel">
     <div class="queue-header">
         <i class="bi bi-music-note-list me-2"></i>Up Next
-        <button class="btn btn-sm btn-outline-secondary float-end" onclick="closeQueue()">✕</button>
+        <button class="btn btn-sm btn-outline-secondary float-end" onclick="closeQueue()" aria-label="Close queue">✕</button>
     </div>
     <div id="queue-list"></div>
 </div>
@@ -1285,22 +1245,22 @@
                 <h6 class="text-white mb-2">EraTunez</h6>
                 <small class="text-secondary">Music of the Era - East Africa's Premier Music Platform</small>
                 <div class="d-flex gap-3 justify-content-center justify-content-md-start mt-3">
-                    <a href="https://facebook.com/eratunes" target="_blank" class="social-link" title="Facebook">
+                    <a href="https://facebook.com/eratunes" target="_blank" class="social-link" aria-label="Facebook">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="https://instagram.com/eratunez_" target="_blank" class="social-link" title="Instagram">
+                    <a href="https://instagram.com/eratunez_" target="_blank" class="social-link" aria-label="Instagram">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    <a href="https://twitter.com/eratunez" target="_blank" class="social-link" title="X (Twitter)">
+                    <a href="https://twitter.com/eratunez" target="_blank" class="social-link" aria-label="X Twitter">
                         <i class="bi bi-twitter-x"></i>
                     </a>
-                    <a href="https://tiktok.com/@eratunez" target="_blank" class="social-link" title="TikTok">
+                    <a href="https://tiktok.com/@eratunez" target="_blank" class="social-link" aria-label="TikTok">
                         <i class="bi bi-tiktok"></i>
                     </a>
-                    <a href="https://youtube.com/@eratunez" target="_blank" class="social-link" title="YouTube">
+                    <a href="https://youtube.com/@eratunez" target="_blank" class="social-link" aria-label="YouTube">
                         <i class="bi bi-youtube"></i>
                     </a>
-                    <a href="https://whatsapp.com/channel/https://whatsapp.com/channel/0029VbCge3rA89MbctkFoh3p " target="_blank" class="social-link" title="WhatsApp">
+                    <a href="https://whatsapp.com/channel/0029VbCge3rA89MbctkFoh3p" target="_blank" class="social-link" aria-label="WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                 </div>
@@ -1333,46 +1293,36 @@
         </div>
     </div>
 </footer>
+
 <!-- Share Modal -->
-<div class="modal fade" id="shareModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="shareModal" tabindex="-1" aria-hidden="true" role="dialog" aria-label="Share song modal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark text-white border-secondary">
             <div class="modal-header border-secondary">
                 <h5 class="modal-title"><i class="bi bi-share-fill me-2 text-success"></i>Share This Song</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close share modal"></button>
             </div>
             <div class="modal-body">
                 <p id="share-song-title" class="text-white fw-bold"></p>
                 <p class="text-secondary small">Share this song with your friends on social media!</p>
                 
                 <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                    <!-- WhatsApp -->
-                    <a href="#" id="share-whatsapp" target="_blank" class="btn btn-success rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <a href="#" id="share-whatsapp" target="_blank" class="btn btn-success rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;" aria-label="Share on WhatsApp">
                         <i class="bi bi-whatsapp"></i>
                     </a>
-                    
-                    <!-- Facebook -->
-                    <a href="#" id="share-facebook" target="_blank" class="btn btn-primary rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <a href="#" id="share-facebook" target="_blank" class="btn btn-primary rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;" aria-label="Share on Facebook">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    
-                    <!-- X (Twitter) -->
-                    <a href="#" id="share-twitter" target="_blank" class="btn btn-dark rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #000; border: 1px solid #333;">
+                    <a href="#" id="share-twitter" target="_blank" class="btn btn-dark rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #000; border: 1px solid #333;" aria-label="Share on X Twitter">
                         <i class="bi bi-twitter-x"></i>
                     </a>
-                    
-                    <!-- Instagram -->
-                    <a href="#" id="share-instagram" target="_blank" class="btn btn-danger rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">
+                    <a href="#" id="share-instagram" target="_blank" class="btn btn-danger rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);" aria-label="Share on Instagram">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    
-                    <!-- Telegram -->
-                    <a href="#" id="share-telegram" target="_blank" class="btn btn-info rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #0088cc; border: none;">
+                    <a href="#" id="share-telegram" target="_blank" class="btn btn-info rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: #0088cc; border: none;" aria-label="Share on Telegram">
                         <i class="bi bi-telegram"></i>
                     </a>
-                    
-                    <!-- Copy Link -->
-                    <button onclick="copyShareLink()" class="btn btn-secondary rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                    <button onclick="copyShareLink()" class="btn btn-secondary rounded-circle" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;" aria-label="Copy link">
                         <i class="bi bi-link-45deg"></i>
                     </button>
                 </div>
@@ -1380,7 +1330,7 @@
                 <div class="mt-3">
                     <div class="input-group">
                         <input type="text" id="share-link-input" class="form-control bg-dark text-white border-secondary" readonly value="">
-                        <button onclick="copyShareLink()" class="btn btn-success">Copy</button>
+                        <button onclick="copyShareLink()" class="btn btn-success" aria-label="Copy link to clipboard">Copy</button>
                     </div>
                 </div>
             </div>
@@ -1388,18 +1338,11 @@
     </div>
 </div>
 
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Bottom Player -->
-<div class="bottom-player">
+<div class="bottom-player" role="region" aria-label="Music player">
     <div class="player-content">
         <div class="player-song-info">
-        <img id="player-img" src="https://placehold.co/45x45/1db954/white?text=🎵" alt="Cover">   
+            <img id="player-img" src="https://placehold.co/45x45/1db954/white?text=🎵" alt="Current song cover">   
             <div class="player-song-details">
                 <div id="player-title" class="player-song-title">Select a song</div>
                 <div id="player-artist" class="player-song-artist">EraTunez</div>
@@ -1408,25 +1351,25 @@
         <div id="video-player-container" style="display: none; width: 100%; margin: 10px 0;">
             <iframe id="youtube-player" width="100%" height="250" frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen style="border-radius: 8px;"></iframe>
+                    allowfullscreen style="border-radius: 8px;" title="YouTube video player"></iframe>
         </div>
         <div class="player-controls">
-            <button onclick="toggleLyrics()" id="lyrics-btn" title="View Lyrics">
+            <button onclick="toggleLyrics()" id="lyrics-btn" title="View Lyrics" aria-label="Toggle lyrics">
                 <i class="bi bi-music-note-beamed"></i>
             </button>
-            <button onclick="playerPrevSong()" title="Previous">
+            <button onclick="playerPrevSong()" title="Previous" aria-label="Previous song">
                 <i class="fas fa-step-backward"></i>
             </button>
-            <button class="play-pause-btn" onclick="playerTogglePlay()" title="Play/Pause">
+            <button class="play-pause-btn" onclick="playerTogglePlay()" title="Play/Pause" aria-label="Play or pause">
                 <i id="player-play-icon" class="fas fa-play"></i>
             </button>
-            <button onclick="playerNextSong()" title="Next">
+            <button onclick="playerNextSong()" title="Next" aria-label="Next song">
                 <i class="fas fa-step-forward"></i>
             </button>
         </div>
         
         <div class="player-progress">
-            <div class="progress-bar-custom" onclick="playerSeek(event)">
+            <div class="progress-bar-custom" onclick="playerSeek(event)" role="progressbar" aria-label="Song progress">
                 <div id="player-progress-fill" class="progress-fill"></div>
             </div>
             <div class="time-info">
@@ -1436,37 +1379,36 @@
         </div>
         
         <div class="player-extras">
-            <button onclick="playerToggleQueue()" title="Queue">
+            <button onclick="playerToggleQueue()" title="Queue" aria-label="Toggle queue">
                 <i class="fas fa-list"></i>
             </button>
-            <button onclick="toggleRadioMode()" id="player-radio-btn" title="Radio Mode">
+            <button onclick="toggleRadioMode()" id="player-radio-btn" title="Radio Mode" aria-label="Toggle radio mode">
                 <i class="fas fa-broadcast-tower"></i>
             </button>
-            <button onclick="toggleVideoMode()" id="video-mode-btn" title="Watch Video" style="display: none;">
+            <button onclick="toggleVideoMode()" id="video-mode-btn" title="Watch Video" style="display: none;" aria-label="Toggle video mode">
                 <i class="bi bi-camera-reels-fill"></i>
             </button>
-            <button onclick="playerToggleShuffle()" id="player-shuffle-btn" title="Shuffle">
+            <button onclick="playerToggleShuffle()" id="player-shuffle-btn" title="Shuffle" aria-label="Toggle shuffle">
                 <i class="fas fa-random"></i>
             </button>
-            <button onclick="playerToggleRepeat()" id="player-repeat-btn" title="Repeat">
+            <button onclick="playerToggleRepeat()" id="player-repeat-btn" title="Repeat" aria-label="Toggle repeat">
                 <i class="fas fa-redo-alt"></i>
             </button>
-            <!-- FREE DOWNLOAD BUTTON - NOW WORKS WITHOUT PAYMENT -->
-            <button onclick="playerDownloadCurrent()" title="Download">
+            <button onclick="playerDownloadCurrent()" title="Download" aria-label="Download current song">
                 <i class="fas fa-download"></i>
             </button>
-            <button onclick="playerToggleLike()" id="player-like-btn" title="Like">
+            <button onclick="playerToggleLike()" id="player-like-btn" title="Like" aria-label="Like current song">
                 <i class="fas fa-heart"></i>
             </button>
             <div style="display: flex; align-items: center; gap: 5px;">
-                <i class="fas fa-volume-up" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
-                <input type="range" id="player-volume" class="volume-slider" min="0" max="1" step="0.01" value="0.7">
+                <i class="fas fa-volume-up" style="font-size: 0.8rem; color: var(--text-secondary);" aria-hidden="true"></i>
+                <input type="range" id="player-volume" class="volume-slider" min="0" max="1" step="0.01" value="0.7" aria-label="Volume control">
             </div>
         </div>
-        <div id="lyrics-panel" style="display: none; background: var(--bg-secondary); border-radius: 12px; margin-top: 15px; padding: 20px; max-height: 400px; overflow-y: auto;">
+        <div id="lyrics-panel" style="display: none; background: var(--bg-secondary); border-radius: 12px; margin-top: 15px; padding: 20px; max-height: 400px; overflow-y: auto;" role="dialog" aria-label="Lyrics panel">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="mb-0 text-success"><i class="bi bi-music-note-beamed me-2"></i>Lyrics</h6>
-                <button onclick="toggleLyrics()" class="btn btn-sm btn-outline-secondary rounded-circle">
+                <button onclick="toggleLyrics()" class="btn btn-sm btn-outline-secondary rounded-circle" aria-label="Close lyrics">
                     <i class="bi bi-x-lg"></i>
                 </button>
             </div>
@@ -1478,8 +1420,6 @@
 </div>
 
 <audio id="player-audio" preload="auto"></audio>
-</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1487,7 +1427,6 @@
 // ========== DARK/LIGHT MODE TOGGLE ==========
 function initTheme() {
     let savedTheme = localStorage.getItem('eratunez_theme');
-    
     if (savedTheme) {
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
@@ -1513,11 +1452,9 @@ function updateThemeIcon(theme) {
 function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('eratunez_theme', newTheme);
     updateThemeIcon(newTheme);
-    
     showToast(`${newTheme === 'dark' ? '🌙 Dark' : '☀️ Light'} mode activated`);
 }
 
@@ -1604,7 +1541,6 @@ function loadPlayerState() {
     }
 }
 
-// Auto-save every 3 seconds
 setInterval(function() {
     if (playerCurrentSong && playerAudio.src) {
         savePlayerState();
@@ -1655,7 +1591,6 @@ function playSong(audioUrl, title, artist, coverImg, songId, queueSongs = null) 
     playerAudio.src = audioUrl;
     playerAudio.load();
     playerAudio.play();
-    
     document.getElementById('player-play-icon').className = 'fas fa-pause';
     playerCurrentSong = { id: songId, title: title, artist: artist, audio: audioUrl, img: coverImg || 'https://placehold.co/45x45/1db954/white?text=🎵' };
     
@@ -1666,12 +1601,10 @@ function playSong(audioUrl, title, artist, coverImg, songId, queueSongs = null) 
             method: 'POST',
             headers: { 'X-CSRFToken': getCookie('csrftoken'), 'Content-Type': 'application/json' }
         }).catch(err => console.log("Error:", err));
-        
         fetch(`/track-history/${songId}/`, {
             method: 'POST',
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).catch(err => console.log("Error:", err));
-        
         checkSongVideo(songId);
     }
     
@@ -1682,12 +1615,10 @@ function playFromQueue_Internal(song) {
     playerAudio.src = song.audio;
     playerAudio.load();
     playerAudio.play().catch(e => console.log('Autoplay blocked:', e));
-    
     document.getElementById('player-title').innerText = song.title || 'Unknown';
     document.getElementById('player-artist').innerText = song.artist || 'EraTunez';
     document.getElementById('player-img').src = song.img || 'https://placehold.co/45x45/1db954/white?text=🎵';
     document.getElementById('player-play-icon').className = 'fas fa-pause';
-    
     playerCurrentSong = {
         id: song.id,
         title: song.title,
@@ -1695,22 +1626,18 @@ function playFromQueue_Internal(song) {
         audio: song.audio,
         img: song.img || 'https://placehold.co/45x45/1db954/white?text=🎵'
     };
-    
     songCompletionTracked = false;
     savePlayerState();
     updateQueueDisplay();
-    
     if (song.id) {
         fetch(`/play-song/${song.id}/`, {
             method: 'POST',
             headers: { 'X-CSRFToken': getCookie('csrftoken'), 'Content-Type': 'application/json' }
         }).catch(() => {});
-        
         fetch(`/track-history/${song.id}/`, {
             method: 'POST',
             headers: { 'X-CSRFToken': getCookie('csrftoken') }
         }).catch(() => {});
-        
         checkSongVideo(song.id);
     }
 }
@@ -1728,14 +1655,11 @@ function playerTogglePlay() {
 
 function playerNextSong() {
     let queue = playerIsShuffling && playerShuffledQueue.length > 0 ? playerShuffledQueue : playerQueue;
- 
     if (!queue || queue.length === 0) {
         showToast("Queue is empty");
         return;
     }
- 
     let nextIndex = playerCurrentIndex + 1;
- 
     if (nextIndex >= queue.length) {
         if (playerIsRepeating) {
             nextIndex = 0;
@@ -1745,7 +1669,6 @@ function playerNextSong() {
             return;
         }
     }
- 
     playerCurrentIndex = nextIndex;
     const song = queue[playerCurrentIndex];
     if (song) {
@@ -1758,12 +1681,9 @@ function playerPrevSong() {
         playerAudio.currentTime = 0;
         return;
     }
- 
     let queue = playerIsShuffling && playerShuffledQueue.length > 0 ? playerShuffledQueue : playerQueue;
     if (!queue || queue.length === 0) return;
- 
     let prevIndex = playerCurrentIndex - 1;
- 
     if (prevIndex < 0) {
         if (playerIsRepeating) {
             prevIndex = queue.length - 1;
@@ -1772,7 +1692,6 @@ function playerPrevSong() {
             return;
         }
     }
- 
     playerCurrentIndex = prevIndex;
     const song = queue[playerCurrentIndex];
     if (song) {
@@ -1838,14 +1757,11 @@ function playerToggleLike() {
     }
 }
 
-// ========== UPDATED: FREE DOWNLOAD FUNCTION (NO LOGIN REQUIRED) ==========
 function playerDownloadCurrent() {
     if (!playerCurrentSong || !playerCurrentSong.audio) {
         showToast("No song selected");
         return;
     }
-    
-    // Track download for stats (if user is logged in, track it; if not, skip)
     {% if user.is_authenticated %}
         fetch(`/track-download/${playerCurrentSong.id}/`, {
             method: 'POST',
@@ -1855,11 +1771,10 @@ function playerDownloadCurrent() {
             }
         }).catch(err => console.log('Download tracking error:', err));
     {% endif %}
-    
-    // Direct download - FREE for everyone!
     const link = document.createElement('a');
     link.href = playerCurrentSong.audio;
     link.download = '';
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1879,14 +1794,11 @@ function closeQueue() {
 function updateQueueDisplay() {
     const queueList = document.getElementById('queue-list');
     const queue = playerIsShuffling ? playerShuffledQueue : playerQueue;
-    
     if (!queueList) return;
-    
     if (queue.length === 0) {
         queueList.innerHTML = '<div class="text-center py-3 text-secondary">Queue is empty</div>';
         return;
     }
-    
     let html = '';
     queue.forEach((song, index) => {
         const isActive = (playerCurrentSong && song.audio === playerCurrentSong.audio);
@@ -1918,7 +1830,6 @@ function setPlayerQueue(songs, currentSongAudio) {
         playerQueue = [...songs];
         playerCurrentIndex = playerQueue.findIndex(s => s.audio === currentSongAudio);
         if (playerCurrentIndex === -1) playerCurrentIndex = 0;
-        
         if (playerIsShuffling) {
             playerShuffledQueue = [...playerQueue];
             for (let i = playerShuffledQueue.length - 1; i > 0; i--) {
@@ -1933,12 +1844,10 @@ function setPlayerQueue(songs, currentSongAudio) {
     }
 }
 
-// ========== PLAYER EVENT LISTENERS ==========
 playerAudio.addEventListener('timeupdate', function() {
     if (playerAudio.duration) {
         const percent = (playerAudio.currentTime / playerAudio.duration) * 100;
         document.getElementById('player-progress-fill').style.width = percent + '%';
-        
         if (percent > 80 && !songCompletionTracked && playerCurrentSong) {
             songCompletionTracked = true;
             fetch(`/track-completion/${playerCurrentSong.id}/`, {
@@ -1946,16 +1855,13 @@ playerAudio.addEventListener('timeupdate', function() {
                 headers: { 'X-CSRFToken': getCookie('csrftoken') }
             }).catch(err => console.log('Error tracking completion:', err));
         }
-        
         if (percent < 10) {
             songCompletionTracked = false;
         }
-        
         const currentMin = Math.floor(playerAudio.currentTime / 60);
         const currentSec = Math.floor(playerAudio.currentTime % 60);
         const totalMin = Math.floor(playerAudio.duration / 60);
         const totalSec = Math.floor(playerAudio.duration % 60);
-        
         document.getElementById('player-current-time').innerText = `${currentMin}:${currentSec.toString().padStart(2,'0')}`;
         document.getElementById('player-duration').innerText = `${totalMin}:${totalSec.toString().padStart(2,'0')}`;
     }
@@ -1983,7 +1889,6 @@ if (volumeSlider) {
     playerAudio.volume = 0.7;
 }
 
-// ========== HELPER FUNCTIONS ==========
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -2012,26 +1917,21 @@ function escapeHtml(str) {
 function showToast(message) {
     const existingToast = document.querySelector('.toast-notification');
     if (existingToast) existingToast.remove();
-    
     let toast = document.createElement('div');
     toast.className = 'toast-notification';
     toast.innerHTML = message;
     document.body.appendChild(toast);
-    
     setTimeout(() => {
         if (toast) toast.remove();
     }, 2000);
 }
 
-// ========== RADIO MODE FUNCTIONS ==========
 function startRadio(songId) {
     if (!songId) {
         showToast("Please select a song first");
         return;
     }
-    
     showToast("Loading radio mode...");
-    
     fetch(`/radio/${songId}/`)
         .then(response => response.json())
         .then(data => {
@@ -2043,17 +1943,13 @@ function startRadio(songId) {
                     img: song.img || 'https://placehold.co/45x45/1db954/white?text=🎵',
                     audio: song.audio
                 }));
-                
                 isRadioMode = true;
                 currentRadioSeed = data.seed_song;
                 playerQueue = [...radioQueue];
                 playerCurrentIndex = 0;
-                
                 updateRadioButtonUI(true);
-                
                 const firstSong = radioQueue[0];
                 playSong(firstSong.audio, firstSong.title, firstSong.artist, firstSong.img, firstSong.id, playerQueue);
-                
                 showToast(`Radio Mode: Playing similar to "${currentRadioSeed}"`);
             } else {
                 showToast("No similar songs found for radio mode");
@@ -2098,19 +1994,16 @@ function updateRadioButtonUI(active) {
     }
 }
 
-// ========== VIDEO MODE FUNCTIONS ==========
 let isVideoMode = false;
 let currentVideoEmbedUrl = null;
 let currentSongHasVideo = false;
 
 function toggleVideoMode() {
     if (!currentSongHasVideo) return;
-    
     isVideoMode = !isVideoMode;
     const videoContainer = document.getElementById('video-player-container');
     const albumArt = document.getElementById('player-img');
     const videoBtn = document.getElementById('video-mode-btn');
-    
     if (isVideoMode) {
         if (videoContainer) videoContainer.style.display = 'block';
         if (albumArt) albumArt.style.display = 'none';
@@ -2118,12 +2011,10 @@ function toggleVideoMode() {
             videoBtn.style.color = '#1db954';
             videoBtn.style.backgroundColor = '#1a1a1a';
         }
-        
         const videoFrame = document.getElementById('youtube-player');
         if (videoFrame && currentVideoEmbedUrl) {
             videoFrame.src = currentVideoEmbedUrl;
         }
-        
         if (!playerAudio.paused) {
             playerAudio.pause();
             document.getElementById('player-play-icon').className = 'fas fa-play';
@@ -2135,7 +2026,6 @@ function toggleVideoMode() {
             videoBtn.style.color = '';
             videoBtn.style.backgroundColor = '';
         }
-        
         const videoFrame = document.getElementById('youtube-player');
         if (videoFrame) {
             videoFrame.src = '';
@@ -2150,7 +2040,6 @@ function checkSongVideo(songId) {
             currentSongHasVideo = data.has_video;
             currentVideoEmbedUrl = data.video_url;
             const videoBtn = document.getElementById('video-mode-btn');
-            
             if (currentSongHasVideo && videoBtn) {
                 videoBtn.style.display = 'flex';
             } else if (videoBtn) {
@@ -2163,7 +2052,6 @@ function checkSongVideo(songId) {
         .catch(err => console.log('Error checking video:', err));
 }
 
-// ========== LYRICS FUNCTIONS ==========
 function toggleLyrics() {
     const panel = document.getElementById('lyrics-panel');
     if (panel.style.display === 'none') {
@@ -2179,7 +2067,6 @@ function loadLyrics() {
         document.getElementById('lyrics-content').innerHTML = '<div class="text-center py-4 text-secondary">No lyrics available</div>';
         return;
     }
-    
     fetch(`/api/lyrics/${playerCurrentSong.id}/`)
         .then(response => response.json())
         .then(data => {
@@ -2194,7 +2081,7 @@ function loadLyrics() {
             document.getElementById('lyrics-content').innerHTML = '<div class="text-center py-4 text-secondary">Failed to load lyrics</div>';
         });
 }
-// ========== INSTANT DOWNLOAD ==========
+
 function downloadSongInstant(audioUrl, songTitle) {
     showToast(`⬇️ Downloading "${songTitle}"...`);
     const link = document.createElement('a');
@@ -2219,9 +2106,34 @@ function displayPlainLyrics(lyrics) {
     container.innerHTML = html;
 }
 
-// ========== LIVE SEARCH SUGGESTIONS ==========
-let searchTimeout;
+function openShareModal(songTitle, artistName, songId) {
+    showToast('Opening share options...');
+    const url = `https://www.eratunez.com/song/${songId}/`;
+    const text = `🎵 Check out "${songTitle}" by ${artistName} on EraTunez! 🎶\n\nDownload and stream East African music for free at:`;
+    const shareUrl = url;
+    document.getElementById('share-song-title').innerText = `"${songTitle}" by ${artistName}`;
+    document.getElementById('share-link-input').value = url;
+    document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + shareUrl)}`;
+    document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
+    document.getElementById('share-instagram').href = `https://www.instagram.com/`;
+    document.getElementById('share-telegram').href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`;
+    const modal = new bootstrap.Modal(document.getElementById('shareModal'));
+    modal.show();
+}
 
+function copyShareLink() {
+    const input = document.getElementById('share-link-input');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+        showToast('✅ Link copied to clipboard!');
+    }).catch(() => {
+        document.execCommand('copy');
+        showToast('✅ Link copied to clipboard!');
+    });
+}
+
+let searchTimeout;
 const searchInput = document.getElementById('search-input');
 const searchSuggestions = document.getElementById('search-suggestions');
 const suggestionsList = document.getElementById('suggestions-list');
@@ -2230,23 +2142,18 @@ const suggestionsLoading = document.getElementById('suggestions-loading');
 if (searchInput) {
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
-        
         if (searchTimeout) clearTimeout(searchTimeout);
-        
         if (query.length < 2) {
             searchSuggestions.style.display = 'none';
             return;
         }
-        
         searchSuggestions.style.display = 'block';
         suggestionsLoading.style.display = 'block';
         suggestionsList.innerHTML = '';
-        
         searchTimeout = setTimeout(() => {
             fetchSearchSuggestions(query);
         }, 300);
     });
-    
     document.addEventListener('click', function(e) {
         if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
             searchSuggestions.style.display = 'none';
@@ -2259,7 +2166,6 @@ function fetchSearchSuggestions(query) {
         .then(response => response.json())
         .then(data => {
             suggestionsLoading.style.display = 'none';
-            
             if (data.results && data.results.length > 0) {
                 let html = '';
                 data.results.forEach(result => {
@@ -2286,84 +2192,39 @@ function fetchSearchSuggestions(query) {
             suggestionsLoading.style.display = 'none';
             suggestionsList.innerHTML = `<div class="p-3 text-center text-danger">Search failed</div>`;
         });
-    }
-// ========== SHARE FUNCTION ==========
-function openShareModal(songTitle, artistName, songId) {
-    alert("Share button clicked for song: " + songTitle + " by " + artistName);
-    showToast('Opening share options...');
-    const url = `https://www.eratunez.com/song/${songId}/`;
-    const text = `🎵 Check out "${songTitle}" by ${artistName} on EraTunez! 🎶\n\nDownload and stream East African music for free at:`;
-    const shareUrl = url;
-    
-    // Update modal
-    document.getElementById('share-song-title').innerText = `"${songTitle}" by ${artistName}`;
-    document.getElementById('share-link-input').value = url;
-    
-    // Update share links
-    document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + shareUrl)}`;
-    document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-    document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
-    document.getElementById('share-instagram').href = `https://www.instagram.com/`;
-    document.getElementById('share-telegram').href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(text)}`;
-    
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('shareModal'));
-    modal.show();
 }
 
-function copyShareLink() {
-    const input = document.getElementById('share-link-input');
-    input.select();
-    navigator.clipboard.writeText(input.value).then(() => {
-        showToast('✅ Link copied to clipboard!');
-    }).catch(() => {
-        document.execCommand('copy');
-        showToast('✅ Link copied to clipboard!');
-    });
-}
-
-// ========== SMOOTH AJAX NAVIGATION - NO PLAYER INTERRUPTION ==========
 let isNavigating = false;
-
 document.addEventListener('click', function(e) {
     if (isNavigating) return;
     if (e.target.closest('button') || e.target.closest('form')) return;
-    
     let link = e.target.closest('a');
     if (!link) return;
-    
     let href = link.getAttribute('href');
     if (!href) return;
-    
     if (href.startsWith('http') || href.startsWith('#') || href.startsWith('javascript') || 
         href.startsWith('/admin') || href.includes('logout') || href.includes('login') ||
         href.includes('whatsapp') || link.hasAttribute('download')) {
         return;
     }
-    
     e.preventDefault();
     isNavigating = true;
-    
     const mainContent = document.getElementById('main-content');
     mainContent.innerHTML = '<div class="text-center py-5"><i class="fas fa-spinner fa-spin fa-2x text-success"></i><p class="mt-2">Loading...</p></div>';
-    
     fetch(href)
         .then(response => response.text())
         .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const newContent = doc.getElementById('main-content')?.innerHTML || doc.querySelector('.main-content')?.innerHTML;
-            
             if (newContent) {
                 mainContent.innerHTML = newContent;
-                
                 const scripts = mainContent.querySelectorAll('script');
                 scripts.forEach(oldScript => {
                     const newScript = document.createElement('script');
                     newScript.textContent = oldScript.textContent;
                     oldScript.parentNode.replaceChild(newScript, oldScript);
                 });
-                
                 if (href === '/' || href.endsWith('/') || href.includes('home')) {
                     if (typeof loadRecommendations === 'function') {
                         setTimeout(function() {
@@ -2374,7 +2235,6 @@ document.addEventListener('click', function(e) {
             } else {
                 window.location.href = href;
             }
-            
             window.history.pushState({}, '', href);
             isNavigating = false;
         })
@@ -2389,7 +2249,6 @@ window.addEventListener('popstate', function() {
     window.location.reload();
 });
 
-// ========== LOAD SAVED STATE ==========
 document.addEventListener('DOMContentLoaded', function() {
     loadPlayerState();
     initTheme();
@@ -2400,7 +2259,6 @@ if (themeToggle) {
     themeToggle.addEventListener('click', toggleTheme);
 }
 
-// ========== MAKE GLOBAL FUNCTIONS ==========
 window.playSong = playSong;
 window.setPlayerQueue = setPlayerQueue;
 window.playerNextSong = playerNextSong;
@@ -2419,7 +2277,11 @@ window.toggleVideoMode = toggleVideoMode;
 window.checkSongVideo = checkSongVideo;
 window.toggleLyrics = toggleLyrics;
 window.playFromQueue_Internal = playFromQueue_Internal;
+window.downloadSongInstant = downloadSongInstant;
+window.openShareModal = openShareModal;
+window.copyShareLink = copyShareLink;
 </script>
+
 <!-- Kadam Popunder Ad -->
 <div class="uzxdvf450729"></div>
 <script src="https://hdbtop.com/code/uzxdvf450729"></script>

@@ -133,7 +133,7 @@ var artistSongs = [
         id: {{ song.id }},
         title: "{{ song.title|escapejs }}",
         artist: "{{ song.artist.username|escapejs }}",
-        img: "{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}",
+        img: "{% if song.cover_image %}{{ song.cover_image.url }}{% else %}https://placehold.co/160x160/1db954/white?text=🎵{% endif %}",
         audio: "{{ song.audio_file.url }}"
     },
     {% endfor %}
@@ -141,11 +141,9 @@ var artistSongs = [
 
 // Function to play song with artist queue
 function playArtistSong(audioUrl, title, artist, coverImg, songId) {
-    // Set the queue to all artist songs
     if (typeof setPlayerQueue === 'function') {
         setPlayerQueue(artistSongs, audioUrl);
     }
-    // Play the song
     playSong(audioUrl, title, artist, coverImg, songId, artistSongs);
 }
 
@@ -157,6 +155,7 @@ function playArtistRadio(songId) {
         console.log('Radio function not available');
     }
 }
+
 function toggleFollow() {
     const btn = document.getElementById('follow-btn');
     const followText = document.getElementById('follow-text');
@@ -189,11 +188,9 @@ function toggleFollow() {
             }
             showToast(data.message);
             
-            // Update follower count
             fetch(`/follow-status/{{ artist.id }}/`)
                 .then(res => res.json())
                 .then(data => {
-                    // Refresh page or update count
                     location.reload();
                 });
         }
@@ -214,6 +211,14 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function showToast(message) {
+    let toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
 }
 
 // Check initial follow status
@@ -239,7 +244,8 @@ fetch(`/follow-status/{{ artist.id }}/`)
             <div class="col-md-auto text-center text-md-start">
                 {% if artist.profile_picture %}
                     <img src="{{ artist.profile_picture.url }}" class="artist-pfp-large border border-4" 
-                         style="border-color: {{ artist.artist_color|default:'#1DB954' }} !important;">
+                         style="border-color: {{ artist.artist_color|default:'#1DB954' }} !important;"
+                         alt="Profile picture of {{ artist.get_display_name }}">
                 {% else %}
                     <div class="artist-pfp-large bg-secondary d-flex align-items-center justify-content-center mx-auto">
                         <i class="bi bi-person-fill" style="font-size: 5rem;"></i>
@@ -247,46 +253,47 @@ fetch(`/follow-status/{{ artist.id }}/`)
                 {% endif %}
             </div>
             <div class="badge bg-dark border border-secondary p-2 px-3 rounded-pill">
-    <span class="text-success fw-bold">{{ total_plays }}</span> TOTAL PLAYS
-</div>
+                <span class="text-success fw-bold">{{ total_plays }}</span> TOTAL PLAYS
+            </div>
 
             <div class="col-md ps-md-5 mt-4 mt-md-0">
                 <div class="d-flex align-items-center justify-content-center justify-content-md-start">
                     <h1 class="display-3 fw-bold mb-0 text-white">
-    {{ artist.get_display_name }}
-</h1>
+                        {{ artist.get_display_name }}
+                    </h1>
                     {% if artist.is_pro %}
                         <i class="bi bi-patch-check-fill verified-badge gold-check" title="Pro Artist"></i>
                     {% elif artist.is_verified %}
                         <i class="bi bi-patch-check-fill verified-badge blue-check" title="Verified Artist"></i>
                     {% endif %}
                 </div>
-                <!-- Add this in the artist header section, near the artist name -->
-<div class="mt-3">
-    {% if user.is_authenticated and user != artist %}
-        <button id="follow-btn" class="btn btn-outline-success rounded-pill px-4" onclick="toggleFollow()">
-            <i class="bi bi-person-plus me-1"></i>
-            <span id="follow-text">Follow</span>
-        </button>
-    {% endif %}
-    
-    {% if user == artist %}
-        <div class="d-flex gap-2">
-            <a href="{% url 'followers_list' artist.username %}" class="btn btn-outline-secondary rounded-pill">
-                <i class="bi bi-people me-1"></i> {{ artist.followers.count }} Followers
-            </a>
-            <a href="{% url 'following_list' artist.username %}" class="btn btn-outline-secondary rounded-pill">
-                <i class="bi bi-person-check me-1"></i> Following
-            </a>
-        </div>
-    {% else %}
-        <div class="mt-2">
-            <span class="badge bg-dark border border-secondary">
-                <i class="bi bi-people me-1"></i> {{ artist.followers.count }} Followers
-            </span>
-        </div>
-    {% endif %}
-</div>
+                
+                <div class="mt-3">
+                    {% if user.is_authenticated and user != artist %}
+                        <button id="follow-btn" class="btn btn-outline-success rounded-pill px-4" onclick="toggleFollow()"
+                                aria-label="Follow {{ artist.get_display_name }}">
+                            <i class="bi bi-person-plus me-1"></i>
+                            <span id="follow-text">Follow</span>
+                        </button>
+                    {% endif %}
+                    
+                    {% if user == artist %}
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'followers_list' artist.username %}" class="btn btn-outline-secondary rounded-pill" aria-label="View followers">
+                                <i class="bi bi-people me-1"></i> {{ artist.followers.count }} Followers
+                            </a>
+                            <a href="{% url 'following_list' artist.username %}" class="btn btn-outline-secondary rounded-pill" aria-label="View following">
+                                <i class="bi bi-person-check me-1"></i> Following
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="mt-2">
+                            <span class="badge bg-dark border border-secondary">
+                                <i class="bi bi-people me-1"></i> {{ artist.followers.count }} Followers
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
 
                 <p class="lead text-secondary mt-2 mb-4" style="max-width: 600px;">
                     {{ artist.bio|default:"EraTunez Official Artist." }}
@@ -324,12 +331,14 @@ fetch(`/follow-status/{{ artist.id }}/`)
                     <div class="card bg-dark border-0">
                         <div class="position-relative">
                             <img src="{{ item.image.url }}" class="rounded shadow-sm" 
-                                 style="width: 110px; height: 110px; object-fit: cover; border: 1px solid #222;">
+                                 style="width: 110px; height: 110px; object-fit: cover; border: 1px solid #222;"
+                                 alt="{{ item.name }} by {{ artist.get_display_name }}">
                             
                             <a href="https://wa.me/{{ artist.whatsapp_number }}?text=Hi%20{{ artist.username }},%20I'm%20buying%20{{ item.name|urlencode }}" 
                                target="_blank" 
                                class="btn btn-success btn-sm position-absolute bottom-0 end-0 m-1 p-1 d-flex align-items-center justify-content-center"
-                               style="width: 30px; height: 30px; border-radius: 50%;">
+                               style="width: 30px; height: 30px; border-radius: 50%;"
+                               aria-label="Buy {{ item.name }} on WhatsApp">
                                <i class="bi bi-whatsapp"></i>
                             </a>
                         </div>
@@ -365,32 +374,35 @@ fetch(`/follow-status/{{ artist.id }}/`)
                 <div class="position-relative">
                     {% if song.cover_image %}
                     <img src="{{ song.cover_image.url }}" class="card-img-top rounded shadow-sm" style="aspect-ratio: 1/1; object-fit: cover; cursor: pointer;" 
-                         onclick="playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                         onclick="playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}https://placehold.co/160x160/1db954/white?text=🎵{% endif %}', {{ song.id }})"
+                         alt="Cover art for {{ song.title }} by {{ song.artist.username }}">
                     {% endif %}
                     
-                    <!-- Play Button Overlay -->
-                    <button class="play-btn-overlay" onclick="event.stopPropagation(); playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                    <button class="play-btn-overlay" onclick="event.stopPropagation(); playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}https://placehold.co/160x160/1db954/white?text=🎵{% endif %}', {{ song.id }})"
+                            aria-label="Play {{ song.title }}">
                         <i class="bi bi-play-fill"></i>
                     </button>
                     
-                    <!-- Radio Button Overlay -->
-                    <button class="radio-btn-overlay" onclick="event.stopPropagation(); playArtistRadio({{ song.id }})">
+                    <button class="radio-btn-overlay" onclick="event.stopPropagation(); playArtistRadio({{ song.id }})"
+                            aria-label="Start radio for {{ song.title }}">
                         <i class="bi bi-broadcast"></i>
                     </button>
                 </div>
                 <div class="card-body p-2 text-center text-md-start">
                     <h6 class="text-white text-truncate mb-0" style="cursor: pointer;" 
-                        onclick="playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                        onclick="playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}https://placehold.co/160x160/1db954/white?text=🎵{% endif %}', {{ song.id }})">
                         {{ song.title }}
                     </h6>
                     <small class="text-secondary">{{ song.play_count }} plays</small>
                     <div class="mt-2">
                         <button class="btn btn-sm btn-outline-success rounded-pill me-1" style="font-size: 0.65rem; padding: 2px 6px;" 
-                                onclick="event.stopPropagation(); playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}/static/default-cover.png{% endif %}', {{ song.id }})">
+                                onclick="event.stopPropagation(); playArtistSong('{{ song.audio_file.url }}', '{{ song.title|escapejs }}', '{{ song.artist.username|escapejs }}', '{% if song.cover_image %}{{ song.cover_image.url }}{% else %}https://placehold.co/160x160/1db954/white?text=🎵{% endif %}', {{ song.id }})"
+                                aria-label="Play {{ song.title }}">
                             <i class="bi bi-play-fill"></i> Play
                         </button>
                         <button class="btn btn-sm btn-outline-warning rounded-pill" style="font-size: 0.65rem; padding: 2px 6px;" 
-                                onclick="event.stopPropagation(); playArtistRadio({{ song.id }})">
+                                onclick="event.stopPropagation(); playArtistRadio({{ song.id }})"
+                                aria-label="Start radio for {{ song.title }}">
                             <i class="bi bi-broadcast"></i> Radio
                         </button>
                     </div>

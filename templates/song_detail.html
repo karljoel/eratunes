@@ -312,70 +312,41 @@
 <div class="song-detail-container">
     <!-- Song Header -->
     <div class="song-header">
-     {% if song.cover_image %}
-    <img src="{{ song.cover_image.url }}" class="song-cover">
-{% else %}
-    <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover">
-{% endif %}  
-       <div class="song-info">
-    <h1 class="song-title">{{ song.title }}</h1>
-    <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
-    <div class="song-stats">
-        <div class="stat-badge">
-            <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
-        </div>
-        <div class="stat-badge">
-            <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
-        </div>
-    </div>
-    <div class="action-buttons">
-        <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()">
-            <i class="bi bi-play-fill me-2"></i>Play Now
-        </button>
-
-        <!-- 🔥 UPDATED: Download button - FREE for everyone, no login needed -->
-        <button class="btn btn-success rounded-pill px-4" 
-                onclick="downloadSongInstant('{{ song.audio_file.url }}', '{{ song.title|escapejs }}')">
-            <i class="bi bi-download me-2"></i>Download Now - Free
-        </button>
-
-        {% if prev_song %}
-        <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
-            <i class="bi bi-chevron-left"></i>
-        </a>
+        {% if song.cover_image %}
+            <img src="{{ song.cover_image.url }}" class="song-cover" alt="Cover art for {{ song.title }} by {{ song.artist.get_display_name }}">
+        {% else %}
+            <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover" alt="Default cover art for {{ song.title }}">
         {% endif %}
-        {% if next_song %}
-        <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
-            <i class="bi bi-chevron-right"></i>
-        </a>
-        {% endif %}
-    </div>
-</div>
-    
-    {% if prev_song %}
-    <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
-        <i class="bi bi-chevron-left"></i>
-    </a>
-    {% endif %}
-    {% if next_song %}
-    <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
-        <i class="bi bi-chevron-right"></i>
-    </a>
-    {% endif %}
-</div>       
-    {% if prev_song %}
-    <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle">
-        <i class="bi bi-chevron-left"></i>
-    </a>
-    {% endif %}
-    {% if next_song %}
-    <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
-        <i class="bi bi-chevron-right"></i>
-    </a>
-    {% endif %}
-</div>
+        
+        <div class="song-info">
+            <h1 class="song-title">{{ song.title }}</h1>
+            <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
+            <div class="song-stats">
+                <div class="stat-badge">
+                    <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
+                </div>
+                <div class="stat-badge">
+                    <i class="bi bi-download me-1"></i> {{ song.download_count }} downloads
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-success rounded-pill px-4" onclick="playSongFromDetail()" aria-label="Play {{ song.title }}">
+                    <i class="bi bi-play-fill me-2"></i>Play Now
+                </button>
+
+                <button class="btn btn-success rounded-pill px-4" 
+                        onclick="downloadSongInstant('{{ song.audio_file.url }}', '{{ song.title|escapejs }}')"
+                        aria-label="Download {{ song.title }}">
+                    <i class="bi bi-download me-2"></i>Download Now - Free
+                </button>
+
+                {% if prev_song %}
+                <a href="{% url 'song_detail' prev_song.id %}" class="btn btn-outline-secondary rounded-circle" aria-label="Previous song">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+                {% endif %}
                 {% if next_song %}
-                <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle">
+                <a href="{% url 'song_detail' next_song.id %}" class="btn btn-outline-secondary rounded-circle" aria-label="Next song">
                     <i class="bi bi-chevron-right"></i>
                 </a>
                 {% endif %}
@@ -395,7 +366,7 @@
             <textarea id="comment-input" class="form-control bg-dark text-white border-secondary rounded-3" 
                       rows="2" placeholder="Share your thoughts about this song... (+5 points)"></textarea>
             <div class="mt-2 text-end">
-                <button id="submit-comment" class="btn btn-success rounded-pill px-4">
+                <button id="submit-comment" class="btn btn-success rounded-pill px-4" aria-label="Post comment">
                     <i class="bi bi-send me-1"></i>Post Comment
                 </button>
             </div>
@@ -416,7 +387,6 @@
 const songId = {{ song.id }};
 
 function playSongFromDetail() {
-    // Get song data from the page
     const songData = {
         id: {{ song.id }},
         title: "{{ song.title|escapejs }}",
@@ -425,7 +395,6 @@ function playSongFromDetail() {
         img: "{{ song.get_cover_url|escapejs }}"
     };
     
-    // Check if global playSong function exists (from base.html player)
     if (typeof window.playSong === 'function') {
         window.playSong(songData.audio, songData.title, songData.artist, songData.img, songData.id);
         showToast("Now playing: " + songData.title);
@@ -476,11 +445,11 @@ function displayComments(comments) {
                         </div>
                         <div class="mt-1 text-white">${escapeHtml(comment.text)}</div>
                         <div class="mt-2">
-                            <button class="btn btn-sm btn-link text-secondary" onclick="likeComment(${comment.id})">
+                            <button class="btn btn-sm btn-link text-secondary" onclick="likeComment(${comment.id})" aria-label="Like comment">
                                 <i class="bi bi-heart"></i> ${comment.likes}
                             </button>
                             ${comment.user === '{{ user.username }}' ? 
-                                `<button class="btn btn-sm btn-link text-danger" onclick="deleteComment(${comment.id})">
+                                `<button class="btn btn-sm btn-link text-danger" onclick="deleteComment(${comment.id})" aria-label="Delete comment">
                                     <i class="bi bi-trash"></i> Delete
                                 </button>` : ''
                             }
@@ -591,26 +560,22 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.addEventListener('click', submitComment);
     }
     
-    // Check for payment success message
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('payment') === 'success') {
         showToast('✅ Payment successful! You can now download this song.');
     }
 });
 
-// Make sure the buy button form submits normally
 document.getElementById('buyForm')?.addEventListener('submit', function(e) {
     console.log("Buy form submitted");
 });
-</script>
-<script>
+
 document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.querySelector('.download-trigger');
     if (downloadBtn) {
         downloadBtn.addEventListener('click', function() {
             const songId = this.getAttribute('data-song-id');
             
-            // Fire background tracking request to your stats view
             fetch(`/music/track-download/${songId}/`, {
                 method: 'GET',
                 headers: {
@@ -620,7 +585,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Instantly updates the download stat count UI badge on the page
                     const statBadge = document.querySelector('.bi-download').parentElement;
                     if (statBadge) {
                         statBadge.innerHTML = `<i class="bi bi-download me-1"></i> ${data.downloads} downloads`;
