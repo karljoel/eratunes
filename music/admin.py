@@ -4,11 +4,12 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import CustomUser, Song, Comment, Product, Playlist, PlaylistSong, Ad, DJMix, Podcast, ProRequest, Mood, SongMood
 from .models import BlogPost 
+
 # ==================== PRODUCT ADMIN ====================
 admin.site.register(Product)
 
 # ==================== CUSTOM USER ADMIN ====================
-@admin.register(CustomUser)  # <--- Use the proper decorator here
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Artist & Fan Info', {
@@ -22,15 +23,18 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 'email', 'points', 'is_artist', 'is_pro', 'is_verified', 'is_staff']
     list_editable = ['points', 'is_verified', 'is_pro']
 
-# DELETE the old unregister/register block that was down here!
+
 # ==================== SONG ADMIN ====================
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
     list_display = ('title', 'artist', 'region', 'genre', 'is_approved', 'has_lyrics', 'has_video', 'is_trending', 'boost_paid', 'trending_expiry')
-    list_filter = ('is_approved', 'is_trending', 'has_lyrics', 'has_video', 'boost_paid', 'region', 'genre')
+    list_filter = ('is_approved', 'is_trending', 'has_lyrics', 'has_video', 'boost_paid', 'region', 'genre', 'moods')
     search_fields = ('title', 'artist__username', 'region')
     list_editable = ('region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
     actions = ['approve_boost']
+    
+    # 🆕 ADDED: filter_horizontal for moods
+    filter_horizontal = ('moods',)
     
     fieldsets = (
         ('Basic Information', {
@@ -38,6 +42,12 @@ class SongAdmin(admin.ModelAdmin):
         }),
         ('Media', {
             'fields': ('audio_file', 'cover_image')
+        }),
+        # 🆕 ADDED: Moods section
+        ('Moods', {
+            'fields': ('moods',),
+            'description': 'Select moods that describe this song',
+            'classes': ('wide',)
         }),
         ('Lyrics', {
             'fields': ('lyrics', 'has_lyrics', 'lyrics_views'),
@@ -53,7 +63,8 @@ class SongAdmin(admin.ModelAdmin):
             'fields': ('is_approved', 'is_trending', 'trending_expiry', 'boost_paid')
         }),
         ('Statistics', {
-            'fields': ('play_count', 'download_count')
+            'fields': ('play_count', 'download_count'),
+            'classes': ('collapse',),
         }),
     )
     
@@ -66,8 +77,10 @@ class SongAdmin(admin.ModelAdmin):
         self.message_user(request, f"✅ {queryset.count()} song(s) boosted to TRENDING for 5 days!")
     approve_boost.short_description = "✅ Approve selected boost requests"
 
+
 # ==================== COMMENT ADMIN ====================
 admin.site.register(Comment)
+
 
 # ==================== PLAYLIST ADMIN ====================
 @admin.register(Playlist)
@@ -80,11 +93,13 @@ class PlaylistAdmin(admin.ModelAdmin):
         return obj.song_count()
     song_count.short_description = 'Songs'
 
+
 @admin.register(PlaylistSong)
 class PlaylistSongAdmin(admin.ModelAdmin):
     list_display = ('playlist', 'song', 'added_at', 'order')
     list_filter = ('added_at',)
     search_fields = ('playlist__name', 'song__title')
+
 
 # ==================== AD ADMIN ====================
 @admin.register(Ad)
@@ -132,6 +147,7 @@ class AdAdmin(admin.ModelAdmin):
         self.message_user(request, f"📊 Stats reset for {queryset.count()} ad(s).")
     reset_stats.short_description = "Reset click/impression stats"
 
+
 # ==================== DJ MIX ADMIN ====================
 @admin.register(DJMix)
 class DJMixAdmin(admin.ModelAdmin):
@@ -140,6 +156,7 @@ class DJMixAdmin(admin.ModelAdmin):
     search_fields = ('title', 'dj_name')
     list_editable = ('is_featured',)
 
+
 # ==================== PODCAST ADMIN ====================
 @admin.register(Podcast)
 class PodcastAdmin(admin.ModelAdmin):
@@ -147,6 +164,7 @@ class PodcastAdmin(admin.ModelAdmin):
     list_filter = ('is_featured', 'season_number', 'release_date')
     search_fields = ('title', 'host_name')
     list_editable = ('is_featured',)
+
 
 # ==================== MOOD ADMIN ====================
 @admin.register(Mood)
@@ -157,12 +175,14 @@ class MoodAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ('is_active',)
 
+
 # ==================== SONG MOOD ADMIN ====================
 @admin.register(SongMood)
 class SongMoodAdmin(admin.ModelAdmin):
     list_display = ('song', 'mood', 'created_at')
     list_filter = ('mood',)
     search_fields = ('song__title', 'mood__name')
+
 
 # ==================== PRO REQUEST ADMIN ====================
 @admin.register(ProRequest)
