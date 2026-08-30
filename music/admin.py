@@ -28,13 +28,10 @@ class CustomUserAdmin(UserAdmin):
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
     list_display = ('title', 'artist', 'region', 'genre', 'is_approved', 'has_lyrics', 'has_video', 'is_trending', 'boost_paid', 'trending_expiry')
-    list_filter = ('is_approved', 'is_trending', 'has_lyrics', 'has_video', 'boost_paid', 'region', 'genre', 'moods')
+    list_filter = ('is_approved', 'is_trending', 'has_lyrics', 'has_video', 'boost_paid', 'region', 'genre')
     search_fields = ('title', 'artist__username', 'region')
     list_editable = ('region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
     actions = ['approve_boost']
-    
-    # 🆕 ADDED: filter_horizontal for moods
-    filter_horizontal = ('moods',)
     
     fieldsets = (
         ('Basic Information', {
@@ -43,7 +40,6 @@ class SongAdmin(admin.ModelAdmin):
         ('Media', {
             'fields': ('audio_file', 'cover_image')
         }),
-        # 🆕 ADDED: Moods section
         ('Moods', {
             'fields': ('moods',),
             'description': 'Select moods that describe this song',
