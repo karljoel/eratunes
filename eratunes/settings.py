@@ -21,6 +21,7 @@ ALLOWED_HOSTS = [
     'eratunez.com',
     'www.eratunez.com',
     '.onrender.com',
+    '.ondigitalocean.app',
 ]
 
 # ========== CSRF TRUSTED ORIGINS ==========
@@ -28,6 +29,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://eratunez.com',
     'https://www.eratunez.com',
     'https://*.onrender.com',
+    'https://*.ondigitalocean.app',
 ]
 
 # Application definition
@@ -78,15 +80,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eratunes.wsgi.application'
 
+# ========== DATABASE ==========
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eratunes',
-        'USER': 'eratunesuser',
-        'PASSWORD': '2VgxUMGNYbw7KMNUMelgJtljqF77xw3D',  # ✅ UPDATED
-        'HOST': 'dpg-d972qesvikkc73dh411g-a',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 # Password validation
@@ -107,11 +105,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ========== CLOUDFLARE R2 STORAGE ==========
-AWS_ACCESS_KEY_ID = 'c59513eb356cbb7e17d1d9ba93882655'
-AWS_SECRET_ACCESS_KEY = '820ff134bc368c78319e1168b020de73c0d8e84b1a2bee9744e205896fc5c38a'
+AWS_ACCESS_KEY_ID = os.environ.get('R2_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('R2_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
 AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
 AWS_S3_REGION_NAME = 'weur'
