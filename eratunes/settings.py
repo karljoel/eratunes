@@ -81,19 +81,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'eratunes.wsgi.application'
 
 # ========== DATABASE ==========
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# Fetch environment variable and trim surrounding whitespace/quotes
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+
+# Print debug output to DigitalOcean runtime logs during startup
+print(f"DEBUG DATABASE_URL VALUE: '{DATABASE_URL}'", flush=True)
 
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
+        'default': dj_database_url.parse(
+            DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True
         )
     }
 else:
-    # Fallback to local SQLite during build steps or local testing when DATABASE_URL is not set
+    print("WARNING: DATABASE_URL is empty! Falling back to SQLite.", flush=True)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
