@@ -81,23 +81,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'eratunes.wsgi.application'
 
 # ========== DATABASE ==========
-# Fetch environment variable and trim surrounding whitespace/quotes
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+RAW_DB_URL = os.environ.get('DATABASE_URL', '').strip()
 
-# Print debug output to DigitalOcean runtime logs during startup
-print(f"DEBUG DATABASE_URL VALUE: '{DATABASE_URL}'", flush=True)
+# Print debug info to DigitalOcean Runtime Logs
+print(f"DEBUG: RAW_DB_URL length is {len(RAW_DB_URL)}", flush=True)
 
-if DATABASE_URL:
+if RAW_DB_URL.startswith(('postgres://', 'postgresql://')):
     DATABASES = {
         'default': dj_database_url.parse(
-            DATABASE_URL,
+            RAW_DB_URL,
             conn_max_age=600,
             conn_health_checks=True,
             ssl_require=True
         )
     }
 else:
-    print("WARNING: DATABASE_URL is empty! Falling back to SQLite.", flush=True)
+    print("WARNING: Valid PostgreSQL DATABASE_URL not detected. Defaulting to SQLite.", flush=True)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
