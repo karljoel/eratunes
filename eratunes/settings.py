@@ -124,19 +124,22 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # ========== CLOUDFLARE R2 STORAGE ==========
-AWS_ACCESS_KEY_ID = os.environ.get('R2_ACCESS_KEY')
-AWS_SECRET_ACCESS_KEY = os.environ.get('R2_SECRET_KEY')
-AWS_STORAGE_BUCKET_NAME = 'eratunes-music'
-AWS_S3_ENDPOINT_URL = 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID') or os.environ.get('R2_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY') or os.environ.get('R2_SECRET_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'eratunes-music')
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL', 'https://cbcff8a3da171364f68e4dcc071c996c.r2.cloudflarestorage.com')
+
 AWS_S3_REGION_NAME = 'weur'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
+
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
     'ContentDisposition': 'attachment',
 }
-AWS_S3_CUSTOM_DOMAIN = 'pub-bee61826af38438db4045c84ae0bc301.r2.dev'
+
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN', 'pub-bee61826af38438db4045c84ae0bc301.r2.dev')
 
 STORAGES = {
     'default': {
@@ -147,7 +150,7 @@ STORAGES = {
     },
 }
 
-MEDIA_URL = 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/'
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 
 # ========== CUSTOM USER MODEL ==========
 AUTH_USER_MODEL = 'music.CustomUser'
