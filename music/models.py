@@ -145,12 +145,24 @@ class Song(models.Model):
     ]
 
     # Core fields
-    artist = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_index=True)
+    artist = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        db_index=True,
+        related_name='uploaded_songs'
+    )
+    featured_artists = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='featured_songs',
+        help_text="Select featured artists for this collaboration"
+    )
     title = models.CharField(max_length=200, db_index=True)
     audio_file = models.FileField(upload_to='songs/')
     cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)
     genre = models.CharField(max_length=50, choices=GENRE_CHOICES, default='Afrobeat', db_index=True)
     region = models.CharField(max_length=50, default='all', blank=True)
+    
     # Metadata
     duration = models.PositiveIntegerField(default=0)
     release_date = models.DateField(default=timezone.now, db_index=True)
@@ -189,10 +201,27 @@ class Song(models.Model):
     youtube_url = models.URLField(blank=True, null=True, help_text="YouTube video link (e.g., https://www.youtube.com/watch?v=...")
     has_video = models.BooleanField(default=False)
 
-    # Add after existing fields
+    # Location tracking
     country = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     
+    @property
+    def display_artists(self):
+        """Returns string like 'King Saha ft. Bobi Wine, Nubian Li' or just 'King Saha'"""
+        feats = ", ".join([artist.get_full_name() or artist.username for artist in self.featured_artists.all()])
+        main_artist = self.artist.get_full_name() or self.artist.username
+        if feats:
+            return f"{main_artist} ft. {feats}"
+        return main_artist
+
+    @property
+    def display_title(self):
+        """Returns string like 'Nassanga (feat. Bobi Wine)' or 'Nassanga'"""
+        feats = ", ".join([artist.get_full_name() or artist.username for artist in self.featured_artists.all()])
+        if feats:
+            return f"{self.title} (feat. {feats})"
+        return self.title
+
     def get_youtube_embed_url(self):
         """Convert YouTube URL to embed URL"""
         if not self.youtube_url:
@@ -211,6 +240,7 @@ class Song(models.Model):
             return None
         
         return f"https://www.youtube.com/embed/{video_id}?autoplay=0&enablejsapi=1"
+
     def get_absolute_url(self):
         return reverse('song_detail', args=[str(self.id)])
     
@@ -231,8 +261,7 @@ class Song(models.Model):
         self.refresh_from_db()
     
     def __str__(self):
-        return self.title
-
+        return f"{self.display_artists} - {self.title}"
 
 # ============================================================
 # PRODUCT/MERCH MODEL (Moved BEFORE Payment)

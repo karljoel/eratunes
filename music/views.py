@@ -678,34 +678,40 @@ def request_boost(request, song_id):
 
 def upload_song(request):
     if not request.user.is_artist:
-        messages.error(request, 'Only artists can upload songs')
+        messages.error(request, 'Only artists can upload songs.')
         return redirect('home')
     
     if request.method == 'POST':
-        title = request.POST.get('title')
-        genre = request.POST.get('genre')
-        audio_file = request.FILES.get('audio_file')
-        cover_image = request.FILES.get('cover_image')
-        lyrics = request.POST.get('lyrics')
-        youtube_url = request.POST.get('youtube_url')
-        
-        region = request.user.country if request.user.country else 'all'
-        
-        song = Song.objects.create(
-            artist=request.user,
-            title=title,
-            genre=genre,
-            audio_file=audio_file,
-            cover_image=cover_image,
-            lyrics=lyrics,
-            youtube_url=youtube_url,
-            region=region,
-            is_approved=False
-        )
-        
-        messages.success(request, f'Song "{title}" uploaded successfully! It will appear after admin approval.')
-        return redirect('artist_dashboard')
-    
+        form = SongForm(request.POST, request.FILES, uploader=request.user)
+        if form.is_valid():
+            song = form.save(commit=False)
+            song.artist = request.user
+            song.region = request.user.country if request.user.country else 'all'
+            song.is_approved = False
+            
+            # Additional optional fields if passed from template
+            if request.POST.get('lyrics'):
+                song.lyrics = request.POST.get('lyrics')
+                song.has_lyrics = True
+            
+            if request.POST.get('youtube_url'):
+                song.youtube_url = request.POST.get('youtube_url')
+                song.has_video = True
+
+            song.save()
+            
+            # Save ManyToMany relationships (featured_artists)
+            form.save_m2m()
+            
+            messages.success(request, f'Song "{song.title}" uploaded successfully! It will appear after admin approval.')
+            return redirect('artist_dashboard')
+        else:
+            # Handle validation errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field.title()}: {error}")
+            return redirect('artist_dashboard')
+
     return redirect('artist_dashboard')
 
 

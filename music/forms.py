@@ -1,8 +1,7 @@
 # music/forms.py
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Song, CustomUser, Comment
-from django.contrib.auth.forms import UserCreationForm
-from django import forms
 
 # East African Countries
 COUNTRY_CHOICES = [
@@ -14,6 +13,7 @@ COUNTRY_CHOICES = [
     ('south_sudan', '🇸🇸 South Sudan'),
     ('other', '🌍 Other'),
 ]
+
 # ============================================================
 # USER SIGNUP FORM (Regular listeners)
 # ============================================================
@@ -68,12 +68,10 @@ class ArtistSignupForm(UserCreationForm):
         'placeholder': 'Stage name / Display name (spaces allowed)'
     }), help_text="Your stage name. Leave blank to use your username.")
     
-    # 🆕 ADD COUNTRY FIELD
     country = forms.ChoiceField(choices=COUNTRY_CHOICES, required=True, widget=forms.Select(attrs={
         'class': 'form-control bg-dark text-white border-secondary'
     }))
     
-    # 🆕 ADD CITY FIELD (Optional)
     city = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control bg-dark text-white border-secondary',
         'placeholder': 'e.g., Kampala, Nairobi, Dar es Salaam'
@@ -104,12 +102,10 @@ class ArtistSignupForm(UserCreationForm):
         user.user_type = 'artist'
         user.is_artist = True
         
-        # Set display_name if provided
         display_name = self.cleaned_data.get('display_name')
         if display_name:
             user.display_name = display_name
         
-        # 🆕 Set country and city
         user.country = self.cleaned_data.get('country')
         user.city = self.cleaned_data.get('city')
         
@@ -119,12 +115,23 @@ class ArtistSignupForm(UserCreationForm):
 
 
 # ============================================================
-# SONG FORM
+# SONG FORM (With Featured Artists Collaboration Support)
 # ============================================================
 class SongForm(forms.ModelForm):
+    featured_artists = forms.ModelMultipleChoiceField(
+        queryset=CustomUser.objects.filter(is_artist=True),
+        required=False,
+        widget=forms.SelectMultiple(attrs={
+            'class': 'form-select bg-dark text-white border-secondary select2-multi',
+            'size': '4'
+        }),
+        label="Featured Artists (Optional)",
+        help_text="Select featured artists for collabo songs (Hold Ctrl or Cmd to pick multiple)."
+    )
+
     class Meta:
         model = Song
-        fields = ['title', 'genre', 'cover_image', 'audio_file']
+        fields = ['title', 'featured_artists', 'genre', 'cover_image', 'audio_file']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control bg-dark text-white border-secondary',
@@ -140,6 +147,16 @@ class SongForm(forms.ModelForm):
                 'class': 'form-control bg-dark text-white border-secondary'
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        uploader = kwargs.pop('uploader', None)
+        super().__init__(*args, **kwargs)
+        
+        # Exclude current uploader from featured artists list if uploader is passed
+        if uploader:
+            self.fields['featured_artists'].queryset = CustomUser.objects.filter(
+                is_artist=True
+            ).exclude(pk=uploader.pk)
 
 
 # ============================================================
@@ -159,10 +176,8 @@ class CommentForm(forms.ModelForm):
 
 
 # ============================================================
-# LOGIN FORM (Custom styling)
+# LOGIN FORM
 # ============================================================
-from django.contrib.auth.forms import AuthenticationForm
-
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -174,6 +189,11 @@ class CustomLoginForm(AuthenticationForm):
             'class': 'form-control bg-dark text-white border-secondary',
             'placeholder': 'Password'
         })
+
+
+# ============================================================
+# USER PROFILE FORM
+# ============================================================
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
@@ -230,12 +250,16 @@ class UserProfileForm(forms.ModelForm):
     def clean_whatsapp_number(self):
         whatsapp = self.cleaned_data.get('whatsapp_number')
         if whatsapp:
-            # Remove any spaces or special characters
             import re
             whatsapp = re.sub(r'[\s\-\(\)\+]', '', whatsapp)
             if len(whatsapp) < 10:
                 raise forms.ValidationError('Please enter a valid phone number')
         return whatsapp
+
+
+# ============================================================
+# ADVERTISER REQUEST FORM
+# ============================================================
 class AdvertiserRequestForm(forms.ModelForm):
     class Meta:
         model = CustomUser
@@ -244,4 +268,4 @@ class AdvertiserRequestForm(forms.ModelForm):
             'wants_to_advertise': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'advertiser_business_name': forms.TextInput(attrs={'class': 'form-control bg-dark text-white border-secondary', 'placeholder': 'Your business/company name'}),
             'advertiser_message': forms.Textarea(attrs={'class': 'form-control bg-dark text-white border-secondary', 'rows': 4, 'placeholder': 'Tell us about your advertising needs...'}),
-        }        
+        }

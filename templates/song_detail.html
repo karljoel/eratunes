@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Download {{ song.title }} by {{ song.artist.get_display_name }} (MP3 Free Download) | Eratunez{% endblock title %}
+{% block title %}Download {{ song.display_title }} by {{ song.artist.get_display_name }} (MP3 Free Download) | EraTunez{% endblock title %}
 
 <!-- 2. Dynamic WhatsApp / Facebook Link Previews -->
 {% block extra_head %}
     <!-- Targeted Meta Description specific to this track -->
-    <meta name="description" content="Get the latest track: Stream and download '{{ song.title }}' by {{ song.artist.get_display_name }} for free on Eratunez. Enjoy high-quality MP3 downloads of new Ugandan music.">
+    <meta name="description" content="Get the latest track: Stream and download '{{ song.display_title }}' by {{ song.artist.get_display_name }}{% if song.featured_artists.all %} ft. {% for feat in song.featured_artists.all %}{{ feat.get_display_name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %} for free on EraTunez. Enjoy high-quality MP3 downloads of new Ugandan music.">
     
     <!-- Track-Specific Keywords -->
-    <meta name="keywords" content="{{ song.title }}, {{ song.artist.get_display_name }}, download mp3, free download, new ugandan music, East African new songs">
+    <meta name="keywords" content="{{ song.title }}, {{ song.artist.get_display_name }}{% for feat in song.featured_artists.all %}, {{ feat.get_display_name }}{% endfor %}, download mp3, free download, new ugandan music, East African new songs">
 
     <!-- Open Graph (OG) tags: Essential for WhatsApp share previews -->
-    <meta property="og:title" content="'{{ song.title }}' by {{ song.artist.get_display_name }} - Free Download on Eratunez" />
-    <meta property="og:description" content="Listen to and download '{{ song.title }}' now. Check out the latest Uganda and East African music on Eratunez." />
+    <meta property="og:title" content="'{{ song.display_title }}' - Free Download on EraTunez" />
+    <meta property="og:description" content="Listen to and download '{{ song.display_title }}' by {{ song.artist.get_display_name }} now. Check out the latest Uganda and East African music on EraTunez." />
     <meta property="og:type" content="music.song" />
     <meta property="og:url" content="{{ request.build_absolute_uri }}" />
     
@@ -67,6 +67,23 @@
         font-size: 1.2rem;
         color: #aaa;
         margin-bottom: 15px;
+    }
+
+    .song-artist a {
+        color: #1db954;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .song-artist a:hover {
+        color: #1ed760;
+        text-decoration: underline;
+    }
+
+    .feat-label {
+        color: #888;
+        font-weight: normal;
+        margin: 0 4px;
     }
     
     .song-stats {
@@ -313,14 +330,26 @@
     <!-- Song Header -->
     <div class="song-header">
         {% if song.cover_image %}
-            <img src="{{ song.cover_image.url }}" class="song-cover" alt="Cover art for {{ song.title }} by {{ song.artist.get_display_name }}">
+            <img src="{{ song.cover_image.url }}" class="song-cover" alt="Cover art for {{ song.display_title }}">
         {% else %}
-            <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover" alt="Default cover art for {{ song.title }}">
+            <img src="https://placehold.co/250x250/1db954/white?text=🎵" class="song-cover" alt="Default cover art for {{ song.display_title }}">
         {% endif %}
         
         <div class="song-info">
-            <h1 class="song-title">{{ song.title }}</h1>
-            <h3 class="song-artist">{{ song.artist.get_display_name }}</h3>
+            <!-- Full Track Title -->
+            <h1 class="song-title">{{ song.display_title }}</h1>
+            
+            <!-- Main Artist & Featured Artists Links -->
+            <h3 class="song-artist">
+                <a href="{% url 'artist_detail' song.artist.id %}">{{ song.artist.get_display_name }}</a>
+                {% if song.featured_artists.all %}
+                    <span class="feat-label">ft.</span>
+                    {% for feat in song.featured_artists.all %}
+                        <a href="{% url 'artist_detail' feat.id %}">{{ feat.get_display_name }}</a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </h3>
+
             <div class="song-stats">
                 <div class="stat-badge">
                     <i class="bi bi-earbuds me-1"></i> {{ song.play_count }} plays
@@ -334,9 +363,10 @@
                     <i class="bi bi-play-fill me-2"></i>Play Now
                 </button>
 
-                <button class="btn btn-success rounded-pill px-4" 
-                        onclick="downloadSongInstant('{{ song.audio_file.url }}', '{{ song.title|escapejs }}')"
-                        aria-label="Download {{ song.title }}">
+                <button class="btn btn-success rounded-pill px-4 download-trigger" 
+                        data-song-id="{{ song.id }}"
+                        onclick="downloadSongInstant('{{ song.audio_file.url }}', '{{ song.display_title|escapejs }}')"
+                        aria-label="Download {{ song.display_title }}">
                     <i class="bi bi-download me-2"></i>Download Now - Free
                 </button>
 
@@ -390,9 +420,9 @@ function playSongFromDetail() {
     const songData = {
         id: {{ song.id }},
         title: "{{ song.title|escapejs }}",
-        artist: "{{ song.artist.get_display_name|escapejs }}",
+        artist: "{{ song.display_artists|escapejs }}",
         audio: "{{ song.audio_file.url|escapejs }}",
-        img: "{{ song.get_cover_url|escapejs }}"
+        img: "{% if song.cover_image %}{{ song.cover_image.url|escapejs }}{% else %}https://placehold.co/250x250/1db954/white?text=🎵{% endif %}"
     };
     
     if (typeof window.playSong === 'function') {
