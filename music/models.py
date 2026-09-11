@@ -27,6 +27,19 @@ COUNTRY_CHOICES = [
     ('other', '🌍 Other'),
 ]
 class CustomUser(AbstractUser):
+    # ========== OVERRIDE USERNAME TO ALLOW SPACES ==========
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        validators=[RegexValidator(
+            regex=r'^[\w.@+\- ]+$',
+            message='Enter a valid username. Letters, digits, spaces, and @/./+/-/_ only.',
+        )],
+        error_messages={
+            'unique': "A user with that username already exists.",
+        },
+    )
+    
     # Professional & Identity Info
     is_artist = models.BooleanField(default=False, db_index=True)
     artist_color = models.CharField(max_length=7, default="#ffffff")
