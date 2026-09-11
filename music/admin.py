@@ -40,12 +40,15 @@ class SongAdmin(admin.ModelAdmin):
     list_editable = ('region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
     actions = ['approve_boost']
     
+    # ✅ Multi-select box for featured_artists
+    filter_horizontal = ('featured_artists',)
+    
     # ✅ ADD INLINES FOR MOODS
     inlines = [SongMoodInline]
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'artist', 'genre', 'region', 'release_date')
+            'fields': ('title', 'artist', 'featured_artists', 'genre', 'region', 'release_date')
         }),
         ('Media', {
             'fields': ('audio_file', 'cover_image')
