@@ -46,10 +46,9 @@ class CustomUser(AbstractUser):
     points = models.PositiveIntegerField(default=0, db_index=True)
     whatsapp_number = models.CharField(max_length=15, blank=True, null=True)
     
-    # Add after whatsapp_number field
     country = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    # User Type
+
     USER_TYPE_CHOICES = (
         ('user', 'Regular User'),
         ('artist', 'Artist'),
@@ -115,15 +114,13 @@ class CustomUser(AbstractUser):
         return reverse('artist_detail', args=[str(self.id)])
     
     def __str__(self):
-        return self.username
+        return str(self.display_name or self.username or f"User {self.id}")
     
     @property
     def get_cover_url(self):
-     if self.cover_image:
-        return self.cover_image.url
-     return '/static/images/eratunez-logo.png'
-
-
+        if hasattr(self, 'cover_image') and self.cover_image:
+            return self.cover_image.url
+        return '/static/images/eratunez-logo.png'
 # ============================================================
 # SONG MODEL
 # ============================================================
