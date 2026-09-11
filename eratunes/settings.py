@@ -5,9 +5,9 @@ Django settings for eratunes project.
 import os
 from pathlib import Path
 import dj_database_url
-
+from dotenv import load_dotenv 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(BASE_DIR / '.env')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-h2n0t)#$s9v#wp+-myyp*wna(=2c#^g=22nb5o8z&&%x-*&7j!')
 
