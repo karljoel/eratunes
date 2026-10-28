@@ -90,8 +90,7 @@ if RAW_DB_URL.startswith(('postgres://', 'postgresql://')):
     DATABASES = {
         'default': dj_database_url.parse(
             RAW_DB_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
+            conn_max_age=0,  # <--- CHANGED TO 0
             ssl_require=True
         )
     }
