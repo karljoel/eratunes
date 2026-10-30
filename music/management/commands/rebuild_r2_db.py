@@ -45,7 +45,7 @@ class Command(BaseCommand):
                     artist_name = "Unknown Artist"
                     title = clean_name
                 
-                # 1. Truncate strings strictly to database limits
+                # Truncate strings strictly
                 title = title.strip()[:195]
                 artist_name = artist_name.strip()[:145]
                 
@@ -53,7 +53,6 @@ class Command(BaseCommand):
                     skipped += 1
                     continue
 
-                # 2. Safe username and email generation
                 safe_username = artist_name.replace(' ', '_').lower()[:140]
                 fake_email = f"{safe_username}@eratunez-recovery.com"[:250]
                 
@@ -66,24 +65,28 @@ class Command(BaseCommand):
                     }
                 )
                 
+                # THE FIX: Shorten the filename for the FileField database column
+                safe_filename = filename[:95]  # Keep it under 100 chars
                 audio_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{urllib.parse.quote(key)}"
 
-                # 3. FORCE safe defaults for fields with 100 char limits
                 song, created = Song.objects.get_or_create(
                     title=title,
                     artist=artist_obj, 
                     defaults={
-                        'audio_file': audio_url,
+                        'audio_file': safe_filename, # <--- SHORT SAFE FILENAME
                         'cover_image': 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/covers/11716.jpg',
                         'is_approved': True,
-                        'genre': 'Afrobeat',      # <--- FORCED SAFE VALUE
-                        'region': 'all',          # <--- FORCED SAFE VALUE
-                        'country': 'uganda',      # <--- FORCED SAFE VALUE
-                        'city': '',               # <--- FORCED SAFE VALUE
+                        'genre': 'Afrobeat',
+                        'region': 'all',
+                        'country': 'uganda',
+                        'city': '',
                     }
                 )
                 
+                # THE FIX: Override the URL manually so it points to R2
                 if created:
+                    song.audio_file.name = safe_filename
+                    song.save()
                     count += 1
 
         self.stdout.write(self.style.SUCCESS(f"Successfully rebuilt {count} songs! Skipped: {skipped}"))
