@@ -45,22 +45,22 @@ class Command(BaseCommand):
                     artist_name = "Unknown Artist"
                     title = clean_name
                 
-                # THE FIX: Truncate strings to fit the database limits
-                # Title max is 200, Artist username max is 150
+                # 1. Truncate strings strictly to database limits
                 title = title.strip()[:195]
                 artist_name = artist_name.strip()[:145]
                 
-                if not title or not artist_name:
+                if not title:
                     skipped += 1
                     continue
 
-                safe_username = artist_name.replace(' ', '_').lower()
-                fake_email = f"{safe_username}@eratunez-recovery.com"
+                # 2. Safe username and email generation
+                safe_username = artist_name.replace(' ', '_').lower()[:140]
+                fake_email = f"{safe_username}@eratunez-recovery.com"[:250]
                 
                 artist_obj, _ = CustomUser.objects.get_or_create(
                     username=artist_name,
                     defaults={
-                        'email': fake_email[:254], # Email max is 254
+                        'email': fake_email,
                         'is_artist': True,
                         'user_type': 'artist'
                     }
@@ -68,6 +68,7 @@ class Command(BaseCommand):
                 
                 audio_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{urllib.parse.quote(key)}"
 
+                # 3. FORCE safe defaults for fields with 100 char limits
                 song, created = Song.objects.get_or_create(
                     title=title,
                     artist=artist_obj, 
@@ -75,6 +76,10 @@ class Command(BaseCommand):
                         'audio_file': audio_url,
                         'cover_image': 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/covers/11716.jpg',
                         'is_approved': True,
+                        'genre': 'Afrobeat',      # <--- FORCED SAFE VALUE
+                        'region': 'all',          # <--- FORCED SAFE VALUE
+                        'country': 'uganda',      # <--- FORCED SAFE VALUE
+                        'city': '',               # <--- FORCED SAFE VALUE
                     }
                 )
                 
