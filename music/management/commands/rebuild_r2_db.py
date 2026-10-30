@@ -1,7 +1,7 @@
 import boto3
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from music.models import Song, CustomUser  # Changed Artist to CustomUser
+from music.models import Song, CustomUser
 import urllib.parse
 
 class Command(BaseCommand):
@@ -23,6 +23,8 @@ class Command(BaseCommand):
         pages = paginator.paginate(Bucket=bucket_name, Prefix='songs/')
 
         count = 0
+        skipped = 0
+        
         for page in pages:
             if 'Contents' not in page:
                 continue
@@ -43,15 +45,22 @@ class Command(BaseCommand):
                     artist_name = "Unknown Artist"
                     title = clean_name
                 
-                # Create a dummy user for the artist if they don't exist
-                # We use a fake email based on the name to make it unique
-                safe_username = artist_name.strip().replace(' ', '_').lower()
+                # THE FIX: Truncate strings to fit the database limits
+                # Title max is 200, Artist username max is 150
+                title = title.strip()[:195]
+                artist_name = artist_name.strip()[:145]
+                
+                if not title or not artist_name:
+                    skipped += 1
+                    continue
+
+                safe_username = artist_name.replace(' ', '_').lower()
                 fake_email = f"{safe_username}@eratunez-recovery.com"
                 
                 artist_obj, _ = CustomUser.objects.get_or_create(
-                    username=artist_name.strip(),
+                    username=artist_name,
                     defaults={
-                        'email': fake_email,
+                        'email': fake_email[:254], # Email max is 254
                         'is_artist': True,
                         'user_type': 'artist'
                     }
@@ -60,16 +69,16 @@ class Command(BaseCommand):
                 audio_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{urllib.parse.quote(key)}"
 
                 song, created = Song.objects.get_or_create(
-                    title=title.strip(),
+                    title=title,
                     artist=artist_obj, 
                     defaults={
                         'audio_file': audio_url,
                         'cover_image': 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/covers/11716.jpg',
-                        'is_approved': True,  # Make sure they show up on the site
+                        'is_approved': True,
                     }
                 )
                 
                 if created:
                     count += 1
 
-        self.stdout.write(self.style.SUCCESS(f"Successfully rebuilt {count} songs from R2!"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully rebuilt {count} songs! Skipped: {skipped}"))
