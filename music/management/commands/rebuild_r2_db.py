@@ -1,7 +1,7 @@
 import boto3
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from music.models import Song, Artist  # Make sure your models are imported correctly
+from music.models import Song, CustomUser  # Changed Artist to CustomUser
 import urllib.parse
 
 class Command(BaseCommand):
@@ -43,18 +43,29 @@ class Command(BaseCommand):
                     artist_name = "Unknown Artist"
                     title = clean_name
                 
-                # THE FIX: Get or create the Artist object first!
-                artist_obj, _ = Artist.objects.get_or_create(name=artist_name.strip())
+                # Create a dummy user for the artist if they don't exist
+                # We use a fake email based on the name to make it unique
+                safe_username = artist_name.strip().replace(' ', '_').lower()
+                fake_email = f"{safe_username}@eratunez-recovery.com"
+                
+                artist_obj, _ = CustomUser.objects.get_or_create(
+                    username=artist_name.strip(),
+                    defaults={
+                        'email': fake_email,
+                        'is_artist': True,
+                        'user_type': 'artist'
+                    }
+                )
                 
                 audio_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{urllib.parse.quote(key)}"
 
-                # Now link the artist_obj to the song
                 song, created = Song.objects.get_or_create(
                     title=title.strip(),
-                    artist=artist_obj,  # <-- Use the object, not the string
+                    artist=artist_obj, 
                     defaults={
                         'audio_file': audio_url,
                         'cover_image': 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/covers/11716.jpg',
+                        'is_approved': True,  # Make sure they show up on the site
                     }
                 )
                 
