@@ -168,7 +168,10 @@ class Song(models.Model):
         help_text="Select featured artists for this collaboration"
     )
     title = models.CharField(max_length=200, db_index=True)
-    audio_file = models.FileField(upload_to='songs/')
+    
+    # 🔥 THE FIX: Changed from FileField to URLField to accept full Cloudflare R2 links
+    audio_file = models.URLField(max_length=500)
+    
     cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)
     genre = models.CharField(max_length=50, choices=GENRE_CHOICES, default='Afrobeat', db_index=True)
     region = models.CharField(max_length=50, default='all', blank=True)
@@ -237,13 +240,10 @@ class Song(models.Model):
         if not self.youtube_url:
             return None
         
-        # Handle youtu.be format
         if 'youtu.be' in self.youtube_url:
             video_id = self.youtube_url.split('/')[-1].split('?')[0]
-        # Handle youtube.com/watch?v= format
         elif 'watch?v=' in self.youtube_url:
             video_id = self.youtube_url.split('v=')[1].split('&')[0]
-        # Handle youtube.com/embed/ format
         elif 'youtube.com/embed/' in self.youtube_url:
             video_id = self.youtube_url.split('/embed/')[1].split('?')[0]
         else:
@@ -272,7 +272,6 @@ class Song(models.Model):
     
     def __str__(self):
         return f"{self.display_artists} - {self.title}"
-
 # ============================================================
 # PRODUCT/MERCH MODEL (Moved BEFORE Payment)
 # ============================================================
