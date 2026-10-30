@@ -34,13 +34,14 @@ class SongMoodInline(admin.TabularInline):
 # ==================== SONG ADMIN ====================
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
-    # 🔥 ADDED 'title' AND 'artist' HERE SO YOU CAN EDIT THEM DIRECTLY
     list_display = ('title', 'artist', 'region', 'genre', 'is_approved', 'has_lyrics', 'has_video', 'is_trending', 'boost_paid', 'trending_expiry')
     list_filter = ('is_approved', 'is_trending', 'has_lyrics', 'has_video', 'boost_paid', 'region', 'genre')
     search_fields = ('title', 'artist__username', 'region')
     
-    # 🔥 ADDED 'title' AND 'artist' HERE
-    list_editable = ('title', 'artist', 'region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
+    # 🔥 'artist' is REMOVED from list_editable so it can be the link
+    list_editable = ('title', 'region', 'is_approved', 'is_trending', 'has_lyrics', 'has_video')
+    list_display_links = ('artist',) 
+    
     actions = ['approve_boost']
     
     # ✅ Multi-select box for featured_artists
