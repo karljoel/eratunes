@@ -1,7 +1,7 @@
 import boto3
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from music.models import Song
+from music.models import Song, Artist  # Make sure your models are imported correctly
 import urllib.parse
 
 class Command(BaseCommand):
@@ -38,16 +38,20 @@ class Command(BaseCommand):
                 clean_name = clean_name.replace('eratunez.com', '').strip()
                 
                 if ' - ' in clean_name:
-                    artist, title = clean_name.split(' - ', 1)
+                    artist_name, title = clean_name.split(' - ', 1)
                 else:
-                    artist = "Unknown Artist"
+                    artist_name = "Unknown Artist"
                     title = clean_name
+                
+                # THE FIX: Get or create the Artist object first!
+                artist_obj, _ = Artist.objects.get_or_create(name=artist_name.strip())
                 
                 audio_url = f"https://{settings.AWS_S3_CUSTOM_DOMAIN}/{urllib.parse.quote(key)}"
 
+                # Now link the artist_obj to the song
                 song, created = Song.objects.get_or_create(
                     title=title.strip(),
-                    artist=artist.strip(),
+                    artist=artist_obj,  # <-- Use the object, not the string
                     defaults={
                         'audio_file': audio_url,
                         'cover_image': 'https://pub-bee61826af38438db4045c84ae0bc301.r2.dev/covers/11716.jpg',
