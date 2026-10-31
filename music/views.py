@@ -1450,7 +1450,6 @@ def track_song_interaction(request, song_id):
     
     return JsonResponse({'status': 'error'}, status=400)
 
-
 @csrf_exempt
 def track_listening_history(request, song_id):
     if not request.user.is_authenticated:
