@@ -41,9 +41,9 @@ def download_song(request, song_id):
     song = get_object_or_404(Song, id=song_id)
     song.download_count += 1
     song.save()
-    return redirect(song.audio_file.url)
+    return redirect('audio': item.song.audio_file,)
     # 2. Stream the file from Cloudflare R2 through Django to force an instant attachment download
-    r = requests.get(song.audio_file.url, stream=True) # type: ignore
+    r = requests.get('audio': song.audio_file,, stream=True) # type: ignore
     
     response = StreamingHttpResponse(
         r.iter_content(chunk_size=8192),
@@ -1492,7 +1492,7 @@ def track_completion(request, song_id):
                 history.save()
             
             return JsonResponse({'status': 'success'})
-        except Exception as e:
+        except Exception as e: 'audio':
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
     return JsonResponse({'status': 'error'}, status=400)
