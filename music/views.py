@@ -1492,7 +1492,7 @@ def track_completion(request, song_id):
                 history.save()
             
             return JsonResponse({'status': 'success'})
-    except Exception as e:
+except Exception as e:
          return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
     
     return JsonResponse({'status': 'error'}, status=400)
