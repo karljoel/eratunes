@@ -43,7 +43,7 @@ def download_song(request, song_id):
     song.save()
     return redirect(song.audio_file)
     # 2. Stream the file from Cloudflare R2 through Django to force an instant attachment download
-    r = requests.get('audio': song.audio_file,, stream=True) # type: ignore
+        r = requests.get(song.audio_file, stream=True) 
     
     response = StreamingHttpResponse(
         r.iter_content(chunk_size=8192),
