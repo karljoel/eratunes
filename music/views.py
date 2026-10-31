@@ -1457,46 +1457,24 @@ def track_listening_history(request, song_id):
         return JsonResponse({'status': 'error'}, status=401)
     
     if request.method == 'POST':
-        try:
-            song = get_object_or_404(Song, id=song_id)
-            
-            UserListeningHistory.objects.create(
-                user=request.user,
-                song=song,
-                played_at=timezone.now()
-            )
-            
-            return JsonResponse({'status': 'success'})
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
-    return JsonResponse({'status': 'error'}, status=400)
-
-
-@csrf_exempt
-def track_completion(request, song_id):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status': 'error'}, status=401)
-    
-    if request.method == 'POST':
-        try:
-            song = get_object_or_404(Song, id=song_id)
-            
-            history = UserListeningHistory.objects.filter(
-                user=request.user,
-                song=song
-            ).last()
-            
-            if history:
-                history.completed = True
-                history.save()
-            
-            return JsonResponse({'status': 'success'})
-except Exception as e:
-         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
-    return JsonResponse({'status': 'error'}, status=400)
-
+            try:
+        if request.content_type == 'application/json':
+            data = json.loads(request.body)
+            interaction_type = data.get('type')
+        else:
+            interaction_type = request.POST.get('type')
+        
+        song = get_object_or_404(Song, id=song_id)
+        
+        UserSongInteraction.objects.create(
+            user=request.user,
+            song=song,
+            interaction_type=interaction_type
+        )
+        
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 # ============================================================
 # ALL ARTISTS
