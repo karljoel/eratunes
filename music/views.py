@@ -317,7 +317,7 @@ def radio_view(request, song_id):
             'title': song.title,
             'artist': song.artist.username,
             'img': song.cover_image.url if song.cover_image else '',
-            'audio': song.audio_file.url
+            'audio': song.audio_file
         })
     
     radio_songs.insert(0, {
@@ -325,7 +325,7 @@ def radio_view(request, song_id):
         'title': seed_song.title,
         'artist': seed_song.artist.username,
         'img': seed_song.cover_image.url if seed_song.cover_image else '',
-        'audio': seed_song.audio_file.url
+        'audio': item.song.audio_file,
     })
     
     return JsonResponse({'songs': radio_songs, 'seed_song': seed_song.title})
@@ -948,7 +948,7 @@ def api_region_songs(request):
             'id': song.id,
             'title': song.title,
             'artist': song.artist.username,
-            'audio': song.audio_file.url,
+            'audio': item.song.audio_file,
         })
     
     return JsonResponse({
@@ -1037,7 +1037,7 @@ def get_ai_recommendations(request):
                 'title': song.title,
                 'artist': song.artist.username,
                 'img': song.cover_image.url if song.cover_image else '/static/default-cover.png',
-                'audio': song.audio_file.url,
+                'audio': song.audio_file,
                 'reason': get_recommendation_reason(song, request.user) if request.user.is_authenticated else "Trending now"
             })
         
@@ -1192,7 +1192,7 @@ def charts_page(request):
                 'title': song.title,
                 'artist': song.artist.username,
                 'img': song.cover_image.url if song.cover_image else '/static/default-cover.png',
-                'audio': song.audio_file.url,
+                'audio': item.song.audio_file,
             })
         context['page_songs_json'] = json.dumps(songs_list)
         
@@ -1731,7 +1731,7 @@ def view_mix(request, mix_id):
             'title': item.song.title,
             'artist': item.song.artist.username,
             'img': item.song.cover_image.url if item.song.cover_image else '/static/default-cover.png',
-            'audio': item.song.audio_file.url,
+           'audio': item.song.audio_file,
         })
     
     context = {
@@ -2040,7 +2040,7 @@ def mood_playlist(request, mood_slug):
             'title': song.title,
             'artist': song.artist.username,
             'img': song.cover_image.url if song.cover_image else '/static/default-cover.png',
-            'audio': song.audio_file.url,
+            'audio': item.song.audio_file,
         })
     
     context = {
